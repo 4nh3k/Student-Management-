@@ -10,6 +10,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import { useAppContext } from './contexts/app.contexts';
 import MainLayout from './layouts/MainLayout';
+import Button from './components/Button';
 
 function ProtectedRoute() {
   const { isAuthenticated } = useAppContext();
@@ -34,25 +35,29 @@ const AuthRouteChildren: RouteObject[] = [
 
 export default function useRouteElement() {
   const routeElement = useRoutes([
-    {
-      element: <RejectedRoute />,
-      children: [
-        {
-          element: <MainLayout />,
-          children: AuthRouteChildren
-        }
-      ]
-    },
+    // {
+    //   element: <RejectedRoute />,
+    //   children: [
+    //     {
+    //       element: <MainLayout />,
+    //       children: AuthRouteChildren
+    //     }
+    //   ]
+    // },
     // Main Layout
-    {
-      element: <ProtectedRoute />,
-      children: [{}]
-    }
-    // Handle Not Found page
+    // {
+    //   element: <ProtectedRoute />,
+    //   children: [{}]
+    // },
+    //Handle Not Found page
     // {
     //   element: <NotFound />,
     //   path: path.all
     // }
+    {
+      element: <Button></Button>,
+      path: '/component'
+    }
   ]);
 
   return routeElement;
