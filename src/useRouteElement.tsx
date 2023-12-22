@@ -9,7 +9,7 @@ import path from './constants/path';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import { useAppContext } from './contexts/app.contexts';
-import Sidebar from './components/Sidebar/Sidebar';
+import Input from './components/Input';
 
 function ProtectedRoute() {
   const { isAuthenticated } = useAppContext();
@@ -61,7 +61,7 @@ export default function useRouteElement() {
     // }
     {
       
-      element: <Sidebar></Sidebar>,
+      element: <Input placeholder='test input holder'></Input>,
       path: '/sidebar'
     }
   ]);

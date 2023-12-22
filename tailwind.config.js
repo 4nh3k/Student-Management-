@@ -15,6 +15,7 @@ export default {
         sidebarHover: '#184376',
         error: '#f06c6c',
         success: '#a6ed6e',
+        input: '#dddeee',
         logo: ''
       },
       dropShadow: {
