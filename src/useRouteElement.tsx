@@ -9,9 +9,7 @@ import path from './constants/path';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import { useAppContext } from './contexts/app.contexts';
-import MainLayout from './layouts/MainLayout';
-import Button from './components/Button';
-import Breadcrumb from './components/Breadcrumb/Breadcrumb';
+import Sidebar from './components/Sidebar/Sidebar';
 
 function ProtectedRoute() {
   const { isAuthenticated } = useAppContext();
@@ -63,13 +61,8 @@ export default function useRouteElement() {
     // }
     {
       
-      element: <Breadcrumb></Breadcrumb>,
-      path: '/component'
-    },
-    {
-      
-      element: <Breadcrumb></Breadcrumb>,
-      path: '/component2/component3'
+      element: <Sidebar></Sidebar>,
+      path: '/sidebar'
     }
   ]);
   

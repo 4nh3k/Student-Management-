@@ -15,7 +15,7 @@ export default {
         sidebarHover: '#184376',
         error: '#f06c6c',
         success: '#a6ed6e',
-        logo: 'linear-gradient(to top, rgba(17, 45, 78, 0.3), rgba(17, 45, 78, 1))'
+        logo: ''
       },
       dropShadow: {
         font: '0 4px 4px rgba(0, 0, 0, 0.25)'
