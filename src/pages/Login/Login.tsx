@@ -1,3 +1,9 @@
+import Input from 'src/components/Input';
+
 export default function Login() {
-  return <div> </div>;
+  return (
+    <div>
+      <Input />
+    </div>
+  );
 }

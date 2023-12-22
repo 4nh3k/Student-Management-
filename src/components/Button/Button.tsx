@@ -12,7 +12,7 @@ export default function Button(props: ButtonProps) {
     typeButton,
     isLoading,
     children,
-    className = 'px-3 py-4 border-2 rounded-lg text-sm md:text-base text-gray-700 font-medium',
+    className = 'text-white uppercase bg-primary rounded-md font-semibold py-2 px-8',
     ...rest
   } = props;
 
