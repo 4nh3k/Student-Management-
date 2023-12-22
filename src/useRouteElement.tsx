@@ -11,6 +11,7 @@ import Register from './pages/Register';
 import { useAppContext } from './contexts/app.contexts';
 import MainLayout from './layouts/MainLayout';
 import Button from './components/Button';
+import Breadcrumb from './components/Breadcrumb/Breadcrumb';
 
 function ProtectedRoute() {
   const { isAuthenticated } = useAppContext();
@@ -34,6 +35,12 @@ const AuthRouteChildren: RouteObject[] = [
 ];
 
 export default function useRouteElement() {
+  const pathTestForBreadcrumb = [
+    { title: 'Home', link: '/' },
+    { title: 'Products', link: '/products' },
+    { title: 'Category', link: '/products/category' },
+    { title: 'Current Page' },
+  ];
   const routeElement = useRoutes([
     // {
     //   element: <RejectedRoute />,
@@ -55,10 +62,17 @@ export default function useRouteElement() {
     //   path: path.all
     // }
     {
-      element: <Button></Button>,
+      
+      element: <Breadcrumb></Breadcrumb>,
       path: '/component'
+    },
+    {
+      
+      element: <Breadcrumb></Breadcrumb>,
+      path: '/component2/component3'
     }
   ]);
+  
 
   return routeElement;
 }

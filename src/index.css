@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Font faces */
+
 @font-face {
   font-family: 'Ubuntu';
   src: local('Ubuntu'), url(./fonts/Ubuntu-Regular.ttf) format('truetype');
@@ -14,77 +16,33 @@
 }
 
 body {
-  /* Add Ubuntu font */
   font-family: 'Ubuntu', sans-serif;
   font-weight: 300;
   font-size: 1.125rem;
 }
 
 .title {
-  @apply text-[2rem]
+  @apply text-[2rem];
 }
 
 .small {
-  @apply text-[0.875rem]
+  @apply text-[0.875rem];
 }
+/* Scrollbar styles */
 
-.background-color {
-  @apply bg-gray-700
-}
-
-.content-background {
-  @apply bg-white
-}
-
-.text-color {
-  @apply bg-black
-}
-
-.primary-color {
-  @apply bg-[#D60A0B]
-}
-
-.secondary-color {
-  @apply bg-[#14238A]
-}
-
-.sidebar-color{
-  @apply bg-[#112D4E]
-}
-
-.sidebar-hover{
-  @apply bg-[#184376]
-}
-
-.logo-gradient{
-  @apply bg-gradient-to-br from-[rgba(17,45,78,0.3)] to-[rgba(17,45,78,1)]
-}
-
-.error-color{
-  @apply bg-[#f06c6c]
-}
-
-.success-color{
-  @apply bg-[#a6ed6e]
-}
-
-/* width */
 ::-webkit-scrollbar {
   width: 10px;
 }
 
-/* Track */
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
   background: #888;
   border-radius: 5px;
 }
 
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
