@@ -37,7 +37,7 @@ export default function useRouteElement() {
     { title: 'Home', link: '/' },
     { title: 'Products', link: '/products' },
     { title: 'Category', link: '/products/category' },
-    { title: 'Current Page' },
+    { title: 'Current Page' }
   ];
   const routeElement = useRoutes([
     // {
@@ -60,12 +60,10 @@ export default function useRouteElement() {
     //   path: path.all
     // }
     {
-      
       element: <Input placeholder='test input holder'></Input>,
       path: '/sidebar'
     }
   ]);
-  
 
   return routeElement;
 }
