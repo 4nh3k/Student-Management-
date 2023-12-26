@@ -10,7 +10,12 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import { useAppContext } from './contexts/app.contexts';
 import Input from './components/Input';
-
+import Dropdown from './components/Dropdown/Dropdown';
+import CircleIcon from './components/CircleIcon/CircleIcon';
+import Logo from 'src/assets/icons/UITLogo.svg';
+import Header from './components/Header/Header';
+import SearchBar from './components/SearchBar/SearchBar';
+import DateTimeInput from './components/DatetimeInput/DatetimeInput';
 function ProtectedRoute() {
   const { isAuthenticated } = useAppContext();
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
@@ -60,9 +65,25 @@ export default function useRouteElement() {
     //   path: path.all
     // }
     {
-      element: <Input placeholder='test input holder'></Input>,
-      path: '/sidebar'
-    }
+      element: <CircleIcon src={Logo} size={128} ></CircleIcon>,
+      path: '/dropdown'
+    },
+    {
+      element: <Header></Header>,
+      path: '/header'
+    },
+    {
+      element: <SearchBar></SearchBar>,
+      path: '/search'
+    },
+    {
+      element: <DateTimeInput></DateTimeInput>,
+      path: '/date'
+    },
+    {
+      element: <Login></Login>,
+      path: '/login'
+    },
   ]);
 
   return routeElement;
