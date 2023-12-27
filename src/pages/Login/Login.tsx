@@ -3,8 +3,8 @@ import Button from 'src/components/Button';
 import Input from 'src/components/Input/Input';
 export default function Login() {
   return (
-    <div className='flex bg-sidebar'>
-      <div id='background-container' className='w-1/3'>
+    <div className='flex flex-col lg:flex-row bg-sidebar'>
+      <div id='background-container' className='w-full lg:w-1/3'>
         <img
           src={UITBackground}
           className='h-screen w-full'

@@ -16,6 +16,7 @@ import Logo from 'src/assets/icons/UITLogo.svg';
 import Header from './components/Header/Header';
 import SearchBar from './components/SearchBar/SearchBar';
 import DateTimeInput from './components/DatetimeInput/DatetimeInput';
+import SidebarComponent from './components/Sidebar/Sidebar';
 function ProtectedRoute() {
   const { isAuthenticated } = useAppContext();
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
@@ -83,6 +84,10 @@ export default function useRouteElement() {
     {
       element: <Login></Login>,
       path: '/login'
+    },
+    {
+      element: <SidebarComponent></SidebarComponent>,
+      path: '/sidebar'
     },
   ]);
 

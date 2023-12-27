@@ -42,7 +42,7 @@ export default {
         18: '4.5rem'
       },
       fontFamily: {
-        cookie: ['"Cookie"', 'cursive']
+        'Ubuntu': ['"Ubuntu"', 'sans']
       },
       flexGrow: {
         2: 2
