@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { TableTheme, getClassName } from './TableStyle';
+import { ArrowUp } from '@phosphor-icons/react';
+import { ArrowDown } from '@phosphor-icons/react/dist/ssr';
 
 interface Header {
   title: string;
@@ -129,11 +131,30 @@ const Table: React.FC<TableProps> = ({
           <tr className={resolvedStyles.classNameHeader}>
             {headers?.map(header => (
               <th
-                className={header.className ? header.className : 'px-4 py-4'}
+                className={
+                  header.className ? header.className : 'group/header px-4 py-4'
+                }
                 key={header.dataIndex}
                 onClick={() => header.sortable && handleSort(header.dataIndex)}
               >
                 {header.title}
+                {header.sortable && (
+                  <>
+                    {sortColumn === header.dataIndex && sortOrder === 'asc' && (
+                      <ArrowUp size={16} className='ml-1 inline-block' />
+                    )}
+                    {sortColumn === header.dataIndex &&
+                      sortOrder === 'desc' && (
+                        <ArrowDown size={16} className='ml-1 inline-block' />
+                      )}
+                    {sortColumn !== header.dataIndex && (
+                      <ArrowUp
+                        size={16}
+                        className='ml-1 hidden text-black/40 group-hover/header:inline-block'
+                      />
+                    )}
+                  </>
+                )}
               </th>
             ))}
           </tr>
