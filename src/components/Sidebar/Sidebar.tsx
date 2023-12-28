@@ -1,120 +1,135 @@
-import logo from 'src/assets/icons/UITLogo.svg';
-('use client');
 import { Sidebar } from 'flowbite-react';
-import path from 'src/constants/path';
+import React from 'react';
 import {
-  Books,
-  ChalkboardTeacher,
-  ChartPieSlice,
-  Money,
-  Student
-} from '@phosphor-icons/react';
+  PiBooks,
+  PiChalkboardTeacher,
+  PiChartPieSlice,
+  PiMoney,
+  PiStudent
+} from 'react-icons/pi';
 import { useLocation } from 'react-router-dom';
+import logo from 'src/assets/icons/UITLogo.svg';
+import path from 'src/constants/path';
+('use client');
 
 interface SidebarProp {
   isAdmin: boolean;
 }
 
-const getIsOpen = (tab: string, location: string) => {
-  return location.includes(tab);
-};
-
 export default function SidebarComponent() {
   const location = useLocation();
+  const [collapsed, setCollapsed] = React.useState(false);
+  const getIsOpen = (tab: string) => {
+    return location.pathname.includes(tab);
+  };
+  const getIsActive = (link: string) => {
+    return location.pathname === link;
+  };
 
   return (
     <Sidebar
-      className='fixed bottom-0 left-0 top-0 w-24 bg-sidebar shadow-lg lg:w-60 '
+      collapsed={collapsed}
       aria-label='Sidebar with multi-level dropdown example'
     >
-      <div className='mb-4 flex w-full items-center space-x-3 pb-2 pt-2 align-middle text-[1.125rem] font-semibold'>
-        <img src={logo} alt='logo' className='ml-3 h-[1.5rem] w-[1.5rem]' />
-        <span>Quản lý sinh viên</span>
-      </div>
+      {/* <div className='mb-2 flex items-center'>
+        <button
+          className='flex h-[40px] w-[40px] items-center justify-center rounded-md hover:bg-gray-100'
+          onClick={() => setCollapsed(!collapsed)}
+        >
+          <PiList size={20} />
+        </button>
+        <img hidden={collapsed} src={logo} alt='logo' className='ml-2 h-10' />
+        <span hidden={collapsed} className='ml-3 text-lg font-semibold'>
+          QLSV
+        </span>
+      </div> */}
+      <Sidebar.Logo href={path.dashboard} img={logo} imgAlt='uit logo'>
+        Quản lý sinh viên
+      </Sidebar.Logo>
       <Sidebar.Items>
         <Sidebar.ItemGroup>
           <Sidebar.Item
             href={path.dashboard}
-            active={path.dashboard === location.pathname}
-            icon={ChartPieSlice}
+            active={getIsActive(path.dashboard)}
+            icon={PiChartPieSlice}
           >
             Bảng điều khiển
           </Sidebar.Item>
           <Sidebar.Collapse
             label='Sinh viên'
-            icon={Student}
-            open={getIsOpen('student', location.pathname)}
+            icon={PiStudent}
+            open={getIsOpen('student')}
           >
             <Sidebar.Item
               href={path.all_students}
-              active={path.all_students === location.pathname}
+              active={getIsActive(path.all_students)}
             >
               Toàn bộ sinh viên
             </Sidebar.Item>{' '}
             {/* Quản lý tiến độ*/} {/* Giấy tờ sinh viên */}
             <Sidebar.Item
               href={path.add_student}
-              active={path.add_student === location.pathname}
+              active={getIsActive(path.add_student)}
             >
               Thêm sinh viên
             </Sidebar.Item>
           </Sidebar.Collapse>
           <Sidebar.Collapse
             label='Giảng viên'
-            icon={ChalkboardTeacher}
-            open={getIsOpen('lecturer', location.pathname)}
+            icon={PiChalkboardTeacher}
+            open={getIsOpen('lecturer')}
           >
             <Sidebar.Item
               href={path.all_lecturers}
-              active={path.all_lecturers === location.pathname}
+              active={getIsActive(path.all_lecturers)}
             >
               Toàn bộ giảng viên
             </Sidebar.Item>
             <Sidebar.Item
               href={path.add_lecturer}
-              active={path.add_lecturer === location.pathname}
+              active={getIsActive(path.add_lecturer)}
             >
               Thêm giảng viên
             </Sidebar.Item>
           </Sidebar.Collapse>
           <Sidebar.Collapse
             label='Học phí'
-            icon={Money}
-            open={getIsOpen('fee', location.pathname)}
+            icon={PiMoney}
+            open={getIsOpen('fee')}
           >
             <Sidebar.Item
               href={path.fee_list}
-              active={path.fee_list === location.pathname}
+              active={getIsActive(path.fee_list)}
             >
               Danh sách học phí
             </Sidebar.Item>
             <Sidebar.Item
               href={path.add_fee}
-              active={path.add_fee === location.pathname}
+              active={getIsActive(path.add_fee)}
             >
               Thêm học phí
             </Sidebar.Item>
           </Sidebar.Collapse>
           <Sidebar.Collapse
             label='Học tập'
-            icon={Books}
-            open={getIsOpen('management', location.pathname)}
+            icon={PiBooks}
+            open={getIsOpen('management')}
           >
             <Sidebar.Item
               href={path.course_management}
-              active={path.course_management === location.pathname}
+              active={getIsActive(path.course_management)}
             >
               Quản lý học phần
             </Sidebar.Item>
             <Sidebar.Item
               href={path.timetable_management}
-              active={path.timetable_management === location.pathname}
+              active={getIsActive(path.timetable_management)}
             >
               Quản lý lịch học
             </Sidebar.Item>
             <Sidebar.Item
               href={path.exam_schedule_management}
-              active={path.exam_schedule_management === location.pathname}
+              active={getIsActive(path.exam_schedule_management)}
             >
               Quản lý lịch thi
             </Sidebar.Item>

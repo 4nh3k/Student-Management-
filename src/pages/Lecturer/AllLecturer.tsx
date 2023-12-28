@@ -1,79 +1,201 @@
-import { Button, FloatingLabel, Select } from 'flowbite-react';
-import Pagination from 'src/components/Pagination';
+import { Select, TextInput } from 'flowbite-react';
+import { useState } from 'react';
 import Table from 'src/components/Table';
+import { Header } from 'src/components/Table/Table';
+('use client');
+
+interface LecturerData {
+  ID: string;
+  lecturerName: string;
+  gender: string;
+  class: string;
+  status: string;
+}
+
 const AllLecturer = () => {
+  const [search, setSearch] = useState<string>('');
+  const [selectedValue, setSelectedValue] = useState<string>('ID');
+  const [pageSize, setPageSize] = useState<number>(10);
+
   const courseMajor = ['KTPM', 'KHMT', 'ATTT', 'MMT&TT'];
-  const headers = [
-    { title: 'Mã số sinh viên', dataIndex: 'ID' },
-    { title: 'Tên', dataIndex: 'studentName' },
-    { title: 'Giới tính', dataIndex: 'gender' },
-    { title: 'Lớp', dataIndex: 'class' },
-    { title: 'Khoa', dataIndex: 'status' }
+  const headers: Header[] = [
+    { title: 'Mã số sinh viên', dataIndex: 'ID', sortable: true },
+    { title: 'Tên', dataIndex: 'lecturerName', sortable: true },
+    { title: 'Giới tính', dataIndex: 'gender', sortable: true },
+    { title: 'Lớp', dataIndex: 'class', sortable: true },
+    { title: 'Khoa', dataIndex: 'status', sortable: true }
   ];
-  const data = [
+  const data: LecturerData[] = [
     {
       ID: '21520620',
-      studentName: 'Nguyễn Tuấn Bảo',
+      lecturerName: 'Nguyễn Tuấn Bảo',
       gender: 'Nam',
       class: 'KTPM',
       status: 'CNPM'
     },
     {
       ID: '21520620',
-      studentName: 'Nguyễn Tuấn Bảo',
+      lecturerName: 'Nguyễn Tuấn Bảo',
       gender: 'Nam',
       class: 'KTPM',
       status: 'CNPM'
     },
     {
       ID: '21520620',
-      studentName: 'Nguyễn Tuấn Bảo',
+      lecturerName: 'Nguyễn Tuấn Bảo',
       gender: 'Nam',
       class: 'KTPM',
       status: 'CNPM'
     },
     {
       ID: '21520620',
-      studentName: 'Nguyễn Tuấn Bảo',
+      lecturerName: 'Nguyễn Tuấn Bảo',
       gender: 'Nam',
       class: 'KTPM',
       status: 'CNPM'
     },
     {
       ID: '21520620',
-      studentName: 'Nguyễn Tuấn Bảo',
+      lecturerName: 'Nguyễn Tuấn Bảo',
+      gender: 'Nam',
+      class: 'KTPM',
+      status: 'CNPM'
+    },
+    {
+      ID: '21520620',
+      lecturerName: 'Nguyễn Tuấn Bảo',
+      gender: 'Nam',
+      class: 'KTPM',
+      status: 'CNPM'
+    },
+    {
+      ID: '21520620',
+      lecturerName: 'Nguyễn Tuấn Bảo',
+      gender: 'Nam',
+      class: 'KTPM',
+      status: 'CNPM'
+    },
+    {
+      ID: '21520620',
+      lecturerName: 'Nguyễn Tuấn Bảo',
+      gender: 'Nam',
+      class: 'KTPM',
+      status: 'CNPM'
+    },
+    {
+      ID: '21520620',
+      lecturerName: 'Nguyễn Tuấn Bảo',
+      gender: 'Nam',
+      class: 'KTPM',
+      status: 'CNPM'
+    },
+    {
+      ID: '21520620',
+      lecturerName: 'Nguyễn Tuấn Bảo',
+      gender: 'Nam',
+      class: 'KTPM',
+      status: 'CNPM'
+    },
+    {
+      ID: '21520620',
+      lecturerName: 'Nguyễn Tuấn Bảo',
+      gender: 'Nam',
+      class: 'KTPM',
+      status: 'CNPM'
+    },
+    {
+      ID: '21520620',
+      lecturerName: 'Nguyễn Tuấn Bảo',
+      gender: 'Nam',
+      class: 'KTPM',
+      status: 'CNPM'
+    },
+    {
+      ID: '21520620',
+      lecturerName: 'Nguyễn Tuấn Bả0',
+      gender: 'Nam',
+      class: 'KTPM',
+      status: 'CNPM'
+    },
+    {
+      ID: '21520621',
+      lecturerName: 'Nguyễn Tuấn Bảo',
+      gender: 'Nam',
+      class: 'KTPM',
+      status: 'CNPM'
+    },
+    {
+      ID: '21520620',
+      lecturerName: 'Nguyễn Tuấn Bảo',
+      gender: 'Nam',
+      class: 'KTPM',
+      status: 'CNPM'
+    },
+    {
+      ID: '21520620',
+      lecturerName: 'Nguyễn Tuấn Bảo',
       gender: 'Nam',
       class: 'KTPM',
       status: 'CNPM'
     }
   ];
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  };
+  const handleSelectedValueChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setSelectedValue(e.target.value);
+  };
+
   return (
-    <div id='student-table-container' className='w-full bg-white p-5 shadow-lg'>
-      <div
-        id='input-row'
-        className='flex items-center justify-between align-middle'
-      >
+    <div className='w-full bg-white p-5 shadow-lg'>
+      <div id='input-row' className='flex items-center'>
         <div className='w-96'>
-          <FloatingLabel className='' variant='outlined' label='Tìm bằng tên' />
+          <TextInput
+            placeholder='Tìm kiếm...'
+            value={search}
+            onChange={handleSearchChange}
+          />
         </div>
-        <Select id='major' required>
-          <option>Nam</option>
-          <option>Nữ</option>
-        </Select>
+        <div className='ml-4'>
+          <Select
+            id='filter'
+            value={selectedValue}
+            onChange={handleSelectedValueChange}
+            required
+          >
+            {headers.map(header => {
+              return (
+                <option key={header.dataIndex} value={header.dataIndex}>
+                  {header.title}
+                </option>
+              );
+            })}
+          </Select>
+        </div>
+        <div className='ml-auto flex items-center'>
+          <span className='mr-2 text-gray-500'>Hiển thị</span>
+          <Select
+            id='pageSize'
+            value={pageSize}
+            onChange={e => setPageSize(+e.target.value)}
+          >
+            <option>10</option>
+            <option>25</option>
+            <option>50</option>
+            <option>100</option>
+          </Select>
+          <span className='ml-2 text-gray-500'>kết quả</span>
+        </div>
       </div>
       <Table
         headers={headers}
         data={data}
+        pageSize={pageSize}
+        filters={{ [selectedValue]: search }}
         className='border-input mt-2 border-2'
-      />
-      <Pagination
-        className='mt-5 flex justify-end'
-        pageCount={50}
-        pageRangeDisplayed={5}
-        onPageChange={(data: { selected: number }) => {
-          console.log(data);
-        }}
       />
     </div>
   );

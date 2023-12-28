@@ -7,5 +7,5 @@
   @apply text-gray-600;
 }
 .pagination ul li.selected a {
-  @apply bg-primary text-white;
+  @apply rounded-md bg-primary text-white;
 }
