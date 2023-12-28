@@ -1,9 +1,4 @@
 import logo from 'src/assets/icons/UITLogo.svg';
-import dashboard from 'src/assets/icons/dashboard.png';
-import student from 'src/assets/icons/students.png';
-import fee from 'src/assets/icons/fee.png';
-import lecturer from 'src/assets/icons/lecturer.svg';
-import learning from 'src/assets/icons/learning.png';
 ('use client');
 import { Sidebar } from 'flowbite-react';
 
@@ -25,23 +20,29 @@ export default function SidebarComponent() {
         <Sidebar.ItemGroup>
           <Sidebar.Item href='#'>Bảng điều khiển</Sidebar.Item>
           <Sidebar.Collapse label='Sinh viên'>
-            <Sidebar.Item href='#'>Toàn bộ sinh viên</Sidebar.Item>{' '}
+            <Sidebar.Item href='/all-students'>Toàn bộ sinh viên</Sidebar.Item>{' '}
             {/* Quản lý tiến độ*/}
-            <Sidebar.Item href='#'>Thêm sinh viên</Sidebar.Item>
-            <Sidebar.Item href='#'>Giấy tờ sinh viên</Sidebar.Item>
+            <Sidebar.Item href='/add-student'>Thêm sinh viên</Sidebar.Item>
+            <Sidebar.Item href='/student-paper'>Giấy tờ sinh viên</Sidebar.Item>
           </Sidebar.Collapse>
           <Sidebar.Collapse label='Giảng viên'>
-            <Sidebar.Item href='#'>Toàn bộ giảng viên</Sidebar.Item>
-            <Sidebar.Item href='#'>Thêm giảng viên</Sidebar.Item>
+            <Sidebar.Item href='/all-lecturer'>Toàn bộ giảng viên</Sidebar.Item>
+            <Sidebar.Item href='/add-lecturer'>Thêm giảng viên</Sidebar.Item>
           </Sidebar.Collapse>
           <Sidebar.Collapse label='Học phí'>
-            <Sidebar.Item href='#'>Danh sách học phí</Sidebar.Item>
-            <Sidebar.Item href='#'>Thêm học phí</Sidebar.Item>
+            <Sidebar.Item href='/fee-list'>Danh sách học phí</Sidebar.Item>
+            <Sidebar.Item href='/add-fee'>Thêm học phí</Sidebar.Item>
           </Sidebar.Collapse>
           <Sidebar.Collapse label='Học tập'>
-            <Sidebar.Item href='#'>Quản lý học phần</Sidebar.Item>
-            <Sidebar.Item href='#'>Quản lý lịch học</Sidebar.Item>
-            <Sidebar.Item href='#'>Quản lý lịch thi</Sidebar.Item>
+            <Sidebar.Item href='/course-management'>
+              Quản lý học phần
+            </Sidebar.Item>
+            <Sidebar.Item href='/timetable-management'>
+              Quản lý lịch học
+            </Sidebar.Item>
+            <Sidebar.Item href='/exam-schedule-management'>
+              Quản lý lịch thi
+            </Sidebar.Item>
           </Sidebar.Collapse>
         </Sidebar.ItemGroup>
       </Sidebar.Items>

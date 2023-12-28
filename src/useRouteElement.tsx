@@ -17,6 +17,8 @@ import Header from './components/Header/Header';
 import SearchBar from './components/SearchBar/SearchBar';
 import DateTimeInput from './components/DatetimeInput/DatetimeInput';
 import SidebarComponent from './components/Sidebar/Sidebar';
+import MainLayout from './layouts/MainLayout';
+import AllStudent from './pages/Student/AllStudent';
 function ProtectedRoute() {
   const { isAuthenticated } = useAppContext();
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
@@ -89,6 +91,15 @@ export default function useRouteElement() {
       element: <SidebarComponent></SidebarComponent>,
       path: '/sidebar'
     },
+    {
+      element: <MainLayout></MainLayout>,
+      children: [
+        {
+          element: <AllStudent></AllStudent>,
+          path: '/all-students'
+        }
+      ]
+    }
   ]);
 
   return routeElement;
