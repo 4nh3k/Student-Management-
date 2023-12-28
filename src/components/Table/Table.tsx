@@ -1,7 +1,6 @@
+import { ArrowDown, ArrowUp } from '@phosphor-icons/react';
 import React, { useState } from 'react';
 import { TableTheme, getClassName } from './TableStyle';
-import { ArrowUp } from '@phosphor-icons/react';
-import { ArrowDown } from '@phosphor-icons/react/dist/ssr';
 
 interface Header {
   title: string;
