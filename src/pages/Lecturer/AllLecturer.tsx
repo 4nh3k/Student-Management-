@@ -1,27 +1,19 @@
-import { Breadcrumb, FloatingLabel } from 'flowbite-react';
-import Pagination from 'src/components/Pagination';
+import { Button, FloatingLabel, Select } from 'flowbite-react';
 import Breadcrumbs from 'src/components/Breadcrumb/Breadcrumb';
-import Header from 'src/components/Header/Header';
-import { Spinner } from 'flowbite-react';
-import { Dropdown } from 'flowbite-react';
-import { Button } from 'flowbite-react';
+import Pagination from 'src/components/Pagination';
 import Table from 'src/components/Table';
-import { useState } from 'react';
-import theme from './../../constants/theme';
-const AllStudent = () => {
+const AllLecturer = () => {
   const courseMajor = ['KTPM', 'KHMT', 'ATTT', 'MMT&TT'];
   const headers = [
-    { title: 'Mã số sinh viên', dataIndex: 'studentID' },
+    { title: 'Mã số sinh viên', dataIndex: 'ID' },
     { title: 'Tên', dataIndex: 'studentName' },
     { title: 'Giới tính', dataIndex: 'gender' },
     { title: 'Lớp', dataIndex: 'class' },
-    { title: 'Trạng thái học tập', dataIndex: 'status' },
-    { title: 'Email', dataIndex: 'email' },
-    { title: 'Ngày sinh', dataIndex: 'dateOfBirth' }
+    { title: 'Khoa', dataIndex: 'status' }
   ];
   const data = [
     {
-      studentID: '21520620',
+      ID: '21520620',
       studentName: 'Nguyễn Tuấn Bảo',
       gender: 'Nam',
       class: 'KTPM',
@@ -30,7 +22,7 @@ const AllStudent = () => {
       dateOfBirth: '11/03/2003'
     },
     {
-      studentID: '21520620',
+      ID: '21520620',
       studentName: 'Nguyễn Tuấn Bảo',
       gender: 'Nam',
       class: 'KTPM',
@@ -39,7 +31,7 @@ const AllStudent = () => {
       dateOfBirth: '11/03/2003'
     },
     {
-      studentID: '21520620',
+      ID: '21520620',
       studentName: 'Nguyễn Tuấn Bảo',
       gender: 'Nam',
       class: 'KTPM',
@@ -48,7 +40,7 @@ const AllStudent = () => {
       dateOfBirth: '11/03/2003'
     },
     {
-      studentID: '21520620',
+      ID: '21520620',
       studentName: 'Nguyễn Tuấn Bảo',
       gender: 'Nam',
       class: 'KTPM',
@@ -57,7 +49,7 @@ const AllStudent = () => {
       dateOfBirth: '11/03/2003'
     },
     {
-      studentID: '21520620',
+      ID: '21520620',
       studentName: 'Nguyễn Tuấn Bảo',
       gender: 'Nam',
       class: 'KTPM',
@@ -66,10 +58,6 @@ const AllStudent = () => {
       dateOfBirth: '11/03/2003'
     }
   ];
-
-  const [totalPage, setTotalPage] = useState(50);
-  const [pageRange, setPageRange] = useState(5);
-  const onPageChange = (page: number) => setCurrentPage(page);
 
   return (
     <div className='items-center'>
@@ -90,16 +78,10 @@ const AllStudent = () => {
                 label='Tìm bằng tên'
               />
             </div>
-            <Dropdown
-              className=' font-bold'
-              label='Chọn khoa'
-              dismissOnClick={true}
-              inline
-            >
-              {courseMajor.map(major => (
-                <Dropdown.Item key={major}>{major}</Dropdown.Item>
-              ))}
-            </Dropdown>
+            <Select id='major' required>
+              <option>Nam</option>
+              <option>Nữ</option>
+            </Select>
             <Button className='bg-primary'>Tìm kiếm</Button>
           </div>
           <Table
@@ -111,7 +93,9 @@ const AllStudent = () => {
             className='mt-5 flex justify-end'
             pageCount={50}
             pageRangeDisplayed={5}
-            onPageChange={(data: { selected: number }) => {}}
+            onPageChange={(data: { selected: number }) => {
+              console.log(data);
+            }}
           />
         </div>
       </div>
@@ -119,7 +103,4 @@ const AllStudent = () => {
   );
 };
 
-export default AllStudent;
-function setCurrentPage(page: number) {
-  throw new Error('Function not implemented.');
-}
+export default AllLecturer;

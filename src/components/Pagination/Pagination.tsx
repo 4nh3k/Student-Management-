@@ -4,13 +4,13 @@ interface PaginationProps {
   pageCount: number;
   pageRangeDisplayed?: number;
   className?: string;
-  handlePageClick: (data: { selected: number }) => void;
+  onPageChange: (data: { selected: number }) => void;
 }
 // https://www.npmjs.com/package/react-paginate
 export default function Pagination({
   pageCount,
   pageRangeDisplayed,
-  handlePageClick,
+  onPageChange,
   className
 }: PaginationProps) {
   return (
@@ -22,7 +22,7 @@ export default function Pagination({
         breakLabel='...'
         nextLabel='Trang sau'
         initialPage={0}
-        onPageChange={handlePageClick}
+        onPageChange={onPageChange}
         pageRangeDisplayed={pageRangeDisplayed}
         pageCount={pageCount}
         previousLabel='Trang trước'

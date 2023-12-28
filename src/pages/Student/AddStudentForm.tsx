@@ -1,22 +1,11 @@
-import React from 'react';
-import { Breadcrumb, FloatingLabel } from 'flowbite-react';
-import Pagination from 'src/components/Pagination';
+import { FloatingLabel, Dropdown, Datepicker } from 'flowbite-react';
 import Breadcrumbs from 'src/components/Breadcrumb/Breadcrumb';
-import Header from 'src/components/Header/Header';
-import { Spinner } from 'flowbite-react';
-import { Dropdown } from 'flowbite-react';
-import { Button } from 'flowbite-react';
-import Table from 'src/components/Table';
-import { useState } from 'react';
-import { Datepicker } from 'flowbite-react';
-
 
 const AddStudentForm = () => {
   return (
     <div className='items-center'>
-      <Header></Header>
       <div id='main-body' className='space-y-5 p-10'>
-        <Breadcrumbs></Breadcrumbs>
+        <Breadcrumbs />
         <div
           id='student-table-container'
           className='w-full bg-white p-5 shadow-lg'
