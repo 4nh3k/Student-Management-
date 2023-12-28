@@ -24,7 +24,7 @@ const ImageLoader = () => {
   };
   return (
     <FileDrop
-      className='m-auto block cursor-pointer rounded-full lg:h-48 lg:w-48'
+      className=' block cursor-pointer rounded-full lg:h-48 lg:w-48'
       targetClassName={`w-48 h-48 border-2 mx-auto ${
         file === null ? 'border-dashed' : 'border-solid'
       } overflow-hidden bg-gray-50 border-gray-400 rounded-full md-4 flex flex-col items-center justify-center`}

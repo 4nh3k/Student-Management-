@@ -15,7 +15,7 @@ const chipColor = {
 export default function Chip({ type, value }: ChipProps) {
   return (
     <div
-      className={`relative grid select-none items-center whitespace-nowrap ${chipColor[type]} w-fit rounded-xl px-3 py-1.5 font-sans text-xs font-semibold text-white`}
+      className={`relative m-auto grid select-none items-center whitespace-nowrap ${chipColor[type]} w-fit rounded-xl px-3 py-1.5 font-sans text-xs font-semibold text-white`}
     >
       <span>{value}</span>
     </div>

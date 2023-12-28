@@ -85,7 +85,6 @@ const AllStudent = () => {
             <Dropdown.Item key={major}>{major}</Dropdown.Item>
           ))}
         </Dropdown>
-        <Button className='bg-primary'>Tìm kiếm</Button>
       </div>
       <Table
         headers={headers}

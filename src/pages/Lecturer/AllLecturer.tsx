@@ -61,7 +61,6 @@ const AllLecturer = () => {
           <option>Nam</option>
           <option>Nữ</option>
         </Select>
-        <Button className='bg-primary'>Tìm kiếm</Button>
       </div>
       <Table
         headers={headers}

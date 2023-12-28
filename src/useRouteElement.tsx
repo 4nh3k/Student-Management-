@@ -13,6 +13,8 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import AddStudentForm from './pages/Student/AddStudentForm';
 import AllLecturer from './pages/Lecturer/AllLecturer';
 import AddLecturer from './pages/Lecturer/AddLecturer';
+import FeeList from './pages/Fee/FeeList';
+import AddFee from './pages/Fee/AddFee';
 function ProtectedRoute() {
   const { isAuthenticated } = useAppContext();
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
@@ -73,6 +75,14 @@ export default function useRouteElement() {
         {
           path: path.add_lecturer,
           element: <AddLecturer />
+        },
+        {
+          path: path.fee_list,
+          element: <FeeList />
+        },
+        {
+          path: path.add_fee,
+          element: <AddFee />
         }
       ]
     },
