@@ -4,7 +4,7 @@ import Logo from 'src/assets/icons/UITLogo.svg';
 
 const Header = user_img => {
   return (
-    <div className='flex items-center justify-end bg-white pb-4 pr-2 pt-4 align-middle'>
+    <div className='flex items-center justify-end bg-white pb-4 pr-2 pt-4 align-middle shadow-lg'>
       <CircleIcon src={Logo} size={32}></CircleIcon>
       <svg
         width='20'

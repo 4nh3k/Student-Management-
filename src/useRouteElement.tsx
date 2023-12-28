@@ -19,6 +19,7 @@ import DateTimeInput from './components/DatetimeInput/DatetimeInput';
 import SidebarComponent from './components/Sidebar/Sidebar';
 import MainLayout from './layouts/MainLayout';
 import AllStudent from './pages/Student/AllStudent';
+import Dashboard from './pages/Dashboard/Dashboard';
 function ProtectedRoute() {
   const { isAuthenticated } = useAppContext();
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
@@ -41,12 +42,6 @@ const AuthRouteChildren: RouteObject[] = [
 ];
 
 export default function useRouteElement() {
-  const pathTestForBreadcrumb = [
-    { title: 'Home', link: '/' },
-    { title: 'Products', link: '/products' },
-    { title: 'Category', link: '/products/category' },
-    { title: 'Current Page' }
-  ];
   const routeElement = useRoutes([
     // {
     //   element: <RejectedRoute />,
@@ -95,8 +90,12 @@ export default function useRouteElement() {
       element: <MainLayout></MainLayout>,
       children: [
         {
+          element: <Dashboard></Dashboard>,
+          path: '/dashboard',
+        },
+        {
           element: <AllStudent></AllStudent>,
-          path: '/all-students'
+          path: '/all-students',
         }
       ]
     }

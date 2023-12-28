@@ -9,7 +9,7 @@ interface SidebarProp {
 export default function SidebarComponent() {
   return (
     <Sidebar
-      className='fixed bottom-0 left-0 top-0 w-24 bg-sidebar shadow lg:w-60 '
+      className='fixed bottom-0 left-0 top-0 w-24 bg-sidebar shadow-lg lg:w-60 '
       aria-label='Sidebar with multi-level dropdown example'
     >
       <div className='flex w-full items-center space-x-3 pb-2 pt-2 align-middle text-[1.125rem] font-semibold'>
@@ -18,12 +18,11 @@ export default function SidebarComponent() {
       </div>
       <Sidebar.Items>
         <Sidebar.ItemGroup>
-          <Sidebar.Item href='#'>Bảng điều khiển</Sidebar.Item>
+          <Sidebar.Item href='/dashboard'>Bảng điều khiển</Sidebar.Item>
           <Sidebar.Collapse label='Sinh viên'>
             <Sidebar.Item href='/all-students'>Toàn bộ sinh viên</Sidebar.Item>{' '}
-            {/* Quản lý tiến độ*/}
+            {/* Quản lý tiến độ*/} {/* Giấy tờ sinh viên */}
             <Sidebar.Item href='/add-student'>Thêm sinh viên</Sidebar.Item>
-            <Sidebar.Item href='/student-paper'>Giấy tờ sinh viên</Sidebar.Item>
           </Sidebar.Collapse>
           <Sidebar.Collapse label='Giảng viên'>
             <Sidebar.Item href='/all-lecturer'>Toàn bộ giảng viên</Sidebar.Item>

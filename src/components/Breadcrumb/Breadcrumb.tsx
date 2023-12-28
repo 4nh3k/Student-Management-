@@ -4,11 +4,16 @@ import React from 'react';
 import useBreadcrumbs from 'use-react-router-breadcrumbs';
 
 const Breadcrumbs = ({ separator = '>' }) => {
-  const breadcrumbs = useBreadcrumbs();
+  const routes = [
+    { path: '/dashboard', breadcrumb: 'Bảng điều khiển' },
+    { path: '/', breadcrumb: 'Trang chủ' },
+    { path: '/all-students', breadcrumb: 'Tất cả sinh viên' }
+  ];
+  const breadcrumbs = useBreadcrumbs(routes);
   const separatorSpan = <span key='separator'> {separator} </span>;
   const lastBreadcrumbIndex = breadcrumbs.length - 1;
   return (
-    <div className='small'>
+    <div className='text-lg font-bold'>
       {breadcrumbs.map(({ match, breadcrumb }, index) => (
         <NavLink key={match.pathname} to={match.pathname}>
           {index > 0 && separatorSpan}
