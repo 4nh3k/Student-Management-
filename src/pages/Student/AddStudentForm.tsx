@@ -33,7 +33,7 @@ const AddStudentForm = () => {
               <Dropdown.Item key={'male'}>{'Nam'}</Dropdown.Item>
               <Dropdown.Item key={'female'}>{'Nữ'}</Dropdown.Item>
             </Dropdown>
-            <Datepicker></Datepicker>
+            <Datepicker placeholder='Chọn ngày sinh'></Datepicker>
           </div>
         </div>
       </div>
