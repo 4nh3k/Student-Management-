@@ -10,9 +10,8 @@ export type TableStyle = {
 };
 
 const defautStyle: TableStyle = {
-  className: 'border-input border-2 mx-4 mt-4 ',
-  classNameTable:
-    'w-full border-collapse table-auto bg-white text-left text-lg',
+  className: 'border-input border-2',
+  classNameTable: 'w-full border-collapse table-auto bg-white text-left ',
   classNameBody: 'divide-y-2 divide-input border-t-2 border-input ',
   classNameHeader: 'font-bold text-primary',
   classNameRow: 'hover:bg-[#F7F6FE] cursor-pointer py-4 text-base',
@@ -20,7 +19,7 @@ const defautStyle: TableStyle = {
 };
 
 const transcriptStyle: TableStyle = {
-  className: 'border-input border-2 mx-4 mt-4',
+  className: 'border-input border-2',
   classNameTable:
     'w-full border-collapse table-auto bg-white text-left text-sm',
   classNameBody: 'divide-y-2 divide-input border-t-2 border-input ',
@@ -39,7 +38,7 @@ export const getClassName = (
   propClassNameRowSelected: string | undefined,
   propTableStyle: TableTheme | undefined
 ): TableStyle => {
-  const style = propTableStyle === 'default' ? defautStyle : transcriptStyle;
+  const style = propTableStyle === 'transcript' ? transcriptStyle : defautStyle;
   return {
     className: propClassName || style.className,
     classNameTable: propClassNameTable || style.classNameTable,

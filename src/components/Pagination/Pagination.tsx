@@ -3,18 +3,20 @@ import './Pagination.css';
 interface PaginationProps {
   pageCount: number;
   pageRangeDisplayed?: number;
+  className?: string;
   handlePageClick: (data: { selected: number }) => void;
 }
 // https://www.npmjs.com/package/react-paginate
 export default function Pagination({
   pageCount,
   pageRangeDisplayed,
-  handlePageClick
+  handlePageClick,
+  className
 }: PaginationProps) {
   return (
-    <div className='pagination'>
+    <div className={!className ? `pagination ` : `pagination ` + className}>
       <ReactPaginate
-        className='flex items-center justify-center space-x-2 text-sm'
+        className='space-x-2 text-sm'
         pageClassName='border-primary h-8 w-8 border bg-white text-center '
         pageLinkClassName='h-full w-full flex items-center justify-center'
         breakLabel='...'

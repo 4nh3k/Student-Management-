@@ -7,6 +7,7 @@ import { Dropdown } from 'flowbite-react';
 import { Button } from 'flowbite-react';
 import Table from 'src/components/Table';
 import { useState } from 'react';
+import theme from './../../constants/theme';
 const AllStudent = () => {
   const courseMajor = ['KTPM', 'KHMT', 'ATTT', 'MMT&TT'];
   const headers = [
@@ -72,7 +73,6 @@ const AllStudent = () => {
 
   return (
     <div className='items-center'>
-      <Header></Header>
       <div id='main-body' className='space-y-5 p-10'>
         <Breadcrumbs></Breadcrumbs>
         <div
@@ -83,13 +83,15 @@ const AllStudent = () => {
             id='input-row'
             className='flex items-center justify-between align-middle'
           >
-            <FloatingLabel
-              className='w-96 text-xl '
-              variant='outlined'
-              label='Tìm bằng tên'
-            />
+            <div className='w-96'>
+              <FloatingLabel
+                className=''
+                variant='outlined'
+                label='Tìm bằng tên'
+              />
+            </div>
             <Dropdown
-              className='text-xl font-bold'
+              className=' font-bold'
               label='Chọn khoa'
               dismissOnClick={true}
               inline
@@ -100,7 +102,17 @@ const AllStudent = () => {
             </Dropdown>
             <Button className='bg-primary'>Tìm kiếm</Button>
           </div>
-          <Table headers={headers} data={data}></Table>
+          <Table
+            headers={headers}
+            data={data}
+            className='border-input mt-2 border-2'
+          />
+          <Pagination
+            className='mt-5 flex justify-end'
+            pageCount={totalPage}
+            pageRange={pageRange}
+            onPageChange={onPageChange}
+          />
         </div>
       </div>
     </div>
@@ -111,4 +123,3 @@ export default AllStudent;
 function setCurrentPage(page: number) {
   throw new Error('Function not implemented.');
 }
-
