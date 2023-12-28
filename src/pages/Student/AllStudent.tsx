@@ -73,7 +73,6 @@ const AllStudent = () => {
 
   return (
     <div className='items-center'>
-      <Header></Header>
       <div id='main-body' className='space-y-5 p-10'>
         <Breadcrumbs></Breadcrumbs>
         <div
