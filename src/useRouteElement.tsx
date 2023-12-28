@@ -20,6 +20,7 @@ import SidebarComponent from './components/Sidebar/Sidebar';
 import MainLayout from './layouts/MainLayout';
 import AllStudent from './pages/Student/AllStudent';
 import Dashboard from './pages/Dashboard/Dashboard';
+import AddStudentForm from './pages/Student/AddStudentForm';
 function ProtectedRoute() {
   const { isAuthenticated } = useAppContext();
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
@@ -96,6 +97,10 @@ export default function useRouteElement() {
         {
           element: <AllStudent></AllStudent>,
           path: '/all-students',
+        },
+        {
+          element: <AddStudentForm></AddStudentForm>,
+          path: '/add-student',
         }
       ]
     }

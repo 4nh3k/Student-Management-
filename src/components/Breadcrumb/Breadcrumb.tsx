@@ -7,7 +7,8 @@ const Breadcrumbs = ({ separator = '>' }) => {
   const routes = [
     { path: '/dashboard', breadcrumb: 'Bảng điều khiển' },
     { path: '/', breadcrumb: 'Trang chủ' },
-    { path: '/all-students', breadcrumb: 'Tất cả sinh viên' }
+    { path: '/all-students', breadcrumb: 'Tất cả sinh viên' },
+    { path: '/add-student', breadcrumb: 'Thêm sinh viên' },
   ];
   const breadcrumbs = useBreadcrumbs(routes);
   const separatorSpan = <span key='separator'> {separator} </span>;

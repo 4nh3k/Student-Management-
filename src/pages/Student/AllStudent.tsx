@@ -101,14 +101,6 @@ const AllStudent = () => {
             <Button className='bg-primary'>Tìm kiếm</Button>
           </div>
           <Table headers={headers} data={data}></Table>
-          <div className='pt-5'>
-            <Pagination
-              pageCount={totalPage}
-              pageRangeDisplayed={pageRange}
-            // handlePageClick={onPageChange}
-            > 
-            </Pagination>
-          </div>
         </div>
       </div>
     </div>
