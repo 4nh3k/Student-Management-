@@ -1,15 +1,15 @@
-import logo from 'src/assets/icons/UITLogo.svg';
-('use client');
 import { Sidebar } from 'flowbite-react';
-import path from 'src/constants/path';
 import {
-  Books,
-  ChalkboardTeacher,
-  ChartPieSlice,
-  Money,
-  Student
-} from '@phosphor-icons/react';
+  PiBooks,
+  PiChalkboardTeacher,
+  PiChartPieSlice,
+  PiMoney,
+  PiStudent
+} from 'react-icons/pi';
 import { useLocation } from 'react-router-dom';
+import logo from 'src/assets/icons/UITLogo.svg';
+import path from 'src/constants/path';
+('use client');
 
 interface SidebarProp {
   isAdmin: boolean;
@@ -27,22 +27,21 @@ export default function SidebarComponent() {
       className='fixed bottom-0 left-0 top-0 w-24 bg-sidebar shadow-lg lg:w-60 '
       aria-label='Sidebar with multi-level dropdown example'
     >
-      <div className='mb-4 flex w-full items-center space-x-3 pb-2 pt-2 align-middle text-[1.125rem] font-semibold'>
-        <img src={logo} alt='logo' className='ml-3 h-[1.5rem] w-[1.5rem]' />
-        <span>Quản lý sinh viên</span>
-      </div>
+      <Sidebar.Logo href={path.dashboard} img={logo} imgAlt='uit logo'>
+        Quản lý sinh viên
+      </Sidebar.Logo>
       <Sidebar.Items>
         <Sidebar.ItemGroup>
           <Sidebar.Item
             href={path.dashboard}
             active={path.dashboard === location.pathname}
-            icon={ChartPieSlice}
+            icon={PiChartPieSlice}
           >
             Bảng điều khiển
           </Sidebar.Item>
           <Sidebar.Collapse
             label='Sinh viên'
-            icon={Student}
+            icon={PiStudent}
             open={getIsOpen('student', location.pathname)}
           >
             <Sidebar.Item
@@ -61,7 +60,7 @@ export default function SidebarComponent() {
           </Sidebar.Collapse>
           <Sidebar.Collapse
             label='Giảng viên'
-            icon={ChalkboardTeacher}
+            icon={PiChalkboardTeacher}
             open={getIsOpen('lecturer', location.pathname)}
           >
             <Sidebar.Item
@@ -79,7 +78,7 @@ export default function SidebarComponent() {
           </Sidebar.Collapse>
           <Sidebar.Collapse
             label='Học phí'
-            icon={Money}
+            icon={PiMoney}
             open={getIsOpen('fee', location.pathname)}
           >
             <Sidebar.Item
@@ -97,7 +96,7 @@ export default function SidebarComponent() {
           </Sidebar.Collapse>
           <Sidebar.Collapse
             label='Học tập'
-            icon={Books}
+            icon={PiBooks}
             open={getIsOpen('management', location.pathname)}
           >
             <Sidebar.Item

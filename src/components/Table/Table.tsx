@@ -1,15 +1,16 @@
-import { ArrowDown, ArrowUp } from '@phosphor-icons/react';
 import React, { useState } from 'react';
+import { PiArrowDown, PiArrowUp } from 'react-icons/pi';
+import Pagination from '../Pagination';
 import { TableTheme, getClassName } from './TableStyle';
 
-interface Header {
+export type Header = {
   title: string;
   dataIndex: string;
   className?: string;
   sortable?: boolean;
-}
+};
 
-interface TableProps {
+export interface TableProps {
   headers: Header[];
   data: any[];
   className?: string;
@@ -24,6 +25,7 @@ interface TableProps {
   onRowClick?: (row: any) => void;
   filters?: any;
   tableStyle?: TableTheme;
+  pageSize?: number; // Number of rows per page
 }
 
 const Table: React.FC<TableProps> = ({
@@ -40,11 +42,13 @@ const Table: React.FC<TableProps> = ({
   selectedRow,
   onRowClick,
   tableStyle,
-  filters // the filters you want to apply
+  filters,
+  pageSize // Default page size is 10
 }) => {
   const [selected, setSelected] = useState(selectedRow || null);
   const [sortColumn, setSortColumn] = useState('');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleRowClick = (row: any, index: number) => {
     setSelected(index);
@@ -63,6 +67,10 @@ const Table: React.FC<TableProps> = ({
       setSortColumn(column);
       setSortOrder('asc');
     }
+  };
+
+  const handlePageChange = (data: { selected: number }) => {
+    setCurrentPage(data.selected + 1);
   };
 
   const filteredData = React.useMemo(() => {
@@ -113,6 +121,16 @@ const Table: React.FC<TableProps> = ({
     return filteredData;
   }, [filteredData, sortColumn, sortOrder]);
 
+  const paginatedData = React.useMemo(() => {
+    if (pageSize !== undefined) {
+      const startIndex = (currentPage - 1) * pageSize;
+      const endIndex = startIndex + pageSize;
+      return sortedData.slice(startIndex, endIndex);
+    }
+
+    return sortedData;
+  }, [sortedData, pageSize, currentPage]);
+
   const resolvedStyles = getClassName(
     className,
     classNameTable,
@@ -124,169 +142,125 @@ const Table: React.FC<TableProps> = ({
   );
 
   return (
-    <div className={resolvedStyles.className}>
-      <table className={resolvedStyles.classNameTable}>
-        <thead>
-          <tr className={resolvedStyles.classNameHeader}>
-            {headers?.map(header => (
-              <th
-                className={
-                  header.className ? header.className : 'group/header px-4 py-4'
-                }
-                key={header.dataIndex}
-                onClick={() => header.sortable && handleSort(header.dataIndex)}
-              >
-                {header.title}
-                {header.sortable && (
-                  <>
-                    {sortColumn === header.dataIndex && sortOrder === 'asc' && (
-                      <ArrowUp size={16} className='ml-1 inline-block' />
-                    )}
-                    {sortColumn === header.dataIndex &&
-                      sortOrder === 'desc' && (
-                        <ArrowDown size={16} className='ml-1 inline-block' />
+    <>
+      <div className={resolvedStyles.className}>
+        <table className={resolvedStyles.classNameTable}>
+          <thead>
+            <tr className={resolvedStyles.classNameHeader}>
+              {headers?.map(header => (
+                <th
+                  className={
+                    header.className
+                      ? header.className
+                      : 'group/header px-4 py-4'
+                  }
+                  key={header.dataIndex}
+                  onClick={() =>
+                    header.sortable && handleSort(header.dataIndex)
+                  }
+                >
+                  {header.title}
+                  {header.sortable && (
+                    <>
+                      {sortColumn === header.dataIndex &&
+                        sortOrder === 'asc' && (
+                          <PiArrowUp size={16} className='ml-1 inline-block' />
+                        )}
+                      {sortColumn === header.dataIndex &&
+                        sortOrder === 'desc' && (
+                          <PiArrowDown
+                            size={16}
+                            className='ml-1 inline-block'
+                          />
+                        )}
+                      {sortColumn !== header.dataIndex && (
+                        <PiArrowUp
+                          size={16}
+                          className='ml-1 inline-block text-transparent group-hover/header:text-black/40'
+                        />
                       )}
-                    {sortColumn !== header.dataIndex && (
-                      <ArrowUp
-                        size={16}
-                        className='ml-1 hidden text-black/40 group-hover/header:inline-block'
-                      />
-                    )}
-                  </>
-                )}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody className={resolvedStyles.classNameBody}>
-          {sortedData?.map((row, index) => (
-            <tr
-              className={
-                canSelected && selected === index
-                  ? resolvedStyles.classNameRowSelected
-                  : resolvedStyles.classNameRow
-              }
-              key={index}
-              onClick={() => handleRowClick(row, index)}
-            >
-              {headers?.map(header => {
-                const cellData = row[header.dataIndex];
+                    </>
+                  )}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className={resolvedStyles.classNameBody}>
+            {paginatedData?.map((row, index) => (
+              <tr
+                className={
+                  canSelected && selected === index
+                    ? resolvedStyles.classNameRowSelected
+                    : resolvedStyles.classNameRow
+                }
+                key={index}
+                onClick={() => handleRowClick(row, index)}
+              >
+                {headers?.map(header => {
+                  const cellData = row[header.dataIndex];
 
-                if (cellData !== undefined && cellData.content !== undefined) {
-                  const colSpan = cellData.colSpan || 1;
+                  if (
+                    cellData !== undefined &&
+                    cellData.content !== undefined
+                  ) {
+                    const colSpan = cellData.colSpan || 1;
 
+                    return (
+                      <td
+                        className={
+                          cellData.className ? cellData.className : 'px-4 py-3'
+                        }
+                        colSpan={colSpan}
+                        key={header.dataIndex}
+                      >
+                        {typeof cellData.content === 'object' ? (
+                          <>{cellData.content}</>
+                        ) : (
+                          cellData.content
+                        )}
+                      </td>
+                    );
+                  }
+                  if (cellData === undefined) return null;
                   return (
                     <td
                       className={
-                        cellData.className ? cellData.className : 'px-4 py-3'
+                        row[header.dataIndex]?.className
+                          ? row[header.dataIndex]?.className
+                          : 'px-4 py-3'
                       }
-                      colSpan={colSpan}
                       key={header.dataIndex}
                     >
-                      {typeof cellData.content === 'object' ? (
-                        <>{cellData.content}</>
+                      {typeof row[header.dataIndex] === 'object' ? (
+                        <>{row[header.dataIndex]}</>
                       ) : (
-                        cellData.content
+                        row[header.dataIndex]
                       )}
                     </td>
-                  );
-                }
-                if (cellData === undefined) return null;
-                return (
-                  <td
-                    className={
-                      row[header.dataIndex]?.className
-                        ? row[header.dataIndex]?.className
-                        : 'px-4 py-3'
-                    }
-                    key={header.dataIndex}
-                  >
-                    {typeof row[header.dataIndex] === 'object' ? (
-                      <>{row[header.dataIndex]}</>
-                    ) : (
-                      row[header.dataIndex]
-                    )}
-                  </td>
-                ); // or handle undefined data as needed
-              })}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+                  ); // or handle undefined data as needed
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {pageSize && (
+        <div className='mt-5 flex items-center justify-between '>
+          <span className='text-sm text-gray-500'>
+            Hiển thị {(currentPage - 1) * pageSize + 1} đến{' '}
+            {currentPage * pageSize} của {sortedData.length} kết quả
+          </span>
+          <Pagination
+            className='flex justify-end'
+            pageCount={Math.ceil(sortedData.length / pageSize)}
+            pageRangeDisplayed={5}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      )}
+    </>
   );
 };
 
 export default Table;
-
-// SAMPLE DATA
-
-// const header = [
-//   {
-//     title: 'Name',
-//     dataIndex: 'name'
-//   },
-//   {
-//     title: 'Age',
-//     dataIndex: 'age',
-//     sortable: true
-//   },
-//   {
-//     title: 'Address',
-//     dataIndex: 'address'
-//   }
-// ];
-
-// const data = [
-//   {
-//     name: 'John Brown',
-//     age: 32,
-//     address: 'New York No. 1 Lake Park'
-//   },
-//   {
-//     name: 'Jim Green',
-//     age: 42,
-//     address: 'London No. 1 Lake Park'
-//   },
-//   {
-//     name: 'Joe Black',
-//     age: 32,
-//     address: 'Sidney No. 1 Lake Park'
-//   }
-// ];
-
-// const transcriptData = [
-//   {
-//     name: {
-//       content: <p className='font-bold'> Học kỳ 2 - Năm học 2023 - 2024</p>,
-//       colSpan: 3
-//     }
-//   },
-//   {
-//     name: 'John Brown',
-//     age: 32,
-//     address: 'New York No. 1 Lake Park'
-//   },
-//   {
-//     name: 'Jim Green',
-//     age: 42,
-//     address: 'London No. 1 Lake Park'
-//   },
-//   {
-//     name: 'Joe Black',
-//     age: 32,
-//     address: 'Sidney No. 1 Lake Park'
-//   },
-//   {
-//     name: {
-//       content: <p className='font-bold'> Số tín chỉ đã học</p>,
-//       colSpan: 2
-//     },
-//     address: 32
-//   }
-// ];
-// const filters = {
-//   name: 'j',
-//   age: 32,
-//   address: 'park'
-// };

@@ -17,7 +17,7 @@ export default function Pagination({
     <div className={!className ? `pagination ` : `pagination ` + className}>
       <ReactPaginate
         className='space-x-2 text-sm'
-        pageClassName='border-primary h-8 w-8 border bg-white text-center '
+        pageClassName='border-primary h-8 w-8 border rounded-lg bg-white text-center '
         pageLinkClassName='h-full w-full flex items-center justify-center'
         breakLabel='...'
         nextLabel='Trang sau'
