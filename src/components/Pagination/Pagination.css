@@ -1,11 +1,11 @@
-ul {
+.pagination ul {
   @apply flex items-center justify-center space-x-2 text-sm;
 }
-ul li.previous a,
-ul li.next a,
-ul li.break a {
+.pagination ul li.previous a,
+.pagination ul li.next a,
+.pagination ul li.break a {
   @apply text-gray-600;
 }
-ul li.selected a {
+.pagination ul li.selected a {
   @apply bg-primary text-white;
 }
