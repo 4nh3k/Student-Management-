@@ -132,7 +132,7 @@ const Table: React.FC<TableProps> = ({
             {headers?.map(header => (
               <th
                 className={
-                  header.className ? header.className : 'group/header px-4 py-4 text-primary font-bold'
+                  header.className ? header.className : 'group/header px-4 py-4'
                 }
                 key={header.dataIndex}
                 onClick={() => header.sortable && handleSort(header.dataIndex)}
