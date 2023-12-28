@@ -15,6 +15,7 @@ import AllLecturer from './pages/Lecturer/AllLecturer';
 import AddLecturer from './pages/Lecturer/AddLecturer';
 import FeeList from './pages/Fee/FeeList';
 import AddFee from './pages/Fee/AddFee';
+import CourseManagement from './pages/CourseManagement/CourseManagement';
 function ProtectedRoute() {
   const { isAuthenticated } = useAppContext();
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
@@ -83,7 +84,11 @@ export default function useRouteElement() {
         {
           path: path.add_fee,
           element: <AddFee />
-        }
+        },
+        {
+          path: path.course_management,
+          element: <CourseManagement />
+        },
       ]
     },
     {
