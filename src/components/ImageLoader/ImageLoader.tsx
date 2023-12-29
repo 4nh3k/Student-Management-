@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 
-import { PencilSimple, UploadSimple } from '@phosphor-icons/react';
 import { FileDrop } from 'react-file-drop';
+import { PiUploadSimple } from 'react-icons/pi';
 const ImageLoader = () => {
   const fileInputRef = useRef<File | null>(null);
   const [file, setFile] = useState(null); // array of currently uploaded files
@@ -40,7 +40,7 @@ const ImageLoader = () => {
     >
       {file === null ? (
         <>
-          <UploadSimple size={64} className='mx-auto text-gray-400' />
+          <PiUploadSimple size={64} className='mx-auto text-gray-400' />
           <p className='mx-6 text-center text-sm font-semibold'>
             Drop files to upload or{' '}
             <span className='text-primary underline'>browse</span>
