@@ -12,73 +12,58 @@ import {
   FloatingLabel
 } from 'flowbite-react';
 
-const CourseManagement = () => {
+const ExamScheduleManagement = () => {
   const [totalPage, setTotalPage] = useState(50);
   const [pageRange, setPageRange] = useState(5);
   const onPageChange = (page: number) => setCurrentPage(page);
   const courseMajor = ['KTPM', 'KHMT', 'ATTT', 'MMT&TT'];
 
   const headers = [
+    { title: 'Mã lịch thi', dataIndex: 'examID' },
     { title: 'Mã môn học', dataIndex: 'courseID' },
-    { title: 'Tên môn học', dataIndex: 'courseName' },
-    { title: 'Giảng viên', dataIndex: 'lecturerName' },
-    { title: 'Thuộc khoa', dataIndex: 'className' },
-    { title: 'Ngày bắt đầu', dataIndex: 'startDate' },
-    { title: 'Ngày kết thúc', dataIndex: 'endDate' },
-    { title: 'Số tín chỉ LT', dataIndex: 'creditLT' },
-    { title: 'Số tín chỉ TH', dataIndex: 'creditTH' }
+    { title: 'Ngày thi', dataIndex: 'examDate' },
+    { title: 'Phòng thi', dataIndex: 'roomID' },
+    { title: 'Ca thi', dataIndex: 'examPhase' },
+    { title: 'Thứ thi', dataIndex: 'examWeekday' },
+    { title: 'Ghi chú', dataIndex: 'note' }
   ];
 
   const data = [
     {
-      courseID: 'IT008.M12',
-      courseName: 'Cấu trúc dữ liệu và máy tính',
-      lecturerName: 'Nguyễn Văn A',
-      className: 'CNPM',
-      startDate: '29/12/2023',
-      endDate: '6/3/2024',
-      creditLT: 3,
-      creditTH: 1
+      examID: 1,
+      courseID: 'SE121.O11',
+      examDate: '04/01/2024',
+      roomID: 'E7.06',
+      examPhase: 1,
+      examWeekday: 5,
+      note: 'A'
     },
     {
-      courseID: 'IT008.M12',
-      courseName: 'Cấu trúc dữ liệu và máy tính',
-      lecturerName: 'Nguyễn Văn A',
-      className: 'CNPM',
-      startDate: '29/12/2023',
-      endDate: '6/3/2024',
-      creditLT: 3,
-      creditTH: 1
+      examID: 2,
+      courseID: 'SE121.O11',
+      examDate: '04/01/2024',
+      roomID: 'E7.06',
+      examPhase: 2,
+      examWeekday: 5,
+      note: 'B'
     },
     {
-      courseID: 'IT008.M12',
-      courseName: 'Cấu trúc dữ liệu và máy tính',
-      lecturerName: 'Nguyễn Văn A',
-      className: 'CNPM',
-      startDate: '29/12/2023',
-      endDate: '6/3/2024',
-      creditLT: 3,
-      creditTH: 1
+      examID: 3,
+      courseID: 'SE121.O11',
+      examDate: '04/01/2024',
+      roomID: 'E7.06',
+      examPhase: 3,
+      examWeekday: 5,
+      note: 'C'
     },
     {
-      courseID: 'IT008.M12',
-      courseName: 'Cấu trúc dữ liệu và máy tính',
-      lecturerName: 'Nguyễn Văn A',
-      className: 'CNPM',
-      startDate: '29/12/2023',
-      endDate: '6/3/2024',
-      creditLT: 3,
-      creditTH: 1
-    },
-    {
-      courseID: 'IT008.M12',
-      courseName: 'Cấu trúc dữ liệu và máy tính',
-      lecturerName: 'Nguyễn Văn A',
-      className: 'CNPM',
-      startDate: '29/12/2023',
-      endDate: '6/3/2024',
-      creditLT: 3,
-      creditTH: 1
+      examID: 4,
+      courseID: 'SE121.O11',
+      examDate: '04/01/2024',
+      roomID: 'E7.06',
+      examPhase: 4,
+      examWeekday: 5,
+      note: 'D'
     }
   ];
 
@@ -120,7 +105,7 @@ const CourseManagement = () => {
           pageCount={50}
           pageRangeDisplayed={5}
           // eslint-disable-next-line @typescript-eslint/no-empty-function
-          // onPageChange={(data: { selected: number }) => {}}
+          onPageChange={(data: { selected: number }) => {}}
         />
       </div>
       <div
@@ -130,10 +115,21 @@ const CourseManagement = () => {
         <div className='mt-4 grid grid-cols-3 gap-8'>
           <div>
             <div className='mb-2 block'>
-              <Label htmlFor='courseID' value='Mã môn học' />
+              <Label htmlFor='examID' value='Mã lịch thi' />
             </div>
             <TextInput
-              id='courseID'
+              id='examID'
+              type='text'
+              placeholder='Nhập mã lịch thi'
+              required
+            />
+          </div>
+          <div>
+            <div className='mb-2 block'>
+              <Label htmlFor='courseName' value='Mã môn học' />
+            </div>
+            <TextInput
+              id='courseName'
               type='text'
               placeholder='Nhập mã môn học'
               required
@@ -141,68 +137,53 @@ const CourseManagement = () => {
           </div>
           <div>
             <div className='mb-2 block'>
-              <Label htmlFor='courseName' value='Tên môn học' />
+              <Label htmlFor='examDate' value='Ngày thi' />
             </div>
-            <TextInput
-              id='courseName'
-              type='text'
-              placeholder='Nhập tên môn học'
-              required
-            />
+            <Datepicker></Datepicker>
           </div>
+
           <div>
             <div className='mb-2 block'>
-              <Label htmlFor='lecturerName' value='Tên giảng viên' />
+              <Label htmlFor='roomID' value='Phòng thi' />
             </div>
-            <TextInput
-              id='lecturerName'
-              type='text'
-              placeholder='Nhập tên giảng viên'
-              required
-            />
-          </div>
-          <div>
-            <div className='mb-2 block'>
-              <Label htmlFor='major' value='Khoa' />
-            </div>
-            <Select id='gender' required>
-              <option>MMT&TT</option>
-              <option>ATTT</option>
-              <option>KTPM</option>
-              <option>KTTT</option>
+            <Select id='roomID' required>
+              <option>B.102</option>
+              <option>C.113</option>
+              <option>B.402</option>
+              <option>C.304</option>
             </Select>
           </div>
           <div>
             <div className='mb-2 block'>
-              <Label htmlFor='department' value='Ngày bắt đầu học' />
+              <Label htmlFor='examPhase' value='Ca thi' />
             </div>
-            <Datepicker></Datepicker>
+            <Select id='examPhase' required>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+            </Select>
           </div>
           <div>
             <div className='mb-2 block'>
-              <Label htmlFor='department' value='Ngày kết thúc' />
-            </div>
-            <Datepicker></Datepicker>
-          </div>
-          <div>
-            <div className='mb-2 block'>
-              <Label htmlFor='creditLT' value='Số tín chỉ LT' />
+              <Label htmlFor='examWeekday' value='Thứ thi' />
             </div>
             <TextInput
-              id='creditLT'
+              id='examWeekday'
               type='number'
-              placeholder='Nhập số tín chỉ LT'
+              placeholder=''
               required
+              disabled={true}
             />
           </div>
           <div>
             <div className='mb-2 block'>
-              <Label htmlFor='creditTH' value='Số tín chỉ TH' />
+              <Label htmlFor='note' value='Ghi chú' />
             </div>
             <TextInput
-              id='creditTH'
+              id='note'
               type='number'
-              placeholder='Nhập số tín chỉ TH'
+              placeholder='Nhập ghi chú'
               required
             />
           </div>
@@ -217,7 +198,7 @@ const CourseManagement = () => {
   );
 };
 
-export default CourseManagement;
+export default ExamScheduleManagement;
 
 function setCurrentPage(page: number) {
   throw new Error('Function not implemented.');

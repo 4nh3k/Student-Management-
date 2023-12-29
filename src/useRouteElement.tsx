@@ -16,6 +16,7 @@ import AddLecturer from './pages/Lecturer/AddLecturer';
 import FeeList from './pages/Fee/FeeList';
 import AddFee from './pages/Fee/AddFee';
 import CourseManagement from './pages/CourseManagement/CourseManagement';
+import ExamScheduleManagement from './pages/ExamScheduleManagement/ExamScheduleManagement';
 function ProtectedRoute() {
   const { isAuthenticated } = useAppContext();
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
@@ -88,6 +89,10 @@ export default function useRouteElement() {
         {
           path: path.course_management,
           element: <CourseManagement />
+        },
+        {
+          path: path.exam_schedule_management,
+          element: <ExamScheduleManagement />
         },
       ]
     },
