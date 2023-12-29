@@ -44,10 +44,6 @@ table {
   border-collapse: collapse;
 }
 
-td, th {
-  text-align: center;
-}
-
 ::-webkit-scrollbar {
   width: 10px;
 }

@@ -1,22 +1,23 @@
 import {
   Navigate,
   Outlet,
-  type RouteObject,
-  useRoutes
+  useRoutes,
+  type RouteObject
 } from 'react-router-dom';
 import path from './constants/path';
-import Login from './pages/Login';
 import { useAppContext } from './contexts/app.contexts';
 import MainLayout from './layouts/MainLayout';
-import AllStudent from './pages/Student/AllStudent';
-import Dashboard from './pages/Dashboard/Dashboard';
-import AddStudentForm from './pages/Student/AddStudentForm';
-import AllLecturer from './pages/Lecturer/AllLecturer';
-import AddLecturer from './pages/Lecturer/AddLecturer';
-import FeeList from './pages/Fee/FeeList';
-import AddFee from './pages/Fee/AddFee';
 import CourseManagement from './pages/CourseManagement/CourseManagement';
+import Dashboard from './pages/Dashboard/Dashboard';
 import ExamScheduleManagement from './pages/ExamScheduleManagement/ExamScheduleManagement';
+import AddFee from './pages/Fee/AddFee';
+import FeeList from './pages/Fee/FeeList';
+import AddLecturer from './pages/Lecturer/AddLecturer';
+import AllLecturer from './pages/Lecturer/AllLecturer';
+import Login from './pages/Login';
+import AddStudentForm from './pages/Student/AddStudentForm';
+import AllStudent from './pages/Student/AllStudent';
+import Transcript from './pages/Transcript/Transcript';
 function ProtectedRoute() {
   const { isAuthenticated } = useAppContext();
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
@@ -94,11 +95,23 @@ export default function useRouteElement() {
           path: path.exam_schedule_management,
           element: <ExamScheduleManagement />
         },
+        {
+          path: path.timetable_management,
+          element: <Transcript />
+        },
+        {
+          path: path.all,
+          element: <Navigate to={path.dashboard} />
+        }
       ]
     },
     {
       element: <Login />,
       path: path.login
+    },
+    {
+      path: path.print_transcript,
+      element: <Transcript isPrint={true} />
     }
   ]);
 

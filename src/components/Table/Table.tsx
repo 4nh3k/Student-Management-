@@ -198,7 +198,8 @@ const Table: React.FC<TableProps> = ({
               >
                 {headers?.map(header => {
                   const cellData = row[header.dataIndex];
-
+                  if (cellData === null) return <td />;
+                  if (cellData === undefined) return null;
                   if (
                     cellData !== undefined &&
                     cellData.content !== undefined
@@ -221,7 +222,6 @@ const Table: React.FC<TableProps> = ({
                       </td>
                     );
                   }
-                  if (cellData === undefined) return null;
                   return (
                     <td
                       className={

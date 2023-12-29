@@ -9,7 +9,9 @@ const path = {
   add_fee: '/add-fee',
   course_management: '/course-management',
   timetable_management: '/timetable-management',
-  exam_schedule_management: '/exam-schedule-management'
+  exam_schedule_management: '/exam-schedule-management',
+  print_transcript: '/print-transcript',
+  all: '*'
 } as const;
 
 export default path;

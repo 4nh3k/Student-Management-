@@ -11,10 +11,10 @@ export type TableStyle = {
 
 const defautStyle: TableStyle = {
   className: 'border-input border-2',
-  classNameTable: 'w-full border-collapse table-auto bg-white text-left ',
+  classNameTable: 'w-full border-collapse table-auto bg-white text-center ',
   classNameBody: 'divide-y-2 divide-input border-t-2 border-input ',
   classNameHeader: 'font-bold text-primary',
-  classNameRow: 'hover:bg-[#F7F6FE] cursor-pointer py-4 text-base',
+  classNameRow: 'hover:bg-[#F7F6FE] cursor-pointer py-4 text-base ',
   classNameRowSelected: 'bg-primary/10'
 };
 
@@ -25,7 +25,7 @@ const transcriptStyle: TableStyle = {
   classNameBody: 'divide-y-2 divide-input border-t-2 border-input ',
   classNameHeader: 'font-bold  divide-x-2 divide-input ',
   classNameRow:
-    'hover:bg-[#F7F6FE] divide-x-2 divide-input cursor-pointer py-4',
+    'hover:bg-[#F7F6FE] divide-x-2 divide-input cursor-pointer py-4 font-normal',
   classNameRowSelected: 'bg-primary/10'
 };
 
