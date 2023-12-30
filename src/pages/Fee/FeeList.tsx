@@ -1,16 +1,8 @@
-import React from 'react';
-import { Button, Dropdown, FloatingLabel, Select, TextInput } from 'flowbite-react';
-import Pagination from 'src/components/Pagination';
-
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { Select, TextInput } from 'flowbite-react';
 import Table from 'src/components/Table';
-import Chip from 'src/components/Chip/Chip';
 
 const FeeList = () => {
-  const [totalPage, setTotalPage] = useState(50);
-  const [pageRange, setPageRange] = useState(5);
-  const onPageChange = (page: number) => setCurrentPage(page);
-  const courseMajor = ['KTPM', 'KHMT', 'ATTT', 'MMT&TT'];
 
   const headers = [
     { title: 'Mã số sinh viên', dataIndex: 'studentID' },
@@ -92,9 +84,11 @@ const FeeList = () => {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchVal(e.target.value);
   };
-  const handleSelectedValueChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSelectedValueChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     setSelectedValue(e.target.value);
-  }
+  };
 
   return (
     <div id='student-table-container' className='w-full bg-white p-5 shadow-lg'>

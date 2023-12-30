@@ -18,6 +18,7 @@ import Login from './pages/Login';
 import AddStudentForm from './pages/Student/AddStudentForm';
 import AllStudent from './pages/Student/AllStudent';
 import Transcript from './pages/Transcript/Transcript';
+import StudentDashboard from './pages/StudentDashboard/StudentDashboard';
 function ProtectedRoute() {
   const { isAuthenticated } = useAppContext();
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
@@ -102,6 +103,10 @@ export default function useRouteElement() {
         {
           path: path.all,
           element: <Navigate to={path.dashboard} />
+        },
+        {
+          path: '/student-dashboard',
+          element: <StudentDashboard />
         }
       ]
     },

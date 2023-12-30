@@ -19,7 +19,6 @@ const Breadcrumbs = ({ separator = '/' }: BreadcrumbProps) => {
     { path: path.course_management, breadcrumb: 'Quản lý học phần' },
     { path: path.exam_schedule_management, breadcrumb: 'Quản lý lịch thi' },
     { path: path.timetable_management, breadcrumb: 'Quản lý lịch thi' },
-
   ];
   const breadcrumbs = useBreadcrumbs(routes);
   const separatorSpan = <span key='separator'> {separator} </span>;
