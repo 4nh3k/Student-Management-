@@ -1,6 +1,17 @@
 import { Button, FloatingLabel } from 'flowbite-react';
+import { useState } from 'react';
 import UITBackground from 'src/assets/imgs/uit-background.jpg';
+import { useAppContext } from 'src/contexts/app.contexts';
+import { setAccessTokenToLS, setProfileToLS } from './../../utils/auth';
 export default function Login() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const { setIsAuthenticated } = useAppContext();
+  const handleLogin = () => {
+    setAccessTokenToLS('token');
+    setProfileToLS(username);
+    setIsAuthenticated(true);
+  };
   return (
     <div className='flex flex-col bg-sidebar lg:flex-row'>
       <div id='background-container' className='w-full lg:w-1/3'>
@@ -20,13 +31,23 @@ export default function Login() {
           className='w-80 rounded-xl bg-white px-10 py-10'
         >
           <div className='mt-2'>
-            <FloatingLabel variant='outlined' label='Tên đăng nhập' />
+            <FloatingLabel
+              variant='outlined'
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+              label='Tên đăng nhập'
+            />
           </div>
           <div className='mt-4'>
-            <FloatingLabel variant='outlined' label='Mật khẩu' />
+            <FloatingLabel
+              variant='outlined'
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              label='Mật khẩu'
+            />
           </div>
           <div id='btnLoginContainer' className='mt-4 text-center'>
-            <Button fullSized color='failure'>
+            <Button fullSized color='failure' onClick={handleLogin}>
               Đăng nhập
             </Button>
           </div>
