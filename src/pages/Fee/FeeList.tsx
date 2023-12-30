@@ -32,7 +32,7 @@ const FeeList = () => {
       fee: '16,000,000đ',
       moneyPaid: '17,000,000đ',
       remainer: '1,000,000đ',
-      paidStatus: <Chip type={'paid'} value={'Đã trả'}></Chip>
+      paidStatus: 'Đã trả'
     },
     {
       studentID: '21520620',
@@ -42,7 +42,7 @@ const FeeList = () => {
       fee: '16,000,000đ',
       moneyPaid: '17,000,000đ',
       remainer: '1,000,000đ',
-      paidStatus: <Chip type={'paid'} value={'Đã trả'}></Chip>
+      paidStatus: 'Đã trả'
     },
     {
       studentID: '21520620',
@@ -52,7 +52,7 @@ const FeeList = () => {
       fee: '16,000,000đ',
       moneyPaid: '17,000,000đ',
       remainer: '1,000,000đ',
-      paidStatus: <Chip type={'paid'} value={'Đã trả'}></Chip>
+      paidStatus: 'Đã trả'
     },
     {
       studentID: '21520620',
@@ -62,7 +62,7 @@ const FeeList = () => {
       fee: '16,000,000đ',
       moneyPaid: '17,000,000đ',
       remainer: '1,000,000đ',
-      paidStatus: <Chip type={'paid'} value={'Đã trả'}></Chip>
+      paidStatus: 'Đã trả'
     },
     {
       studentID: '21520620',
@@ -72,7 +72,7 @@ const FeeList = () => {
       fee: '16,000,000đ',
       moneyPaid: '17,000,000đ',
       remainer: '1,000,000đ',
-      paidStatus: <Chip type={'paid'} value={'Đã trả'}></Chip>
+      paidStatus: 'Đã trả'
     },
     {
       studentID: '21520620',
@@ -82,7 +82,7 @@ const FeeList = () => {
       fee: '16,000,000đ',
       moneyPaid: '17,000,000đ',
       remainer: '1,000,000đ',
-      paidStatus: <Chip type={'paid'} value={'Đã trả'}></Chip>
+      paidStatus: 'Đã trả'
     }
   ];
 
