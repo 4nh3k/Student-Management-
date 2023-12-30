@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Dropdown, FloatingLabel } from 'flowbite-react';
+import { Button, Dropdown, FloatingLabel, Select, TextInput } from 'flowbite-react';
 import Pagination from 'src/components/Pagination';
 
 import { useState } from 'react';
@@ -32,7 +32,7 @@ const FeeList = () => {
       fee: '16,000,000đ',
       moneyPaid: '17,000,000đ',
       remainer: '1,000,000đ',
-      paidStatus: <Chip type={'paid'} value={'Đã trả'}></Chip>
+      paidStatus: 'Đã trả'
     },
     {
       studentID: '21520620',
@@ -42,7 +42,7 @@ const FeeList = () => {
       fee: '16,000,000đ',
       moneyPaid: '17,000,000đ',
       remainer: '1,000,000đ',
-      paidStatus: <Chip type={'paid'} value={'Đã trả'}></Chip>
+      paidStatus: 'Đã trả'
     },
     {
       studentID: '21520620',
@@ -52,7 +52,7 @@ const FeeList = () => {
       fee: '16,000,000đ',
       moneyPaid: '17,000,000đ',
       remainer: '1,000,000đ',
-      paidStatus: <Chip type={'paid'} value={'Đã trả'}></Chip>
+      paidStatus: 'Đã trả'
     },
     {
       studentID: '21520620',
@@ -62,7 +62,7 @@ const FeeList = () => {
       fee: '16,000,000đ',
       moneyPaid: '17,000,000đ',
       remainer: '1,000,000đ',
-      paidStatus: <Chip type={'paid'} value={'Đã trả'}></Chip>
+      paidStatus: 'Đã trả'
     },
     {
       studentID: '21520620',
@@ -72,7 +72,7 @@ const FeeList = () => {
       fee: '16,000,000đ',
       moneyPaid: '17,000,000đ',
       remainer: '1,000,000đ',
-      paidStatus: <Chip type={'paid'} value={'Đã trả'}></Chip>
+      paidStatus: 'Đã trả'
     },
     {
       studentID: '21520620',
@@ -82,50 +82,68 @@ const FeeList = () => {
       fee: '16,000,000đ',
       moneyPaid: '17,000,000đ',
       remainer: '1,000,000đ',
-      paidStatus: <Chip type={'paid'} value={'Đã trả'}></Chip>
+      paidStatus: 'Đã trả'
     }
   ];
 
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [search, setSearchVal] = useState<string>('');
+  const [selectedValue, setSelectedValue] = useState<string>('');
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchVal(e.target.value);
+  };
+  const handleSelectedValueChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedValue(e.target.value);
+  }
+
   return (
     <div id='student-table-container' className='w-full bg-white p-5 shadow-lg'>
-      <div
-        id='input-row'
-        className='flex items-center justify-between align-middle'
-      >
+      <div id='input-row' className='flex items-center'>
         <div className='w-96'>
-          <FloatingLabel className='' variant='outlined' label='Tìm bằng tên' />
+          <TextInput
+            placeholder='Tìm kiếm...'
+            value={search}
+            onChange={handleSearchChange}
+          />
         </div>
-        <Dropdown
-          className=' font-bold'
-          label='Chọn lớp'
-          dismissOnClick={true}
-          inline
-        >
-          {courseMajor.map(major => (
-            <Dropdown.Item key={major}>{major}</Dropdown.Item>
-          ))}
-        </Dropdown>
-
-        <Dropdown
-          className=' font-bold'
-          label='Chọn tình trạng học phí'
-          dismissOnClick={true}
-          inline
-        >
-          <Dropdown.Item>Đã trả</Dropdown.Item>
-          <Dropdown.Item>Chưa trả</Dropdown.Item>
-        </Dropdown>
+        <div className='ml-4'>
+          <Select
+            id='filter'
+            value={selectedValue}
+            onChange={handleSelectedValueChange}
+            required
+          >
+            {headers.map(header => {
+              return (
+                <option key={header.dataIndex} value={header.dataIndex}>
+                  {header.title}
+                </option>
+              );
+            })}
+          </Select>
+        </div>
+        <div className='ml-auto flex items-center'>
+          <span className='mr-2 text-gray-500'>Hiển thị</span>
+          <Select
+            id='pageSize'
+            value={pageSize}
+            onChange={e => setPageSize(+e.target.value)}
+          >
+            <option>10</option>
+            <option>25</option>
+            <option>50</option>
+            <option>100</option>
+          </Select>
+          <span className='ml-2 text-gray-500'>kết quả</span>
+        </div>
       </div>
+
       <Table
         headers={headers}
         data={data}
         className='border-input mt-2 border-2'
-      />
-      <Pagination
-        className='mt-5 flex justify-end'
-        pageCount={50}
-        pageRangeDisplayed={5}
-        onPageChange={(data: { selected: number }) => {}}
+        filters={{ [selectedValue]: search }}
+        pageSize={pageSize}
       />
     </div>
   );
