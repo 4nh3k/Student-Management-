@@ -16,7 +16,7 @@ interface SidebarProp {
   isAdmin: boolean;
 }
 
-export default function SidebarComponent() {
+export default function SidebarComponent({ isAdmin }: SidebarProp) {
   const location = useLocation();
   const [collapsed, setCollapsed] = React.useState(false);
   const getIsOpen = (tab: string) => {

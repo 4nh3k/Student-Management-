@@ -36,82 +36,79 @@ const AuthRouteChildren: RouteObject[] = [
 ];
 
 export default function useRouteElement() {
+  const { profile } = useAppContext();
+  const isAdmin = profile === 'admin';
   const routeElement = useRoutes([
-    // {
-    //   element: <RejectedRoute />,
-    //   children: [
-    //     {
-    //       element: <MainLayout />,
-    //       children: AuthRouteChildren
-    //     }
-    //   ]
-    // },
-    // Main Layout
-    // {
-    //   element: <ProtectedRoute />,
-    //   children: [{}]
-    // },
-    //Handle Not Found page
-    // {
-    //   element: <NotFound />,
-    //   path: path.all
-    // }
     {
-      element: <MainLayout />,
+      element: <RejectedRoute />,
+      children: AuthRouteChildren
+    },
+    {
+      element: <ProtectedRoute />,
       children: [
         {
-          element: <Dashboard />,
-          path: path.dashboard
+          element: <MainLayout isAdmin={isAdmin} />,
+          children: [
+            {
+              element: <Dashboard />,
+              path: path.dashboard
+            },
+            {
+              path: '/test',
+              element: isAdmin ? (
+                <p>I&apos;m Admin </p>
+              ) : (
+                <p>I&apos;m Student </p>
+              )
+            },
+            {
+              element: <AllStudent />,
+              path: path.all_students
+            },
+            {
+              element: <AddStudentForm />,
+              path: path.add_student
+            },
+            {
+              path: path.all_lecturers,
+              element: <AllLecturer />
+            },
+            {
+              path: path.add_lecturer,
+              element: <AddLecturer />
+            },
+            {
+              path: path.fee_list,
+              element: <FeeList />
+            },
+            {
+              path: path.add_fee,
+              element: <AddFee />
+            },
+            {
+              path: path.course_management,
+              element: <CourseManagement />
+            },
+            {
+              path: path.exam_schedule_management,
+              element: <ExamScheduleManagement />
+            },
+            {
+              path: path.timetable_management,
+              element: <Transcript />
+            },
+            {
+              path: path.all,
+              element: <Navigate to={path.dashboard} />
+            }
+          ]
         },
+
         {
-          element: <AllStudent />,
-          path: path.all_students
-        },
-        {
-          element: <AddStudentForm />,
-          path: path.add_student
-        },
-        {
-          path: path.all_lecturers,
-          element: <AllLecturer />
-        },
-        {
-          path: path.add_lecturer,
-          element: <AddLecturer />
-        },
-        {
-          path: path.fee_list,
-          element: <FeeList />
-        },
-        {
-          path: path.add_fee,
-          element: <AddFee />
-        },
-        {
-          path: path.course_management,
-          element: <CourseManagement />
-        },
-        {
-          path: path.exam_schedule_management,
-          element: <ExamScheduleManagement />
-        },
-        {
-          path: path.timetable_management,
-          element: <Transcript />
-        },
-        {
-          path: path.all,
-          element: <Navigate to={path.dashboard} />
+          path: path.print_transcript,
+          element: <Transcript isPrint={true} />
         }
       ]
-    },
-    {
-      element: <Login />,
-      path: path.login
-    },
-    {
-      path: path.print_transcript,
-      element: <Transcript isPrint={true} />
     }
   ]);
 
