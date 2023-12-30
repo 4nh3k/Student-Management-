@@ -1,9 +1,13 @@
-import { Sidebar, SidebarItem } from 'flowbite-react';
+import { Sidebar } from 'flowbite-react';
 import React from 'react';
 import {
+  PiBookOpen,
   PiBooks,
   PiChalkboardTeacher,
   PiChartPieSlice,
+  PiClipboardText,
+  PiFiles,
+  PiMagnifyingGlass,
   PiMoney,
   PiStudent
 } from 'react-icons/pi';
@@ -159,9 +163,9 @@ export default function SidebarComponent({ isAdmin }: SidebarProp) {
               >
                 Bảng điều khiển
               </Sidebar.Item>
-              <Sidebar.Item>Hồ sơ sinh viên</Sidebar.Item>
-              <Sidebar.Item>ĐKHP</Sidebar.Item>
-              <Sidebar.Collapse label='Tra cứu'>
+              <Sidebar.Item icon={PiFiles}>Hồ sơ sinh viên</Sidebar.Item>
+              <Sidebar.Item icon={PiBookOpen}>ĐKHP</Sidebar.Item>
+              <Sidebar.Collapse label='Tra cứu' icon={PiMagnifyingGlass}>
                 <Sidebar.Item>Kết quả học tập</Sidebar.Item>
                 <Sidebar.Item>Thông tin học phí</Sidebar.Item>
                 <Sidebar.Item>Thời khóa biểu</Sidebar.Item>
@@ -169,7 +173,7 @@ export default function SidebarComponent({ isAdmin }: SidebarProp) {
                 <Sidebar.Item>Thông tin ĐKHP</Sidebar.Item>
                 <Sidebar.Item>Điểm rèn luyện</Sidebar.Item>
               </Sidebar.Collapse>
-              <Sidebar.Collapse label='Đăng ký dịch vụ'>
+              <Sidebar.Collapse label='Đăng ký dịch vụ' icon={PiClipboardText}>
                 <Sidebar.Item>Đăng ký xét tốt nghiệp</Sidebar.Item>
               </Sidebar.Collapse>
             </Sidebar.ItemGroup>
