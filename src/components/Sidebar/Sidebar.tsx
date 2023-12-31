@@ -164,7 +164,11 @@ export default function SidebarComponent({ isAdmin }: SidebarProp) {
                 Bảng điều khiển
               </Sidebar.Item>
               <Sidebar.Item icon={PiFiles}>Hồ sơ sinh viên</Sidebar.Item>
-              <Sidebar.Item icon={PiBookOpen}>ĐKHP</Sidebar.Item>
+              <Sidebar.Collapse label='Học phần' icon={PiBookOpen}>
+                <Sidebar.Item>Xác nhận học phần</Sidebar.Item>
+                <Sidebar.Item>Đăng ký học phần</Sidebar.Item>
+                <Sidebar.Item>Danh sách đã đăng ký</Sidebar.Item>
+              </Sidebar.Collapse>
               <Sidebar.Collapse label='Tra cứu' icon={PiMagnifyingGlass}>
                 <Sidebar.Item>Kết quả học tập</Sidebar.Item>
                 <Sidebar.Item>Thông tin học phí</Sidebar.Item>
