@@ -170,16 +170,30 @@ export default function SidebarComponent({ isAdmin }: SidebarProp) {
               <Sidebar.Item icon={PiFiles}>Hồ sơ sinh viên</Sidebar.Item>
               <Sidebar.Collapse label='Học phần' icon={PiBookOpen}>
                 <Sidebar.Item>Xác nhận học phần</Sidebar.Item>
-                <Sidebar.Item>Đăng ký học phần</Sidebar.Item>
-                <Sidebar.Item>Danh sách đã đăng ký</Sidebar.Item>
+                <Sidebar.Item href={path.student_course_register}>
+                  Đăng ký học phần
+                </Sidebar.Item>
+                <Sidebar.Item href={path.student_registered_courses}>
+                  Danh sách đã đăng ký
+                </Sidebar.Item>
               </Sidebar.Collapse>
               <Sidebar.Collapse label='Tra cứu' icon={PiMagnifyingGlass}>
-                <Sidebar.Item>Kết quả học tập</Sidebar.Item>
-                <Sidebar.Item>Thông tin học phí</Sidebar.Item>
+                <Sidebar.Item href={path.print_transcript}>
+                  Kết quả học tập
+                </Sidebar.Item>
+                <Sidebar.Item href={path.student_fee_info}>
+                  Thông tin học phí
+                </Sidebar.Item>
                 <Sidebar.Item>Thời khóa biểu</Sidebar.Item>
-                <Sidebar.Item>Lịch thi</Sidebar.Item>
-                <Sidebar.Item>Thông tin ĐKHP</Sidebar.Item>
-                <Sidebar.Item>Điểm rèn luyện</Sidebar.Item>
+                <Sidebar.Item href={path.student_test_schedule}>
+                  Lịch thi
+                </Sidebar.Item>
+                <Sidebar.Item href={path.student_course_register_info}>
+                  Thông tin ĐKHP
+                </Sidebar.Item>
+                <Sidebar.Item href={path.student_conduct_points}>
+                  Điểm rèn luyện
+                </Sidebar.Item>
               </Sidebar.Collapse>
               <Sidebar.Collapse label='Đăng ký dịch vụ' icon={PiClipboardText}>
                 <Sidebar.Item>Đăng ký xét tốt nghiệp</Sidebar.Item>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { PiArrowDown, PiArrowUp } from 'react-icons/pi';
 import Pagination from '../Pagination';
 import { TableTheme, getClassName } from './TableStyle';
+import { Checkbox } from 'flowbite-react';
 
 export type Header = {
   title: string;
@@ -26,6 +27,7 @@ export interface TableProps {
   filters?: any;
   tableStyle?: TableTheme;
   pageSize?: number; // Number of rows per page
+  enableChosen?: boolean;
 }
 
 const Table: React.FC<TableProps> = ({
@@ -43,7 +45,8 @@ const Table: React.FC<TableProps> = ({
   onRowClick,
   tableStyle,
   filters,
-  pageSize // Default page size is 10
+  pageSize, // Default page size is 10
+  enableChosen = false
 }) => {
   const [selected, setSelected] = useState(selectedRow || null);
   const [sortColumn, setSortColumn] = useState('');
@@ -147,6 +150,7 @@ const Table: React.FC<TableProps> = ({
         <table className={resolvedStyles.classNameTable}>
           <thead>
             <tr className={resolvedStyles.classNameHeader}>
+              {enableChosen && <th></th>}
               {headers?.map(header => (
                 <th
                   className={
@@ -196,6 +200,11 @@ const Table: React.FC<TableProps> = ({
                 key={index}
                 onClick={() => handleRowClick(row, index)}
               >
+                {enableChosen && (
+                  <td key={'choose'} className='pl-5'>
+                    <Checkbox className='items-center align-middle'></Checkbox>
+                  </td>
+                )}
                 {headers?.map(header => {
                   const cellData = row[header.dataIndex];
                   if (cellData === null) return <td />;
