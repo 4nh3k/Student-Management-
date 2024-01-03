@@ -147,7 +147,11 @@ export default function SidebarComponent({ isAdmin }: SidebarProp) {
           collapsed={collapsed}
           aria-label='Sidebar with multi-level dropdown example'
         >
-          <Sidebar.Logo href={path.dashboard} img={logo} imgAlt='uit logo'>
+          <Sidebar.Logo
+            href={path.student_dashboard}
+            img={logo}
+            imgAlt='uit logo'
+          >
             Sinh viên
           </Sidebar.Logo>
           <Sidebar.Items>

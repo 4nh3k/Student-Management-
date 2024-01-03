@@ -12,8 +12,7 @@ const path = {
   exam_schedule_management: '/exam-schedule-management',
   print_transcript: '/print-transcript',
   all: '*',
-  student_dashboard: '/student-dashboard',
-  
+  student_dashboard: '/student-dashboard'
 } as const;
 
 export default path;

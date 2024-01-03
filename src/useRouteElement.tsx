@@ -101,6 +101,10 @@ export default function useRouteElement() {
             {
               path: path.all,
               element: <Navigate to={path.dashboard} />
+            },
+            { 
+              path: path.student_dashboard,
+              element: <StudentDashboard />
             }
           ]
         },
