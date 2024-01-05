@@ -11,18 +11,18 @@ const path = {
   timetable_management: '/timetable-management',
   exam_schedule_management: '/exam-schedule-management',
   print_transcript: '/print-transcript',
-  all: '*',
-  student_confirm_courses: '/student_confirm_courses',
+  course_registration: '/course-registration',
+  course_confirmation: '/course-confirmation',
+  course_registered: '/course-registered',
   student_dashboard: '/student-dashboard',
-  student_course_register: '/student-course-register',
-  student_registered_courses: '/student-registered-courses',
   student_learning_result: '/student-learning-result',
   student_fee_info: '/student-fee-info',
   student_schedule: '/student-schedule',
   student_test_schedule: '/student-test-schedule',
-  student_course_register_info: '/student_course_register_info',
   student_conduct_points: '/student-conduct-points',
-  student_register_graduation: '/student-register-graduation'
+  student_register_graduation: '/student-register-graduation',
+  student_transcript: '/student-transcript',
+  all: '*'
 } as const;
 
 export default path;

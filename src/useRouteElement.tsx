@@ -17,13 +17,12 @@ import AllLecturer from './pages/Lecturer/AllLecturer';
 import Login from './pages/Login';
 import AddStudentForm from './pages/Student/AddStudentForm';
 import AllStudent from './pages/Student/AllStudent';
-import Transcript from './pages/Transcript/Transcript';
-import StudentDashboard from './pages/StudentDashboard/StudentDashboard';
-import StudentCourseRegister from './pages/StudentCourse/StudentCourseRegister';
-import StudentRegisteredCourse from './pages/StudentCourse/StudentRegisteredCourse';
-import StudentFeeInfo from './pages/StudentFeeInfo/StudentFeeInfo';
-import StudentTestSchedule from './pages/StudentTestSchedule/StudentTestSchedule';
 import StudentConductPoints from './pages/StudentConductPoints/StudentConductPoints';
+import StudentTestSchedule from './pages/StudentTestSchedule/StudentTestSchedule';
+import Transcript from './pages/Transcript/Transcript';
+import CoursesConfimation from './pages/UserCourseManagement/CoursesConfimation/CoursesConfimation';
+import CoursesRegistered from './pages/UserCourseManagement/CoursesRegistered/CoursesRegistered';
+import CoursesRegistration from './pages/UserCourseManagement/CoursesRegistration/CoursesRegistration';
 function ProtectedRoute() {
   const { isAuthenticated } = useAppContext();
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
@@ -100,42 +99,42 @@ export default function useRouteElement() {
               element: <ExamScheduleManagement />
             },
             {
-              path: path.timetable_management,
+              path: path.student_transcript,
               element: <Transcript />
             },
             {
-              path: path.all,
-              element: <Navigate to={path.dashboard} />
-            },
-            { 
-              path: path.student_dashboard,
-              element: <StudentDashboard />
-            },
-            {
-              path: path.student_course_register,
-              element: <StudentCourseRegister />
-            },
-            {
-              path: path.student_registered_courses,
-              element: <StudentRegisteredCourse />
-            },
-            {
-              path: path.print_transcript,
-              element: <Transcript isPrint={true} />
-            },
-            {
               path: path.student_fee_info,
-              element: <StudentFeeInfo />
+              element: <FeeList />
+            },
+            {
+              path: path.student_conduct_points,
+              element: <StudentConductPoints />
             },
             {
               path: path.student_test_schedule,
               element: <StudentTestSchedule />
             },
             {
-              path: path.student_conduct_points,
-              element: <StudentConductPoints />
+              path: path.all,
+              element: <Navigate to={path.dashboard} />
+            },
+            {
+              path: path.course_registration,
+              element: <CoursesRegistration />
+            },
+            {
+              path: path.course_confirmation,
+              element: <CoursesConfimation />
+            },
+            {
+              path: path.course_registered,
+              element: <CoursesRegistered />
             }
           ]
+        },
+        {
+          path: path.print_transcript,
+          element: <Transcript isPrint={true} />
         }
       ]
     }

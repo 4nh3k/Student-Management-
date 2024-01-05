@@ -1,8 +1,8 @@
+import { Checkbox } from 'flowbite-react';
 import React, { useState } from 'react';
 import { PiArrowDown, PiArrowUp } from 'react-icons/pi';
 import Pagination from '../Pagination';
 import { TableTheme, getClassName } from './TableStyle';
-import { Checkbox } from 'flowbite-react';
 
 export type Header = {
   title: string;
@@ -27,7 +27,8 @@ export interface TableProps {
   filters?: any;
   tableStyle?: TableTheme;
   pageSize?: number; // Number of rows per page
-  enableChosen?: boolean;
+  hasCheckbox?: boolean; // Whether to display checkboxes
+  onCheck?: (row: any, checked: boolean) => void; // Callback when checkbox is checked/unchecked
 }
 
 const Table: React.FC<TableProps> = ({
@@ -46,9 +47,11 @@ const Table: React.FC<TableProps> = ({
   tableStyle,
   filters,
   pageSize, // Default page size is 10
-  enableChosen = false
+  hasCheckbox,
+  onCheck
 }) => {
   const [selected, setSelected] = useState(selectedRow || null);
+  const [checkedRows, setCheckedRows] = useState<any[]>([]); // Array of row indexes that are checked
   const [sortColumn, setSortColumn] = useState('');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [currentPage, setCurrentPage] = useState(1);
@@ -150,7 +153,7 @@ const Table: React.FC<TableProps> = ({
         <table className={resolvedStyles.classNameTable}>
           <thead>
             <tr className={resolvedStyles.classNameHeader}>
-              {enableChosen && <th></th>}
+              {hasCheckbox && <th></th>}
               {headers?.map(header => (
                 <th
                   className={
@@ -200,9 +203,22 @@ const Table: React.FC<TableProps> = ({
                 key={index}
                 onClick={() => handleRowClick(row, index)}
               >
-                {enableChosen && (
-                  <td key={'choose'} className='pl-5'>
-                    <Checkbox className='items-center align-middle'></Checkbox>
+                {hasCheckbox && (
+                  <td className='pl-2'>
+                    <Checkbox
+                      color={'red'}
+                      onChange={() => {
+                        if (checkedRows.includes(row.ID)) {
+                          setCheckedRows(checkedRows.filter(r => r !== row.ID));
+                          if (onCheck) onCheck(row, false);
+                        } else {
+                          setCheckedRows([...checkedRows, row.ID]);
+                          if (onCheck) {
+                            onCheck(row, true);
+                          }
+                        }
+                      }}
+                    />
                   </td>
                 )}
                 {headers?.map(header => {

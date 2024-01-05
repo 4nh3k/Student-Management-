@@ -22,7 +22,7 @@ export default function MainLayout({ isAdmin = false }: MainLayoutProps) {
       <div className='z-10 h-screen lg:z-0 '>
         <SidebarComponent isAdmin={isAdmin} />
       </div>
-      <div className='ml-auto min-h-screen w-full overflow-y-auto bg-gray-100 '>
+      <div className='ml-auto min-h-screen w-full overflow-y-auto bg-gray-100'>
         {/* <Header /> */}
         <div id='main-body' className='space-y-5 px-10 pb-10 pt-5'>
           <div className='flex items-end'>

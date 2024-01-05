@@ -168,17 +168,32 @@ export default function SidebarComponent({ isAdmin }: SidebarProp) {
                 Bảng điều khiển
               </Sidebar.Item>
               <Sidebar.Item icon={PiFiles}>Hồ sơ sinh viên</Sidebar.Item>
-              <Sidebar.Collapse label='Học phần' icon={PiBookOpen}>
-                <Sidebar.Item>Xác nhận học phần</Sidebar.Item>
-                <Sidebar.Item href={path.student_course_register}>
+              <Sidebar.Collapse
+                label='Học phần'
+                icon={PiBookOpen}
+                open={getIsOpen('course')}
+              >
+                <Sidebar.Item
+                  href={path.course_confirmation}
+                  active={getIsActive(path.course_confirmation)}
+                >
+                  Xác nhận học phần
+                </Sidebar.Item>
+                <Sidebar.Item
+                  href={path.course_registration}
+                  active={getIsActive(path.course_registration)}
+                >
                   Đăng ký học phần
                 </Sidebar.Item>
-                <Sidebar.Item href={path.student_registered_courses}>
+                <Sidebar.Item
+                  href={path.course_registered}
+                  active={getIsActive(path.course_registered)}
+                >
                   Danh sách đã đăng ký
                 </Sidebar.Item>
               </Sidebar.Collapse>
               <Sidebar.Collapse label='Tra cứu' icon={PiMagnifyingGlass}>
-                <Sidebar.Item href={path.print_transcript}>
+                <Sidebar.Item href={path.student_transcript}>
                   Kết quả học tập
                 </Sidebar.Item>
                 <Sidebar.Item href={path.student_fee_info}>
@@ -187,9 +202,6 @@ export default function SidebarComponent({ isAdmin }: SidebarProp) {
                 <Sidebar.Item>Thời khóa biểu</Sidebar.Item>
                 <Sidebar.Item href={path.student_test_schedule}>
                   Lịch thi
-                </Sidebar.Item>
-                <Sidebar.Item href={path.student_course_register_info}>
-                  Thông tin ĐKHP
                 </Sidebar.Item>
                 <Sidebar.Item href={path.student_conduct_points}>
                   Điểm rèn luyện
