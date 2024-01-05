@@ -164,10 +164,29 @@ export default function SidebarComponent({ isAdmin }: SidebarProp) {
                 Bảng điều khiển
               </Sidebar.Item>
               <Sidebar.Item icon={PiFiles}>Hồ sơ sinh viên</Sidebar.Item>
-              <Sidebar.Collapse label='Học phần' icon={PiBookOpen}>
-                <Sidebar.Item>Xác nhận học phần</Sidebar.Item>
-                <Sidebar.Item>Đăng ký học phần</Sidebar.Item>
-                <Sidebar.Item>Danh sách đã đăng ký</Sidebar.Item>
+              <Sidebar.Collapse
+                label='Học phần'
+                icon={PiBookOpen}
+                open={getIsOpen('course')}
+              >
+                <Sidebar.Item
+                  href={path.course_confirmation}
+                  active={getIsActive(path.course_confirmation)}
+                >
+                  Xác nhận học phần
+                </Sidebar.Item>
+                <Sidebar.Item
+                  href={path.course_registration}
+                  active={getIsActive(path.course_registration)}
+                >
+                  Đăng ký học phần
+                </Sidebar.Item>
+                <Sidebar.Item
+                  href={path.course_registered}
+                  active={getIsActive(path.course_registered)}
+                >
+                  Danh sách đã đăng ký
+                </Sidebar.Item>
               </Sidebar.Collapse>
               <Sidebar.Collapse label='Tra cứu' icon={PiMagnifyingGlass}>
                 <Sidebar.Item>Kết quả học tập</Sidebar.Item>

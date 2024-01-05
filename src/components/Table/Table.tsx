@@ -1,3 +1,4 @@
+import { Checkbox } from 'flowbite-react';
 import React, { useState } from 'react';
 import { PiArrowDown, PiArrowUp } from 'react-icons/pi';
 import Pagination from '../Pagination';
@@ -26,6 +27,8 @@ export interface TableProps {
   filters?: any;
   tableStyle?: TableTheme;
   pageSize?: number; // Number of rows per page
+  hasCheckbox?: boolean; // Whether to display checkboxes
+  onCheck?: (row: any, checked: boolean) => void; // Callback when checkbox is checked/unchecked
 }
 
 const Table: React.FC<TableProps> = ({
@@ -43,9 +46,12 @@ const Table: React.FC<TableProps> = ({
   onRowClick,
   tableStyle,
   filters,
-  pageSize // Default page size is 10
+  pageSize, // Default page size is 10
+  hasCheckbox,
+  onCheck
 }) => {
   const [selected, setSelected] = useState(selectedRow || null);
+  const [checkedRows, setCheckedRows] = useState<any[]>([]); // Array of row indexes that are checked
   const [sortColumn, setSortColumn] = useState('');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [currentPage, setCurrentPage] = useState(1);
@@ -147,6 +153,7 @@ const Table: React.FC<TableProps> = ({
         <table className={resolvedStyles.classNameTable}>
           <thead>
             <tr className={resolvedStyles.classNameHeader}>
+              {hasCheckbox && <th></th>}
               {headers?.map(header => (
                 <th
                   className={
@@ -196,6 +203,24 @@ const Table: React.FC<TableProps> = ({
                 key={index}
                 onClick={() => handleRowClick(row, index)}
               >
+                {hasCheckbox && (
+                  <td className='pl-2'>
+                    <Checkbox
+                      color={'red'}
+                      onChange={() => {
+                        if (checkedRows.includes(row.ID)) {
+                          setCheckedRows(checkedRows.filter(r => r !== row.ID));
+                          if (onCheck) onCheck(row, false);
+                        } else {
+                          setCheckedRows([...checkedRows, row.ID]);
+                          if (onCheck) {
+                            onCheck(row, true);
+                          }
+                        }
+                      }}
+                    />
+                  </td>
+                )}
                 {headers?.map(header => {
                   const cellData = row[header.dataIndex];
                   if (cellData === null) return <td />;

@@ -18,7 +18,9 @@ import Login from './pages/Login';
 import AddStudentForm from './pages/Student/AddStudentForm';
 import AllStudent from './pages/Student/AllStudent';
 import Transcript from './pages/Transcript/Transcript';
-import StudentDashboard from './pages/StudentDashboard/StudentDashboard';
+import CoursesConfimation from './pages/UserCourseManagement/CoursesConfimation/CoursesConfimation';
+import CoursesRegistered from './pages/UserCourseManagement/CoursesRegistered/CoursesRegistered';
+import CoursesRegistration from './pages/UserCourseManagement/CoursesRegistration/CoursesRegistration';
 function ProtectedRoute() {
   const { isAuthenticated } = useAppContext();
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
@@ -101,10 +103,21 @@ export default function useRouteElement() {
             {
               path: path.all,
               element: <Navigate to={path.dashboard} />
+            },
+            {
+              path: path.course_registration,
+              element: <CoursesRegistration />
+            },
+            {
+              path: path.course_confirmation,
+              element: <CoursesConfimation />
+            },
+            {
+              path: path.course_registered,
+              element: <CoursesRegistered />
             }
           ]
         },
-
         {
           path: path.print_transcript,
           element: <Transcript isPrint={true} />

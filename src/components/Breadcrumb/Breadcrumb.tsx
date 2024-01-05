@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
-import useBreadcrumbs from 'use-react-router-breadcrumbs';
 import path from 'src/constants/path';
+import useBreadcrumbs from 'use-react-router-breadcrumbs';
 
 interface BreadcrumbProps {
   separator?: string;
@@ -19,6 +19,9 @@ const Breadcrumbs = ({ separator = '/' }: BreadcrumbProps) => {
     { path: path.course_management, breadcrumb: 'Quản lý học phần' },
     { path: path.exam_schedule_management, breadcrumb: 'Quản lý lịch thi' },
     { path: path.timetable_management, breadcrumb: 'Quản lý lịch thi' },
+    { path: path.course_confirmation, breadcrumb: 'Xác nhận học phần' },
+    { path: path.course_registration, breadcrumb: 'Đăng ký học phần' },
+    { path: path.course_registered, breadcrumb: 'Học phần đã đăng ký' }
   ];
   const breadcrumbs = useBreadcrumbs(routes);
   const separatorSpan = <span key='separator'> {separator} </span>;

@@ -11,9 +11,11 @@ const path = {
   timetable_management: '/timetable-management',
   exam_schedule_management: '/exam-schedule-management',
   print_transcript: '/print-transcript',
-  all: '*',
+  course_registration: '/course-registration',
+  course_confirmation: '/course-confirmation',
+  course_registered: '/course-registered',
   student_dashboard: '/student-dashboard',
-  
+  all: '*'
 } as const;
 
 export default path;

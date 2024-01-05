@@ -1,6 +1,6 @@
 import axios, { AxiosError, HttpStatusCode, type AxiosInstance } from 'axios';
-import { getAccessTokenFromLS, getRefreshTokenFromLS } from './auth';
 import { toast } from 'react-toastify';
+import { getAccessTokenFromLS, getRefreshTokenFromLS } from './auth';
 
 class Http {
   private accessToken: string;
@@ -14,7 +14,7 @@ class Http {
     this.refreshTokenRequest = null;
 
     this.instance = axios.create({
-      baseURL: 'http://localhost:5000/api/v1',
+      baseURL: 'https://student-management-server.up.railway.app',
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json'
