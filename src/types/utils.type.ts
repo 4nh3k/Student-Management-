@@ -3,8 +3,13 @@ export interface ResponseAPI<Data> {
   data?: Data;
 }
 
-export interface SuccessResponse {
-  message: string;
+// export interface SuccessResponse {
+//   message: string;
+// }
+
+export interface SuccessResponse<Data> {
+  status: string;
+  data: Data;
 }
 
 export interface ErrorResponse<Data> {

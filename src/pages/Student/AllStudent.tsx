@@ -1,19 +1,27 @@
-import { Button, Dropdown, FloatingLabel, Select, TextInput } from 'flowbite-react';
+import {
+  Button,
+  Dropdown,
+  FloatingLabel,
+  Select,
+  TextInput
+} from 'flowbite-react';
 import Pagination from 'src/components/Pagination';
 
 import { useState } from 'react';
 import Table from 'src/components/Table';
+import { useQuery } from '@tanstack/react-query';
+import { studentApi } from 'src/apis/student.api';
 const AllStudent = () => {
   const courseMajor = ['KTPM', 'KHMT', 'ATTT', 'MMT&TT'];
-  const headers = [
-    { title: 'Mã số sinh viên', dataIndex: 'studentID' },
-    { title: 'Tên', dataIndex: 'studentName' },
-    { title: 'Giới tính', dataIndex: 'gender' },
-    { title: 'Lớp', dataIndex: 'class' },
-    { title: 'Trạng thái học tập', dataIndex: 'status' },
-    { title: 'Email', dataIndex: 'email' },
-    { title: 'Ngày sinh', dataIndex: 'dateOfBirth' }
-  ];
+  // const headers = [
+  //   { title: 'Mã số sinh viên', dataIndex: 'studentID' },
+  //   { title: 'Tên', dataIndex: 'studentName' },
+  //   { title: 'Giới tính', dataIndex: 'gender' },
+  //   { title: 'Lớp', dataIndex: 'class' },
+  //   { title: 'Trạng thái học tập', dataIndex: 'status' },
+  //   { title: 'Email', dataIndex: 'email' },
+  //   { title: 'Ngày sinh', dataIndex: 'dateOfBirth' }
+  // ];
   const data = [
     {
       studentID: '21520620',
@@ -76,6 +84,25 @@ const AllStudent = () => {
     setSelectedValue(e.target.value);
   };
 
+  const { data: studentData, isLoading } = useQuery({
+    queryKey: ['students'],
+    queryFn: ({ signal }) => studentApi.getAllStudents(0, 20, signal)
+  });
+
+  const headers = [
+    { title: 'Mã sinh viên', dataIndex: 'maSinhVien' },
+    { title: 'Họ tên sinh viên', dataIndex: 'hoTenSinhVien' },
+    { title: 'Mã khóa học', dataIndex: 'maKhoaHoc' },
+    { title: 'Mã chuyên ngành', dataIndex: 'maChuyenNganh' },
+    { title: 'Mã hệ đào tạo', dataIndex: 'maHeDaoTao' },
+    { title: 'Tình trạng học tập', dataIndex: 'tinhTrangHocTap' },
+    { title: 'Ngày sinh', dataIndex: 'ngaySinh' },
+    { title: 'Giới tính', dataIndex: 'gioiTinh' }
+  ];
+  // console.log(studentData) to test the data load successfully 
+  const students = studentData?.data.result;
+  
+  
   return (
     <div id='student-table-container' className='w-full bg-white p-5 shadow-lg'>
       <div id='input-row' className='flex items-center'>
@@ -117,13 +144,15 @@ const AllStudent = () => {
           <span className='ml-2 text-gray-500'>kết quả</span>
         </div>
       </div>
-      <Table
-        headers={headers}
-        data={data}
-        className='border-input mt-2 border-2'
-        filters={{ [selectedValue]: search }}
-        pageSize={pageSize}
-      />
+      {!isLoading && students && (
+        <Table
+          headers={headers}
+          data={students}
+          className='border-input mt-2 border-2'
+          filters={{ [selectedValue]: search }}
+          pageSize={pageSize}
+        />
+      )}
     </div>
   );
 };
