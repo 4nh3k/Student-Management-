@@ -1,8 +1,31 @@
+import { useQuery } from '@tanstack/react-query';
 import { Datepicker, Dropdown, FloatingLabel } from 'flowbite-react';
 import { Button, Label, Select, TextInput } from 'flowbite-react';
+import { studentApi } from 'src/apis/student.api';
 import ImageLoader from 'src/components/ImageLoader/ImageLoader';
 
 const AddStudentForm = () => {
+  const { data: majorsData, isLoading: isMajorsLoading } = useQuery({
+    queryKey: ['majors'],
+    queryFn: ({ signal }) => studentApi.getAllMajors(0, 1000, signal)
+  });
+
+  const majors = majorsData?.data.result;
+
+  const { data: facultiesData, isLoading: isFacultyLoading } = useQuery({
+    queryKey: ['faculties'],
+    queryFn: ({ signal }) => studentApi.getAllFaculties(0, 1000, signal)
+  });
+
+  const faculties = facultiesData?.data.result;
+
+  const { data: educationTypes, isLoading: isEducationTypeLoading } = useQuery({
+    queryKey: ['educationTypes'],
+    queryFn: ({ signal }) => studentApi.getAllEducationTypes(0, 1000, signal)
+  });
+
+  const educationTypeData = educationTypes?.data.result;
+
   return (
     <div id='student-table-container' className='w-full bg-white p-5 shadow-lg'>
       <h1>Thêm sinh viên mới</h1>
@@ -41,29 +64,41 @@ const AddStudentForm = () => {
         </div>
         <div>
           <div className='mb-2 block'>
-            <Label htmlFor='major' value='Khoa' />
+            <Label htmlFor='faculty' value='Khoa' />
           </div>
-          <Select id='major' required>
-            <option>KTPM</option>
-            <option>KHMT</option>
+          <Select id='faculty_selection' required>
+            {!isFacultyLoading &&
+              faculties.map(faculty => (
+                <option key={faculty.maKhoaDaoTao}>
+                  {faculty.tenKhoaDaoTao}
+                </option>
+              ))}
           </Select>
         </div>
         <div>
           <div className='mb-2 block'>
             <Label htmlFor='major' value='Ngành' />
           </div>
-          <Select id='major' required>
-            <option>KTPM</option>
-            <option>KHMT</option>
+          <Select id='major_selection' required>
+            {!isMajorsLoading &&
+              majors.map(major => (
+                <option key={major.maChuyenNganh}>
+                  {major.tenChuyenNganh}
+                </option>
+              ))}
           </Select>
         </div>
         <div>
           <div className='mb-2 block'>
             <Label htmlFor='training_sys' value='Hệ đào tạo' />
           </div>
-          <Select id='major' required>
-            <option>CLC</option>
-            <option>CQĐT</option>
+          <Select id='education_selection' required>
+            {!isEducationTypeLoading &&
+              educationTypeData.map(educationType => (
+                <option key={educationType.maHeDaoTao}>
+                  {educationType.tenHeDaoTao}
+                </option>
+              ))}
           </Select>
         </div>
         <div>
@@ -96,6 +131,26 @@ const AddStudentForm = () => {
             id='name'
             type='text'
             placeholder='Nhập số điện thoại'
+            required
+          />
+        </div>
+        <div>
+          <div className='mb-2 block'>
+            <Label htmlFor='learning_state' value='Tình trạng học tập' />
+          </div>
+          <Select id='learning_state' required>
+            <option key={'Đang học'}>Đang học</option>
+            <option key={'Đã tốt nghiệp'}>Đã tốt nghiệp</option>
+          </Select>
+        </div>
+        <div>
+          <div className='mb-2 block'>
+            <Label htmlFor='account' value='Số tài khoản định danh' />
+          </div>
+          <TextInput
+            id='account'
+            type='number'
+            placeholder='Nhập số tài khoản định danh'
             required
           />
         </div>
