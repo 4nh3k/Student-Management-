@@ -1,74 +1,14 @@
-import {
-  Button,
-  Dropdown,
-  FloatingLabel,
-  Select,
-  TextInput
-} from 'flowbite-react';
-import Pagination from 'src/components/Pagination';
+import { Select, TextInput } from 'flowbite-react';
+import Student from 'src/types/student.type';
 
 import { useState } from 'react';
 import Table from 'src/components/Table';
 import { useQuery } from '@tanstack/react-query';
 import { studentApi } from 'src/apis/student.api';
+import { parseISO, format } from 'date-fns';
+
 const AllStudent = () => {
   const courseMajor = ['KTPM', 'KHMT', 'ATTT', 'MMT&TT'];
-  // const headers = [
-  //   { title: 'Mã số sinh viên', dataIndex: 'studentID' },
-  //   { title: 'Tên', dataIndex: 'studentName' },
-  //   { title: 'Giới tính', dataIndex: 'gender' },
-  //   { title: 'Lớp', dataIndex: 'class' },
-  //   { title: 'Trạng thái học tập', dataIndex: 'status' },
-  //   { title: 'Email', dataIndex: 'email' },
-  //   { title: 'Ngày sinh', dataIndex: 'dateOfBirth' }
-  // ];
-  const data = [
-    {
-      studentID: '21520620',
-      studentName: 'Nguyễn Tuấn Bảo',
-      gender: 'Nam',
-      class: 'KTPM',
-      status: 'Đang học',
-      email: '21520620@gm.uit.edu.vn',
-      dateOfBirth: '11/03/2003'
-    },
-    {
-      studentID: '21520620',
-      studentName: 'Nguyễn Tuấn Bảo',
-      gender: 'Nam',
-      class: 'KTPM',
-      status: 'Đang học',
-      email: '21520620@gm.uit.edu.vn',
-      dateOfBirth: '11/03/2003'
-    },
-    {
-      studentID: '21520620',
-      studentName: 'Nguyễn Tuấn Bảo',
-      gender: 'Nam',
-      class: 'KTPM',
-      status: 'Đang học',
-      email: '21520620@gm.uit.edu.vn',
-      dateOfBirth: '11/03/2003'
-    },
-    {
-      studentID: '21520620',
-      studentName: 'Nguyễn Tuấn Bảo',
-      gender: 'Nam',
-      class: 'KTPM',
-      status: 'Đang học',
-      email: '21520620@gm.uit.edu.vn',
-      dateOfBirth: '11/03/2003'
-    },
-    {
-      studentID: '21520620',
-      studentName: 'Nguyễn Tuấn Bảo',
-      gender: 'Nam',
-      class: 'KTPM',
-      status: 'Đang học',
-      email: '21520620@gm.uit.edu.vn',
-      dateOfBirth: '11/03/2003'
-    }
-  ];
 
   const [pageSize, setPageSize] = useState<number>(5);
   const [search, setSearchVal] = useState<string>('');
@@ -86,8 +26,26 @@ const AllStudent = () => {
 
   const { data: studentData, isLoading } = useQuery({
     queryKey: ['students'],
-    queryFn: ({ signal }) => studentApi.getAllStudents(0, 20, signal)
+    queryFn: ({ signal }) => studentApi.getAllStudents(0, 1000, signal),
+    select: data => {
+      return data.data.result.map((item: Student) => {
+        return {
+          maSinhVien: item.maSinhVien,
+          hoTenSinhVien: item.hoTenSinhVien,
+          maKhoaHoc: item.maKhoaHoc,
+          maChuyenNganh: item.maChuyenNganh,
+          maHeDaoTao: item.maHeDaoTao,
+          tinhTrangHocTap: capitalizeFirstLetter(item.tinhTrangHocTap),
+          ngaySinh: format(item.ngaySinh, 'dd/MM/yyyy'),
+          gioiTinh: item.gioiTinh === 'Nam' ? 'Nam' : 'Nữ'
+        };
+      });
+    }
   });
+
+  function capitalizeFirstLetter(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
 
   const headers = [
     { title: 'Mã sinh viên', dataIndex: 'maSinhVien' },
@@ -99,10 +57,9 @@ const AllStudent = () => {
     { title: 'Ngày sinh', dataIndex: 'ngaySinh' },
     { title: 'Giới tính', dataIndex: 'gioiTinh' }
   ];
-  // console.log(studentData) to test the data load successfully 
-  const students = studentData?.data.result;
-  
-  
+  console.log(studentData); //to test the data load successfully
+  const students = studentData;
+
   return (
     <div id='student-table-container' className='w-full bg-white p-5 shadow-lg'>
       <div id='input-row' className='flex items-center'>
