@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { Button, Spinner } from 'flowbite-react';
+import { Button } from 'flowbite-react';
 import { useState } from 'react';
 import { courseApi } from 'src/apis/course.api';
 import { semesterApi } from 'src/apis/semester.api';
+import LoadingIndicator from 'src/components/LoadingIndicator';
 import Table, { Header } from 'src/components/Table/Table';
 import HocPhan from 'src/types/hoc-phan.type';
 
@@ -53,12 +54,7 @@ export default function CoursesRegistration() {
       setCourseSelected(courseSelected.filter(item => item !== row.ID));
     }
   };
-  if (isLoading || isLoadingSemester)
-    return (
-      <div className='flex h-full w-full justify-center'>
-        <Spinner />
-      </div>
-    );
+  if (isLoading || isLoadingSemester) return <LoadingIndicator />;
 
   return (
     <div className=' w-full bg-white p-5 shadow-lg'>

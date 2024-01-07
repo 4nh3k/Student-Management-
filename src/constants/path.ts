@@ -13,7 +13,6 @@ const path = {
   exam_schedule_management: '/exam-schedule-management',
   print_transcript: '/print-transcript',
   course_registration: '/course-registration',
-  course_confirmation: '/course-confirmation',
   course_registered: '/course-registered',
   student_dashboard: '/student-dashboard',
   student_learning_result: '/student-learning-result',

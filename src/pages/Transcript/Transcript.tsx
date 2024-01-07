@@ -1,5 +1,5 @@
-import { Spinner } from 'flowbite-react';
 import { Link } from 'react-router-dom';
+import LoadingIndicator from 'src/components/LoadingIndicator';
 import Table, { Header } from 'src/components/Table/Table';
 import path from 'src/constants/path';
 import useTranscript from 'src/hooks/useTranscript';
@@ -23,12 +23,7 @@ interface TranscriptProps {
 
 function Transcript({ isPrint = false }: TranscriptProps) {
   const { data, isLoading, studentData, studentIsLoading } = useTranscript(8);
-  if (isLoading || studentIsLoading)
-    return (
-      <div className='flex h-full w-full items-center justify-center'>
-        <Spinner aria-label='Loading Data' />
-      </div>
-    );
+  if (isLoading || studentIsLoading) return <LoadingIndicator />;
   console.log(studentData);
   return (
     <div id='student-table-container' className='w-full bg-white p-5 shadow-lg'>

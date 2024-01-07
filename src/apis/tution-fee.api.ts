@@ -7,16 +7,22 @@ export const tuitionFeeApi = {
     offset: number,
     limit: number,
     studentId: number,
-    semesterId: number,
-    signal?: AbortSignal
+    signal?: AbortSignal,
+    semesterId?: number
   ) {
     const urlWithParams = `${URL_GET_TUTION_FEE}?offset=${offset}&limit=${limit}`;
-    const rawBody = {
-      filterBy: {
-        maSinhVien: studentId,
-        maHocKyNamHoc: semesterId
-      }
-    };
+    const rawBody = semesterId
+      ? {
+          filterBy: {
+            maSinhVien: studentId,
+            maHocKyNamHoc: semesterId
+          }
+        }
+      : {
+          filterBy: {
+            maSinhVien: studentId
+          }
+        };
     console.log(rawBody);
     return http.post<SuccessResponse<TutionFee[]>>(urlWithParams, rawBody, {
       signal

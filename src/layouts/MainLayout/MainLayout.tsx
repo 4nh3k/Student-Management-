@@ -34,7 +34,10 @@ export default function MainLayout() {
       </div>
       <div className='ml-auto min-h-screen w-full overflow-y-auto bg-gray-100'>
         {/* <Header /> */}
-        <div id='main-body' className='space-y-5 px-10 pb-10 pt-5'>
+        <div
+          id='main-body'
+          className='flex h-full flex-col space-y-5 px-10 pb-10 pt-5'
+        >
           <div className='flex items-end'>
             <Breadcrumbs />
             <div className='ml-auto'>
