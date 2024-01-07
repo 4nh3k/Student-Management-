@@ -11,16 +11,19 @@ interface Props {
   role: string;
 }
 export default function Login({ role }: Props) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState(
+    role === 'nv' ? 'admin' : '6b0d48e184'
+  );
+  const [password, setPassword] = useState(
+    role === 'nv' ? 'admin' : 'dbcd12e1b0'
+  );
   const { setIsAuthenticated } = useAppContext();
 
   const loginMutation = useMutation({
     mutationFn: () => authApi.login(username, password, role),
     onSuccess: data => {
       console.log(data);
-      if (role === 'sv') setAccessTokenToLS(data.data.accessToken);
-      else setAccessTokenToLS(data.data.token);
+      setAccessTokenToLS(data.data.accessToken);
       setProfileToLS(role);
       setIsAuthenticated(true);
       toast.success('Đăng nhập thành công');

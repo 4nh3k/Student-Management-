@@ -6,14 +6,15 @@ import authApi from 'src/apis/auth.api';
 import Breadcrumbs from 'src/components/Breadcrumb';
 import SidebarComponent from 'src/components/Sidebar';
 import { useAppContext } from 'src/contexts/app.contexts';
-import { setAccessTokenToLS, setProfileToLS } from './../../utils/auth';
+import {
+  getProfileFromLS,
+  setAccessTokenToLS,
+  setProfileToLS
+} from './../../utils/auth';
 
-interface MainLayoutProps {
-  isAdmin?: boolean;
-}
-
-export default function MainLayout({ isAdmin = false }: MainLayoutProps) {
-  const { setIsAuthenticated } = useAppContext();
+export default function MainLayout() {
+  const { setIsAuthenticated, profile } = useAppContext();
+  const isAdmin = getProfileFromLS() === 'nv';
 
   const logoutMutation = useMutation({
     mutationFn: () => authApi.logout(),

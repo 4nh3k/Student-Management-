@@ -23,6 +23,7 @@ import Transcript from './pages/Transcript/Transcript';
 import CoursesConfimation from './pages/UserCourseManagement/CoursesConfimation/CoursesConfimation';
 import CoursesRegistered from './pages/UserCourseManagement/CoursesRegistered/CoursesRegistered';
 import CoursesRegistration from './pages/UserCourseManagement/CoursesRegistration/CoursesRegistration';
+import { getProfileFromLS } from './utils/auth';
 function ProtectedRoute() {
   const { isAuthenticated } = useAppContext();
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
@@ -45,8 +46,8 @@ const AuthRouteChildren: RouteObject[] = [
 ];
 
 export default function useRouteElement() {
-  const { profile } = useAppContext();
-  const isAdmin = profile === 'nv';
+  const isAdmin = getProfileFromLS() === 'nv';
+  console.log(isAdmin);
   const routeElement = useRoutes([
     {
       element: <RejectedRoute />,
@@ -56,7 +57,7 @@ export default function useRouteElement() {
       element: <ProtectedRoute />,
       children: [
         {
-          element: <MainLayout isAdmin={isAdmin} />,
+          element: <MainLayout />,
           children: [
             {
               element: <Dashboard />,
