@@ -1,10 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { Select, TextInput } from 'flowbite-react';
+import { Modal, Select, TextInput } from 'flowbite-react';
 import { useState } from 'react';
 import { lecturerApi } from 'src/apis/lecturer.api';
 import Table from 'src/components/Table';
 import { Header } from 'src/components/Table/Table';
 import Lecturer from 'src/types/lecturer.type';
+import EditStudentForm from '../Student/EditStudentForm';
+import EditLecturer from './EditLecturerForm';
 ('use client');
 
 interface LecturerData {
@@ -45,6 +47,15 @@ const AllLecturer = () => {
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setSelectedValue(e.target.value);
+  };
+
+  const [openModal, setOpenModal] = useState(false);
+
+  const [selectedRow, setSelectedRow] = useState<string>('');
+
+  const handleRowClick = (row: any) => {
+    setSelectedRow(row.maGiangVien);
+    setOpenModal(true);
   };
 
   return (
@@ -95,8 +106,20 @@ const AllLecturer = () => {
           pageSize={pageSize}
           filters={{ [selectedValue]: search }}
           className='border-input mt-2 border-2'
+          onRowClick={handleRowClick}
         />
       )}
+      <Modal
+        size={'6xl'}
+        dismissible
+        show={openModal}
+        onClose={() => setOpenModal(false)}
+      >
+        <Modal.Header>Sửa / Xóa sinh viên</Modal.Header>
+        <Modal.Body>
+          <EditLecturer id={selectedRow} />
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

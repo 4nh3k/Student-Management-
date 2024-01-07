@@ -63,10 +63,10 @@ export default function useRouteElement() {
         {
           element: <MainLayout />,
           children: [
-            {
-              element: AdminRoute(<Dashboard />, <StudentDashboard />),
-              path: path.dashboard
-            },
+            // {
+            //   element: AdminRoute(<Dashboard />, <StudentDashboard />),
+            //   path: path.dashboard
+            // },
             {
               element: <AllStudent />,
               path: path.all_students

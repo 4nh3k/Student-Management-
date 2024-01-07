@@ -48,12 +48,14 @@ const AddLecturer = () => {
       <div className='mt-4 grid grid-cols-4 gap-8'>
         <div>
           <div className='mb-2 block'>
-            <Label htmlFor='name' value='Tên' />
+            <Label htmlFor='tenGiangVien' value='Tên' />
           </div>
           <TextInput
             id='tenGiangVien'
             type='text'
             placeholder='Nhập tên giảng viên'
+            value={lecturer.tenGiangVien}
+            onChange={handleInputChange}
             required
           />
         </div>

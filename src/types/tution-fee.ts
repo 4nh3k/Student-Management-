@@ -1,4 +1,4 @@
-type TutionFee = {
+export default interface TutionFee {
   maThongTinHocPhi: number;
   soTienHocPhiTheoQuyDinh: number;
   soTienPhaiDong: number;

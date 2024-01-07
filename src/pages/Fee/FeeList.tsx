@@ -1,82 +1,39 @@
 import React, { useState } from 'react';
 import { Select, TextInput } from 'flowbite-react';
 import Table from 'src/components/Table';
+import { useQuery } from '@tanstack/react-query';
+import { tuitionFeeApi } from 'src/apis/tution-fee.api';
 
 const FeeList = () => {
-
   const headers = [
-    { title: 'Mã số sinh viên', dataIndex: 'studentID' },
-    { title: 'Tên', dataIndex: 'studentName' },
-    { title: 'Giới tính', dataIndex: 'gender' },
-    { title: 'Lớp', dataIndex: 'class' },
-    { title: 'Học phí', dataIndex: 'fee' },
-    { title: 'Đã trả', dataIndex: 'moneyPaid' },
-    { title: 'Còn dư', dataIndex: 'remainer' },
-    { title: 'Tình trạng', dataIndex: 'paidStatus' }
+    { title: 'Mã thông tin học phí', dataIndex: 'maThongTinHocPhi' },
+    { title: 'Mã học kỳ năm học', dataIndex: 'maHocKyNamHoc' },
+    { title: 'Mã sinh viên', dataIndex: 'maSinhVien' },
+    {
+      title: 'Số tiền học phí theo quy định',
+      dataIndex: 'soTienHocPhiTheoQuyDinh'
+    },
+    { title: 'Số tiền phải đóng', dataIndex: 'soTienPhaiDong' },
+    { title: 'Số tiền đã đóng', dataIndex: 'soTienDaDong' },
+    { title: 'Số tiền dư', dataIndex: 'soTienDu' },
+    {
+      title: 'Tên ngân hàng thanh toán học phí',
+      dataIndex: 'tenNganHangThanhToanHocPhi'
+    },
+    {
+      title: 'Thời điểm thanh toán học phí',
+      dataIndex: 'thoiDiemThanhToanHocPhi'
+    },
+
+    { title: 'Ghi chú bổ sung', dataIndex: 'ghiChuBoSung' },
+
   ];
 
-  const data = [
-    {
-      studentID: '21520620',
-      studentName: 'Nguyễn Tuấn Bảo',
-      gender: 'Giới tính',
-      class: 'KTPM2021',
-      fee: '16,000,000đ',
-      moneyPaid: '17,000,000đ',
-      remainer: '1,000,000đ',
-      paidStatus: 'Đã trả'
-    },
-    {
-      studentID: '21520620',
-      studentName: 'Nguyễn Tuấn Bảo',
-      gender: 'Giới tính',
-      class: 'KTPM2021',
-      fee: '16,000,000đ',
-      moneyPaid: '17,000,000đ',
-      remainer: '1,000,000đ',
-      paidStatus: 'Đã trả'
-    },
-    {
-      studentID: '21520620',
-      studentName: 'Nguyễn Tuấn Bảo',
-      gender: 'Giới tính',
-      class: 'KTPM2021',
-      fee: '16,000,000đ',
-      moneyPaid: '17,000,000đ',
-      remainer: '1,000,000đ',
-      paidStatus: 'Đã trả'
-    },
-    {
-      studentID: '21520620',
-      studentName: 'Nguyễn Tuấn Bảo',
-      gender: 'Giới tính',
-      class: 'KTPM2021',
-      fee: '16,000,000đ',
-      moneyPaid: '17,000,000đ',
-      remainer: '1,000,000đ',
-      paidStatus: 'Đã trả'
-    },
-    {
-      studentID: '21520620',
-      studentName: 'Nguyễn Tuấn Bảo',
-      gender: 'Giới tính',
-      class: 'KTPM2021',
-      fee: '16,000,000đ',
-      moneyPaid: '17,000,000đ',
-      remainer: '1,000,000đ',
-      paidStatus: 'Đã trả'
-    },
-    {
-      studentID: '21520620',
-      studentName: 'Nguyễn Tuấn Bảo',
-      gender: 'Giới tính',
-      class: 'KTPM2021',
-      fee: '16,000,000đ',
-      moneyPaid: '17,000,000đ',
-      remainer: '1,000,000đ',
-      paidStatus: 'Đã trả'
-    }
-  ];
+  const { data: getStudentFee, isLoading: isStudentFeeLoading } = useQuery({
+    queryKey: ['fees'],
+    queryFn: ({ signal }) => tuitionFeeApi.getAllTuitionFees(0, 1000, signal)
+  });
+  const studentFeeData = getStudentFee?.data.result;
 
   const [pageSize, setPageSize] = useState<number>(10);
   const [search, setSearchVal] = useState<string>('');
@@ -132,13 +89,15 @@ const FeeList = () => {
         </div>
       </div>
 
-      <Table
-        headers={headers}
-        data={data}
-        className='border-input mt-2 border-2'
-        filters={{ [selectedValue]: search }}
-        pageSize={pageSize}
-      />
+      {!isStudentFeeLoading && (
+        <Table
+          headers={headers}
+          data={studentFeeData}
+          className='border-input mt-2 border-2'
+          filters={{ [selectedValue]: search }}
+          pageSize={pageSize}
+        />
+      )}
     </div>
   );
 };

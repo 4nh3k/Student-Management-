@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Pagination from 'src/components/Pagination';
-import { useState } from 'react';
+
 import Table from 'src/components/Table';
 import {
   Button,
@@ -11,6 +11,8 @@ import {
   Dropdown,
   FloatingLabel
 } from 'flowbite-react';
+import { useQuery } from '@tanstack/react-query';
+import { courseApi } from 'src/apis/course.api';
 
 const CourseManagement = () => {
   const [totalPage, setTotalPage] = useState(50);
@@ -19,68 +21,50 @@ const CourseManagement = () => {
   const courseMajor = ['KTPM', 'KHMT', 'ATTT', 'MMT&TT'];
 
   const headers = [
-    { title: 'Mã môn học', dataIndex: 'courseID' },
-    { title: 'Tên môn học', dataIndex: 'courseName' },
-    { title: 'Giảng viên', dataIndex: 'lecturerName' },
-    { title: 'Thuộc khoa', dataIndex: 'className' },
-    { title: 'Ngày bắt đầu', dataIndex: 'startDate' },
-    { title: 'Ngày kết thúc', dataIndex: 'endDate' },
-    { title: 'Số tín chỉ LT', dataIndex: 'creditLT' },
-    { title: 'Số tín chỉ TH', dataIndex: 'creditTH' }
+    { title: 'Mã học phần', dataIndex: 'maHocPhan' },
+    // { title: 'Mã môn học', dataIndex: 'maMonHoc' },
+    // { title: 'Mã hệ đào tạo', dataIndex: 'maHeDaoTao' },
+    { title: 'Tên môn học', dataIndex: 'tenMonHoc' },
+    { title: 'Còn mở lớp', dataIndex: 'conMoLop' },
+    { title: 'Loại môn học', dataIndex: 'loaiMonHoc' },
+    { title: 'Số tín chỉ lý thuyết', dataIndex: 'soTinChiLyThuyet' },
+    { title: 'Số tín chỉ thực hành', dataIndex: 'soTinChiThucHanh' },
+    { title: 'Hình thức thi', dataIndex: 'hinhThucThi' },
+    { title: 'Loại học phần', dataIndex: 'loaiHocPhan' },
+    { title: 'Mã giảng viên', dataIndex: 'maGiangVien' },
+    { title: 'Sĩ số sinh viên', dataIndex: 'siSoSinhVien' },
+    { title: 'Thời điểm bắt đầu', dataIndex: 'thoiDiemBatDau' },
+    { title: 'Thời điểm kết thúc', dataIndex: 'thoiDiemKetThuc' },
+    { title: 'Mã học kỳ năm học', dataIndex: 'maHocKyNamHoc' },
+    { title: 'Ghi chú', dataIndex: 'ghiChu' }
   ];
 
-  const data = [
-    {
-      courseID: 'IT008.M12',
-      courseName: 'Cấu trúc dữ liệu và máy tính',
-      lecturerName: 'Nguyễn Văn A',
-      className: 'CNPM',
-      startDate: '29/12/2023',
-      endDate: '6/3/2024',
-      creditLT: 3,
-      creditTH: 1
-    },
-    {
-      courseID: 'IT008.M12',
-      courseName: 'Cấu trúc dữ liệu và máy tính',
-      lecturerName: 'Nguyễn Văn A',
-      className: 'CNPM',
-      startDate: '29/12/2023',
-      endDate: '6/3/2024',
-      creditLT: 3,
-      creditTH: 1
-    },
-    {
-      courseID: 'IT008.M12',
-      courseName: 'Cấu trúc dữ liệu và máy tính',
-      lecturerName: 'Nguyễn Văn A',
-      className: 'CNPM',
-      startDate: '29/12/2023',
-      endDate: '6/3/2024',
-      creditLT: 3,
-      creditTH: 1
-    },
-    {
-      courseID: 'IT008.M12',
-      courseName: 'Cấu trúc dữ liệu và máy tính',
-      lecturerName: 'Nguyễn Văn A',
-      className: 'CNPM',
-      startDate: '29/12/2023',
-      endDate: '6/3/2024',
-      creditLT: 3,
-      creditTH: 1
-    },
-    {
-      courseID: 'IT008.M12',
-      courseName: 'Cấu trúc dữ liệu và máy tính',
-      lecturerName: 'Nguyễn Văn A',
-      className: 'CNPM',
-      startDate: '29/12/2023',
-      endDate: '6/3/2024',
-      creditLT: 3,
-      creditTH: 1
+  const { data: getCourseData, isLoading: isLoadingCourse } = useQuery({
+    queryKey: ['courses'],
+    queryFn: ({ signal }) => courseApi.getAllCourseData(0, 1000),
+    select: data => {
+      return data.data.result.map(course => {
+        return {
+          maHocPhan: course.maHocPhan,
+          maMonHoc: course.maMonHoc,
+          maHeDaoTao: course.maHeDaoTao,
+          tenMonHoc: course.monHoc.tenMonHoc,
+          conMoLop: course.monHoc.conMoLop === true ? 'Còn mở' : 'Đóng',
+          loaiMonHoc: course.monHoc.loaiMonHoc,
+          soTinChiLyThuyet: course.monHoc.soTinChiLyThuyet,
+          soTinChiThucHanh: course.monHoc.soTinChiThucHanh,
+          hinhThucThi: course.hinhThucThi,
+          loaiHocPhan: course.loaiHocPhan,
+          maGiangVien: course.maGiangVien,
+          siSoSinhVien: course.siSoSinhVien,
+          thoiDiemBatDau: course.thoiDiemBatDau,
+          thoiDiemKetThuc: course.thoiDiemKetThuc,
+          maHocKyNamHoc: course.maHocKyNamHoc,
+          ghiChu: course.ghiChu
+        };
+      });
     }
-  ];
+  });
 
   const [search, setSearchVal] = useState<string>('');
   const [selectedValue, setSelectedValue] = useState<string>('');
@@ -140,13 +124,15 @@ const CourseManagement = () => {
             <span className='ml-2 text-gray-500'>kết quả</span>
           </div>
         </div>
-        <Table
-          headers={headers}
-          data={data}
-          className='border-input mt-2 border-2'
-          pageSize={pageSize}
-          filters={{ [selectedValue]: search }}
-        />
+        {!isLoadingCourse && getCourseData && (
+          <Table
+            headers={headers}
+            data={getCourseData}
+            className='border-input mt-2 border-2 overflow-x-auto'
+            pageSize={pageSize}
+            filters={{ [selectedValue]: search }}
+          />
+        )}
       </div>
       <div
         id='add-course-container'
