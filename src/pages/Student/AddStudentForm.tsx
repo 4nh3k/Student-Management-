@@ -18,21 +18,24 @@ const AddStudentForm = ({ id }: AddStudentFormProps) => {
   console.log(id);
   const { data: majorsData, isLoading: isMajorsLoading } = useQuery({
     queryKey: ['majors'],
-    queryFn: ({ signal }) => studentApi.getAllMajors(0, 1000, signal)
+    queryFn: ({ signal }) => studentApi.getAllMajors(0, 1000, signal),
+    staleTime: 1000 * 60 * 60
   });
 
   const majors = majorsData?.data.result;
 
   const { data: facultiesData, isLoading: isFacultyLoading } = useQuery({
     queryKey: ['faculties'],
-    queryFn: ({ signal }) => studentApi.getAllFaculties(0, 1000, signal)
+    queryFn: ({ signal }) => studentApi.getAllFaculties(0, 1000, signal),
+    staleTime: 1000 * 60 * 60
   });
 
   const faculties = facultiesData?.data.result;
 
   const { data: educationTypes, isLoading: isEducationTypeLoading } = useQuery({
     queryKey: ['educationTypes'],
-    queryFn: ({ signal }) => studentApi.getAllEducationTypes(0, 1000, signal)
+    queryFn: ({ signal }) => studentApi.getAllEducationTypes(0, 1000, signal),
+    staleTime: 1000 * 60 * 60
   });
 
   const educationTypeData = educationTypes?.data.result;

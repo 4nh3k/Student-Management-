@@ -8,8 +8,7 @@ export interface ResponseAPI<Data> {
 // }
 
 export interface SuccessResponse<Data> {
-  status: string;
-  data: Data;
+  result: Data;
 }
 
 export interface ErrorResponse<Data> {

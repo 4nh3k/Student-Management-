@@ -4,5 +4,7 @@ export const URL_GET_ALL_COURSES = 'khoa-hoc/get-many';
 export const URL_GET_ALL_MAJORS = 'chuyen-nganh/get-many';
 export const URL_GET_ALL_EDUCATION_TYPES = 'he-dao-tao/get-many';
 export const URL_GET_ALL_FACULTY = 'khoa-dao-tao/get-many';
-
+export const URL_GET_ALL_COURSES_GRADE = 'bang-diem-hoc-phan/get-many';
 export const URL_CREATE_STUDENT = 'sinh-vien/add-many';
+export const URL_GET_HOC_PHAN = 'hoc-phan/get-many';
+export const URL_GET_MON_HOC = 'mon-hoc/get-many';

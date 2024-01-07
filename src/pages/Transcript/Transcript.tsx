@@ -1,177 +1,14 @@
+import { Spinner } from 'flowbite-react';
 import { Link } from 'react-router-dom';
 import Table, { Header } from 'src/components/Table/Table';
 import path from 'src/constants/path';
-
-const data = [
-  {
-    ID: {
-      content: 'Học kỳ 2 - Năm học 2023 - 2024',
-      colSpan: 8,
-      className: 'px-4 py-3 font-bold'
-    }
-  },
-  {
-    ID: 'IS201',
-    courseName: 'Phân tích thiết kế hệ thống thông tin',
-    credit: 4,
-    progressGrade: null,
-    midtermGrade: null,
-    practicalGrade: 8,
-    finalGrade: 7,
-    averageGrade: 7.5
-  },
-  {
-    ID: 'SE101',
-    courseName: 'Phương pháp mô hình hóa',
-    credit: 3,
-    progressGrade: 7,
-    midtermGrade: null,
-    practicalGrade: null,
-    finalGrade: 7,
-    averageGrade: 7
-  },
-  {
-    ID: 'SE104',
-    courseName: 'Nhập môn Công nghệ phần mềm',
-    credit: 4,
-    progressGrade: null,
-    midtermGrade: null,
-    practicalGrade: 9,
-    finalGrade: 9,
-    averageGrade: 9
-  },
-  {
-    ID: 'SE114',
-    courseName: 'Nhập môn ứng dụng di động',
-    credit: 3,
-    progressGrade: null,
-    midtermGrade: null,
-    practicalGrade: 6,
-    finalGrade: 9.5,
-    averageGrade: 8.5
-  },
-  {
-    ID: 'SE346',
-    courseName: 'Lập trình trên thiết bị di động',
-    credit: 4,
-    progressGrade: null,
-    midtermGrade: null,
-    practicalGrade: 7.5,
-    finalGrade: 7,
-    averageGrade: 7.2
-  },
-  {
-    ID: 'SS007',
-    courseName: 'Triết học Mác – Lênin',
-    credit: 3,
-    progressGrade: 6,
-    midtermGrade: null,
-    practicalGrade: null,
-    finalGrade: 8,
-    averageGrade: 7
-  },
-  {
-    ID: 'SS009',
-    courseName: 'Chủ nghĩa xã hội khoa học',
-    credit: 2,
-    progressGrade: 9,
-    midtermGrade: null,
-    practicalGrade: null,
-    finalGrade: 8.5,
-    averageGrade: 8.8
-  },
-  {
-    ID: null,
-    courseName: {
-      content: 'Trung bình học kỳ',
-      className: 'px-4 py-3 font-bold'
-    },
-    credit: {
-      content: 20,
-      className: 'px-4 py-3 font-bold'
-    },
-    progressGrade: null,
-    midtermGrade: null,
-    practicalGrade: null,
-    finalGrade: null,
-    averageGrade: {
-      content: 8,
-      className: 'px-4 py-3 font-bold'
-    }
-  },
-  {
-    courseName: {
-      content: 'Số tín chỉ đã học',
-      colSpan: 2,
-      className: 'px-4 py-3 font-bold'
-    },
-    credit: {
-      content: 83,
-      className: 'px-4 py-3 font-bold'
-    },
-    progressGrade: null,
-    midtermGrade: null,
-    practicalGrade: null,
-    finalGrade: null,
-    averageGrade: null
-  },
-  {
-    courseName: {
-      content: 'Số tín chỉ tích lũy',
-      colSpan: 2,
-      className: 'px-4 py-3 font-bold'
-    },
-    credit: {
-      content: 83,
-      className: 'px-4 py-3 font-bold'
-    },
-    progressGrade: null,
-    midtermGrade: null,
-    practicalGrade: null,
-    finalGrade: null,
-    averageGrade: null
-  },
-  {
-    courseName: {
-      content: 'Điểm trung bình chung',
-      colSpan: 2,
-      className: 'px-4 py-3 font-bold'
-    },
-    credit: null,
-    progressGrade: null,
-    midtermGrade: null,
-    practicalGrade: null,
-    finalGrade: null,
-    averageGrade: {
-      content: 8,
-      colSpan: 2,
-      className: 'px-4 py-3 font-bold'
-    }
-  },
-  {
-    courseName: {
-      content: 'Điểm trung bình chung tích luỹ',
-      colSpan: 2,
-      className: 'px-4 py-3 font-bold'
-    },
-    credit: null,
-    progressGrade: null,
-    midtermGrade: null,
-    practicalGrade: null,
-    finalGrade: null,
-    averageGrade: {
-      content: 8,
-      colSpan: 2,
-      className: 'px-4 py-3 font-bold'
-    }
-  }
-];
-
+import useTranscript from 'src/hooks/useTranscript';
+import { isoStringToDdMmYyyy } from 'src/utils/utils';
 // Now you can use 'data' and 'Header' in your application.
 
 const header: Header[] = [
-  { title: 'Mã môn học', dataIndex: 'ID' },
-  { title: 'Tên môn học', dataIndex: 'courseName' },
+  { title: 'Mã HP', dataIndex: 'ID' },
+  { title: 'Tên học phần', dataIndex: 'courseName' },
   { title: 'Tín chỉ', dataIndex: 'credit' },
   { title: 'Điểm QT', dataIndex: 'progressGrade' },
   { title: 'Điểm GK', dataIndex: 'midtermGrade' },
@@ -185,6 +22,14 @@ interface TranscriptProps {
 }
 
 function Transcript({ isPrint = false }: TranscriptProps) {
+  const { data, isLoading, studentData, studentIsLoading } = useTranscript(8);
+  if (isLoading || studentIsLoading)
+    return (
+      <div className='flex h-full w-full items-center justify-center'>
+        <Spinner aria-label='Loading Data' />
+      </div>
+    );
+  console.log(studentData);
   return (
     <div id='student-table-container' className='w-full bg-white p-5 shadow-lg'>
       <div className='relative'>
@@ -193,6 +38,8 @@ function Transcript({ isPrint = false }: TranscriptProps) {
           <Link
             hidden={isPrint}
             to={path.print_transcript}
+            target='_blank'
+            rel='noopener noreferrer'
             className='rounded-lg bg-primary px-2 py-1 font-normal text-white'
           >
             In bảng điểm
@@ -201,21 +48,27 @@ function Transcript({ isPrint = false }: TranscriptProps) {
       </div>
       <div className='mb-4 mt-6 grid grid-cols-6 gap-2 font-normal'>
         <span>Họ và tên:</span>
-        <span className='font-bold'>Nguyễn Văn A</span>
+        <span className='font-bold'>{studentData?.hoTenSinhVien}</span>
         <span>Ngày sinh:</span>
-        <span className='font-bold'>01/01/2001</span>
+        <span className='font-bold'>
+          {isoStringToDdMmYyyy(studentData?.ngaySinh)}
+        </span>
         <span>Giới tính:</span>
-        <span className='font-bold'>Nam</span>
+        <span className='font-bold'>{studentData?.gioiTinh}</span>
         <span>MSSV:</span>
-        <span className='font-bold'>19520000</span>
+        <span className='font-bold'>{studentData?.maSinhVien}</span>
         <span>Lớp:</span>
-        <span className='font-bold'>IS203</span>
+        <span className='font-bold'>
+          {studentData?.khoaHoc?.tenLopSinhHoatChung}
+        </span>
         <span>Khoa</span>
-        <span className='font-bold'>Công nghệ thông tin</span>
+        <span className='font-bold'>{studentData?.khoaHoc.tenKhoaHoc}</span>
         <span>Bậc đào tạo</span>
-        <span className='font-bold'>Đại học</span>
+        <span className='font-bold '>Đại học</span>
         <span>Hệ đào tạo</span>
-        <span className='font-bold'>Chính quy</span>
+        <span className='font-bold capitalize'>
+          {studentData?.heDaoTao?.tenHeDaoTao}
+        </span>
       </div>
       <Table data={data} headers={header} tableStyle='transcript' />
     </div>
