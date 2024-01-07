@@ -19,9 +19,9 @@ import AddStudentForm from './pages/Student/AddStudentForm';
 import AllStudent from './pages/Student/AllStudent';
 import StudentConductPoints from './pages/StudentConductPoints/StudentConductPoints';
 import StudentDashboard from './pages/StudentDashboard/StudentDashboard';
+import StudentFeeInfo from './pages/StudentFeeInfo/StudentFeeInfo';
 import StudentTestSchedule from './pages/StudentTestSchedule/StudentTestSchedule';
 import Transcript from './pages/Transcript/Transcript';
-import CoursesConfimation from './pages/UserCourseManagement/CoursesConfimation/CoursesConfimation';
 import CoursesRegistered from './pages/UserCourseManagement/CoursesRegistered/CoursesRegistered';
 import CoursesRegistration from './pages/UserCourseManagement/CoursesRegistration/CoursesRegistration';
 import { getProfileFromLS } from './utils/auth';
@@ -105,7 +105,7 @@ export default function useRouteElement() {
             },
             {
               path: path.student_fee_info,
-              element: <FeeList />
+              element: <StudentFeeInfo />
             },
             {
               path: path.student_conduct_points,
@@ -122,10 +122,6 @@ export default function useRouteElement() {
             {
               path: path.course_registration,
               element: <CoursesRegistration />
-            },
-            {
-              path: path.course_confirmation,
-              element: <CoursesConfimation />
             },
             {
               path: path.course_registered,

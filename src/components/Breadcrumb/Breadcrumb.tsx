@@ -20,9 +20,10 @@ const Breadcrumbs = ({ separator = '/' }: BreadcrumbProps) => {
     { path: path.exam_schedule_management, breadcrumb: 'Quản lý lịch thi' },
     { path: path.timetable_management, breadcrumb: 'Quản lý lịch thi' },
     { path: path.student_dashboard, breadcrumb: 'Bảng điều khiển' },
-    { path: path.course_confirmation, breadcrumb: 'Xác nhận học phần' },
     { path: path.course_registration, breadcrumb: 'Đăng ký học phần' },
-    { path: path.course_registered, breadcrumb: 'Học phần đã đăng ký' }
+    { path: path.course_registered, breadcrumb: 'Học phần đã đăng ký' },
+    { path: path.student_fee_info, breadcrumb: 'Thông tin học phí' },
+    { path: path.student_test_schedule, breadcrumbs: 'Lịch thi' }
   ];
   const breadcrumbs = useBreadcrumbs(routes);
   const separatorSpan = <span key='separator'> {separator} </span>;

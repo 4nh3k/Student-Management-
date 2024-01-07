@@ -174,12 +174,6 @@ export default function SidebarComponent({ isAdmin }: SidebarProp) {
                 open={getIsOpen('course')}
               >
                 <Sidebar.Item
-                  href={path.course_confirmation}
-                  active={getIsActive(path.course_confirmation)}
-                >
-                  Xác nhận học phần
-                </Sidebar.Item>
-                <Sidebar.Item
                   href={path.course_registration}
                   active={getIsActive(path.course_registration)}
                 >
