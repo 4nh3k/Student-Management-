@@ -36,13 +36,17 @@ function RejectedRoute() {
 const AuthRouteChildren: RouteObject[] = [
   {
     path: path.login,
-    element: <Login />
+    element: <Login role={'sv'} />
+  },
+  {
+    path: path.admin_login,
+    element: <Login role={'nv'} />
   }
 ];
 
 export default function useRouteElement() {
   const { profile } = useAppContext();
-  const isAdmin = profile === 'admin';
+  const isAdmin = profile === 'nv';
   const routeElement = useRoutes([
     {
       element: <RejectedRoute />,

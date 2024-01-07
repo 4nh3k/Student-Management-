@@ -1,5 +1,3 @@
-import { User } from 'src/types/user.type';
-
 export const setAccessTokenToLS = (token: string) => {
   localStorage.setItem('access_token', token);
 };
@@ -20,7 +18,7 @@ export const clearLS = () => {
   localStorage.removeItem('access_token');
 };
 
-export const setProfileToLS = (profile: User) => {
+export const setProfileToLS = (profile: string) => {
   localStorage.setItem('profile', JSON.stringify(profile));
 };
 export const getProfileFromLS = () => {

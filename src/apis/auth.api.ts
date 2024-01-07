@@ -1,20 +1,23 @@
 import { AuthResponse } from 'src/types/auth.type';
+import { getAccessTokenFromLS } from 'src/utils/auth';
 import http from 'src/utils/http';
 
-export const URL_LOGIN = 'signin';
-export const URL_REGISTER = 'sign-up';
-export const URL_LOGOUT = 'logout';
-export const URL_FORGOT_PASSWORD = 'forgot-password';
+export const URL_LOGIN = 'auth/login';
+export const URL_LOGOUT = 'auth/logout';
+export const URL_REFRESH = 'auth/refresh';
 
 const authApi = {
-  registerAccount(body: { email: string; password: string }) {
-    return http.post<AuthResponse>(URL_REGISTER, body);
-  },
-  login(body: { username: string; password: string }) {
-    return http.post<AuthResponse>(URL_LOGIN, body);
+  login(username: string, password: string, role: string) {
+    return http.post<AuthResponse>(
+      `${URL_LOGIN}?username=${username}&password=${password}&role=${role}`
+    );
   },
   logout() {
-    return http.post(URL_LOGOUT);
+    const accessToken = getAccessTokenFromLS();
+    return http.delete(`${URL_LOGOUT}?accessToken=${accessToken}`);
+  },
+  refreshToken(accessToken: string, refreshToken: string) {
+    return http.post(URL_REFRESH, { accessToken, refreshToken });
   }
 };
 

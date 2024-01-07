@@ -1,19 +1,40 @@
+import { useMutation } from '@tanstack/react-query';
 import { Button, FloatingLabel } from 'flowbite-react';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
+import authApi from 'src/apis/auth.api';
 import UITBackground from 'src/assets/imgs/uit-background.jpg';
 import { useAppContext } from 'src/contexts/app.contexts';
 import { setAccessTokenToLS, setProfileToLS } from './../../utils/auth';
-export default function Login() {
+
+interface Props {
+  role: string;
+}
+export default function Login({ role }: Props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { setIsAuthenticated } = useAppContext();
+
+  const loginMutation = useMutation({
+    mutationFn: () => authApi.login(username, password, role),
+    onSuccess: data => {
+      console.log(data);
+      if (role === 'sv') setAccessTokenToLS(data.data.accessToken);
+      else setAccessTokenToLS(data.data.token);
+      setProfileToLS(role);
+      setIsAuthenticated(true);
+      toast.success('Đăng nhập thành công');
+    },
+    onError: () => {
+      toast.error('Đăng nhập thất bại');
+    }
+  });
+
   const handleLogin = () => {
-    setAccessTokenToLS('token');
-    setProfileToLS(username);
-    setIsAuthenticated(true);
+    loginMutation.mutate();
   };
   return (
-    <div className='flex flex-col bg-sidebar lg:flex-row'>
+    <form className='flex flex-col bg-sidebar lg:flex-row'>
       <div id='background-container' className='w-full lg:w-1/3'>
         <img
           src={UITBackground}
@@ -42,6 +63,7 @@ export default function Login() {
             <FloatingLabel
               variant='outlined'
               value={password}
+              type='password'
               onChange={e => setPassword(e.target.value)}
               label='Mật khẩu'
             />
@@ -56,6 +78,6 @@ export default function Login() {
           </a>
         </div>
       </div>
-    </div>
+    </form>
   );
 }

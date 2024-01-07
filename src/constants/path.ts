@@ -3,6 +3,7 @@ const path = {
   all_students: '/all-students',
   add_student: '/add-student',
   login: '/login',
+  admin_login: '/admin-login',
   all_lecturers: '/all-lecturers',
   add_lecturer: '/add-lecturer',
   fee_list: '/fee-list',

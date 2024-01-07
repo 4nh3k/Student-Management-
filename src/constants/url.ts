@@ -11,4 +11,5 @@ export const URL_GET_ALL_COURSES_GRADE = 'bang-diem-hoc-phan/get-many';
 export const URL_CREATE_STUDENT = 'sinh-vien/add-many';
 
 export const URL_GET_HOC_PHAN = 'hoc-phan/get-many';
+export const URL_GET_HOC_KY = 'hoc-ky-nam-hoc/get-many';
 export const URL_GET_MON_HOC = 'mon-hoc/get-many';

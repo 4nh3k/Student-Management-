@@ -1,5 +1,8 @@
+import { useMutation } from '@tanstack/react-query';
 import { Avatar, Dropdown } from 'flowbite-react';
 import { Outlet } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import authApi from 'src/apis/auth.api';
 import Breadcrumbs from 'src/components/Breadcrumb';
 import SidebarComponent from 'src/components/Sidebar';
 import { useAppContext } from 'src/contexts/app.contexts';
@@ -11,11 +14,22 @@ interface MainLayoutProps {
 
 export default function MainLayout({ isAdmin = false }: MainLayoutProps) {
   const { setIsAuthenticated } = useAppContext();
+
+  const logoutMutation = useMutation({
+    mutationFn: () => authApi.logout(),
+    onSuccess: () => {
+      setAccessTokenToLS('');
+      setProfileToLS('');
+      setIsAuthenticated(false);
+      toast.success('Đăng xuất thành công');
+    },
+    onError: () => {
+      toast.error('Có lỗi xảy ra. Vui lòng thử lại sau');
+    }
+  });
+
   const handleLogout = () => {
-    setAccessTokenToLS('');
-    setProfileToLS(null);
-    setIsAuthenticated(false);
-    console.log('logout');
+    logoutMutation.mutate();
   };
   return (
     <div className='flex h-screen w-screen overflow-y-hidden'>

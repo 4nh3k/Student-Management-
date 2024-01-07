@@ -1,6 +1,10 @@
-import { Button } from 'flowbite-react';
+import { useQuery } from '@tanstack/react-query';
+import { Button, Spinner } from 'flowbite-react';
 import { useState } from 'react';
+import { courseApi } from 'src/apis/course.api';
+import { semesterApi } from 'src/apis/semester.api';
 import Table, { Header } from 'src/components/Table/Table';
+import HocPhan from 'src/types/hoc-phan.type';
 
 export default function CoursesRegistration() {
   const headers: Header[] = [
@@ -10,94 +14,36 @@ export default function CoursesRegistration() {
     { title: 'Thời gian học', dataIndex: 'duration' },
     { title: 'Đã ĐK/Sĩ số', dataIndex: 'registered' }
   ];
-  const data = [
-    {
-      ID: 'SE121',
-      courseName: 'Nhập môn công nghệ phần mềm',
-      credits: '4',
-      duration: 'KTPM',
-      registered: '80/120'
-    },
-    {
-      ID: 'SE123',
-      courseName: 'Nhập môn công nghệ phần mềm',
-      credits: '4',
-      duration: 'KTPM',
-      registered: '80/120'
-    },
-    {
-      ID: 'SE123',
-      courseName: 'Nhập môn công nghệ phần mềm',
-      credits: '4',
-      duration: 'KTPM',
-      registered: '80/120'
-    },
-    {
-      ID: 'SE123',
-      courseName: 'Nhập môn công nghệ phần mềm',
-      credits: '4',
-      duration: 'KTPM',
-      registered: '80/120'
-    },
-    {
-      ID: 'SE123',
-      courseName: 'Nhập môn công nghệ phần mềm',
-      credits: '4',
-      duration: 'KTPM',
-      registered: '80/120'
-    },
-    {
-      ID: 'SE123',
-      courseName: 'Nhập môn công nghệ phần mềm',
-      credits: '4',
-      duration: 'KTPM',
-      registered: '80/120'
-    },
-    {
-      ID: 'SE123',
-      courseName: 'Nhập môn công nghệ phần mềm',
-      credits: '4',
-      duration: 'KTPM',
-      registered: '80/120'
-    },
-    {
-      ID: 'SE123',
-      courseName: 'Nhập môn công nghệ phần mềm',
-      credits: '4',
-      duration: 'KTPM',
-      registered: '80/120'
-    },
-    {
-      ID: 'SE123',
-      courseName: 'Nhập môn công nghệ phần mềm',
-      credits: '4',
-      duration: 'KTPM',
-      registered: '80/120'
-    },
-    {
-      ID: 'SE123',
-      courseName: 'Nhập môn công nghệ phần mềm',
-      credits: '4',
-      duration: 'KTPM',
-      registered: '80/120'
-    },
-    {
-      ID: 'SE123',
-      courseName: 'Nhập môn công nghệ phần mềm',
-      credits: '4',
-      duration: 'KTPM',
-      registered: '80/120'
-    },
-    {
-      ID: 'SE123',
-      courseName: 'Nhập môn công nghệ phần mềm',
-      credits: '4',
-      duration: 'KTPM',
-      registered: '80/120'
-    }
-  ];
 
   const [courseSelected, setCourseSelected] = useState<string[]>([]);
+
+  const { data: semesterData, isLoading: isLoadingSemester } = useQuery({
+    queryKey: ['currentSemester'],
+    queryFn: ({ signal }) => semesterApi.getCurrentSemester(0, 1000, signal),
+    select: data => {
+      return data.data.result[0];
+    }
+  });
+  const { data: courseData, isLoading } = useQuery({
+    queryKey: ['courses', semesterData?.maHocKyNamHoc],
+    queryFn: ({ signal }) =>
+      courseApi.getAllCourseData(0, 10000, semesterData?.maHocKyNamHoc, signal),
+    select: data => {
+      return data.data.result.map((item: HocPhan) => {
+        return {
+          ID: item.maHocPhan,
+          courseName: item.monHoc.tenMonHoc,
+          credits:
+            item.hinhThucThi === 'bài kiểm tra thực hành cuối kỳ'
+              ? item?.monHoc?.soTinChiThucHanh
+              : item?.monHoc?.soTinChiLyThuyet, // TODO: fix this later
+          duration: item.thoiDiemBatDau,
+          registered: item.siSoSinhVien
+        };
+      });
+    },
+    enabled: !!semesterData?.maHocKyNamHoc
+  });
 
   const handleOnCheck = (row: any, checked: boolean) => {
     console.log(row, checked);
@@ -107,6 +53,12 @@ export default function CoursesRegistration() {
       setCourseSelected(courseSelected.filter(item => item !== row.ID));
     }
   };
+  if (isLoading || isLoadingSemester)
+    return (
+      <div className='flex h-full w-full justify-center'>
+        <Spinner />
+      </div>
+    );
 
   return (
     <div className=' w-full bg-white p-5 shadow-lg'>
@@ -114,7 +66,7 @@ export default function CoursesRegistration() {
         headers={headers}
         hasCheckbox={true}
         onCheck={handleOnCheck}
-        data={data}
+        data={courseData}
         className='border-input mt-2 border-2'
       />
       <div className=' fixed bottom-0 right-0 z-10 flex items-center  border-t border-solid border-gray-300 bg-gray-100 py-2 text-center lg:w-[calc(100%-16rem)]'>
