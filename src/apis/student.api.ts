@@ -1,5 +1,7 @@
+import { useParams } from 'react-router-dom';
 import {
   URL_CREATE_STUDENT,
+  URL_DELETE_STUDENT,
   URL_GET_ALL_COURSES,
   URL_GET_ALL_EDUCATION_TYPES,
   URL_GET_ALL_FACULTY,
@@ -101,6 +103,24 @@ export const studentApi = {
     return http.put<SuccessResponse<CreateStudentDto>>(
       `${URL_UPDATE_STUDENT}`,
       rawBody
+    );
+  },
+
+  deleteStudent(id?: number) {
+    const rawBody = {
+      filterBy: {
+        maSinhVien: id
+      },
+      returnJustIds: true
+    };
+    return http.delete<SuccessResponse<CreateStudentDto>>(
+      `${URL_DELETE_STUDENT}`,
+      {
+        data: JSON.stringify(rawBody),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
     );
   }
 };
