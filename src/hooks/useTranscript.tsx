@@ -8,7 +8,7 @@ import { averageGrade, formatGrade } from 'src/utils/utils';
 const useTranscript = (id: number) => {
   const { data: studentData, isLoading: studentIsLoading } = useQuery({
     queryKey: ['student', id],
-    queryFn: ({ signal }) => studentApi.getStudent(id, signal),
+    queryFn: ({ signal }) => studentApi.getAllStudents(0, 10000, signal, id),
     select: data => {
       return data.data.result[0];
     }

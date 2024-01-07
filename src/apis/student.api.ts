@@ -1,7 +1,3 @@
-import { SuccessResponse } from 'src/types/utils.type';
-import http from 'src/utils/http';
-import Student from 'src/types/student.type';
-import Course from 'src/types/course.type';
 import {
   URL_CREATE_STUDENT,
   URL_GET_ALL_COURSES,
@@ -12,8 +8,12 @@ import {
   URL_GET_ALL_STUDENTS,
   URL_UPDATE_STUDENT
 } from 'src/constants/url';
-import Major from 'src/types/major.type';
+import Course from 'src/types/course.type';
 import CreateStudentDto from 'src/types/create-student.dto';
+import Major from 'src/types/major.type';
+import Student from 'src/types/student.type';
+import { SuccessResponse } from 'src/types/utils.type';
+import http from 'src/utils/http';
 
 export const studentApi = {
   getAllStudents(
@@ -24,7 +24,7 @@ export const studentApi = {
   ) {
     const rawBody = {
       filterBy: {
-        "maSinhVien": id
+        maSinhVien: id
       }
     };
     const urlWithParams = `${URL_GET_ALL_STUDENTS}?offset=${offset}&limit=${limit}`;
@@ -67,18 +67,14 @@ export const studentApi = {
       filterBy: {}
     };
     const urlWithParams = `${URL_GET_ALL_FACULTY}?offset=${offset}&limit=${limit}`;
-    return http.post<SuccessResponse<{ result: Major[] }>>(
-      urlWithParams,
-      rawBody,
-      {
-        signal
-      }
-    );
+    return http.post<SuccessResponse<Major[]>>(urlWithParams, rawBody, {
+      signal
+    });
   },
 
   getAllLearningStatus(signal?: AbortSignal) {
     const urlWithParams = `${URL_GET_ALL_LEARNING_STATUS}`;
-    return http.get<SuccessResponse<{ result: string[] }>>(urlWithParams, {
+    return http.get<SuccessResponse<string[]>>(urlWithParams, {
       signal
     });
   },
@@ -89,20 +85,20 @@ export const studentApi = {
       returnJustIds: true
     };
 
-    return http.post<SuccessResponse<{ doc: CreateStudentDto }>>(
+    return http.post<SuccessResponse<CreateStudentDto>>(
       URL_CREATE_STUDENT,
       rawBody
     );
   },
 
-  updateStudent(student: CreateStudentDto, id?: number,) {
+  updateStudent(student: CreateStudentDto, id?: number) {
     const rawBody = {
-      filterBy:{
+      filterBy: {
         maSinhVien: id
       },
       updateTo: student
     };
-    return http.put<SuccessResponse<{ result: CreateStudentDto }>>(
+    return http.put<SuccessResponse<CreateStudentDto>>(
       `${URL_UPDATE_STUDENT}`,
       rawBody
     );
