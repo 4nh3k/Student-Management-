@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Button, Datepicker, Label, Select, TextInput } from 'flowbite-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { studentApi } from 'src/apis/student.api';
 import ImageLoader from 'src/components/ImageLoader/ImageLoader';
@@ -11,7 +11,7 @@ interface AddStudentFormProps {
   id?: string;
 }
 
-const AddStudentForm = ({ id }: AddStudentFormProps) => {
+const EditStudentForm = ({ id }: AddStudentFormProps) => {
   const capitalizeFirstLetter = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
@@ -20,13 +20,57 @@ const AddStudentForm = ({ id }: AddStudentFormProps) => {
     return str.charAt(0).toLowerCase() + str.slice(1);
   };
 
+  const [student, setStudent] = useState<CreateStudentDto>({
+    hoTenSinhVien: '',
+    maKhoaHoc: 1,
+    maChuyenNganh: 1,
+    maHeDaoTao: 5,
+    tinhTrangHocTap: 'đang học',
+    ngaySinh: new Date().toISOString(),
+    gioiTinh: 'Nam',
+    email: '',
+    emailPassword: '',
+    username: '',
+    usernamePassword: '',
+    soTaiKhoanNganHangDinhDanh: '',
+    anhTheSinhVien: '',
+    ngayNhapHoc: new Date().toISOString(),
+    maSinhVien: 0
+  });
+
+  const { data: studentData, isLoading: isLoadingStudentData } = useQuery({
+    queryKey: ['students'],
+    queryFn: ({ signal }) =>
+      studentApi.getAllStudents(0, 1000, signal, parseInt(id)),
+    select: data => {
+      return data.data.result.map((item: CreateStudentDto) => {
+        return {
+          hoTenSinhVien: item.hoTenSinhVien,
+          maKhoaHoc: item.maKhoaHoc,
+          maChuyenNganh: item.maChuyenNganh,
+          maHeDaoTao: item.maHeDaoTao,
+          tinhTrangHocTap: item.tinhTrangHocTap,
+          ngaySinh: item.ngaySinh,
+          gioiTinh: item.gioiTinh,
+          email: item.email,
+          emailPassword: item.emailPassword,
+          username: item.username,
+          usernamePassword: item.usernamePassword,
+          soTaiKhoanNganHangDinhDanh: item.soTaiKhoanNganHangDinhDanh,
+          anhTheSinhVien: item.anhTheSinhVien,
+          ngayNhapHoc: item.ngayNhapHoc,
+          maSinhVien: item.maSinhVien
+        };
+      });
+    }
+  });
+
   const { data: majorsData, isLoading: isMajorsLoading } = useQuery({
     queryKey: ['majors'],
     queryFn: ({ signal }) => studentApi.getAllMajors(0, 1000, signal)
   });
 
   const majors = majorsData?.data.result;
-
   const { data: facultiesData, isLoading: isFacultyLoading } = useQuery({
     queryKey: ['faculties'],
     queryFn: ({ signal }) => studentApi.getAllFaculties(0, 1000, signal)
@@ -49,24 +93,6 @@ const AddStudentForm = ({ id }: AddStudentFormProps) => {
   const learningStatuses = learningStatusList?.data.result;
 
   const { createStudentMutation } = useStudent();
-
-  const [student, setStudent] = useState<CreateStudentDto>({
-    hoTenSinhVien: '',
-    maKhoaHoc: 1,
-    maChuyenNganh: 1,
-    maHeDaoTao: 5,
-    tinhTrangHocTap: 'đang học',
-    ngaySinh: new Date().toISOString(),
-    gioiTinh: 'Nam',
-    email: '',
-    emailPassword: '',
-    username: '',
-    usernamePassword: '',
-    soTaiKhoanNganHangDinhDanh: '',
-    anhTheSinhVien: '',
-    ngayNhapHoc: new Date().toISOString(),
-    maSinhVien: 0
-  });
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -155,6 +181,53 @@ const AddStudentForm = ({ id }: AddStudentFormProps) => {
     }));
   };
 
+  useEffect(() => {
+    if (
+      !isEducationTypeLoading &&
+      !isMajorsLoading &&
+      !isFacultyLoading &&
+      !isLoadingStudentData &&
+      studentData
+    ) {
+      setStudent({
+        hoTenSinhVien: studentData[0].hoTenSinhVien,
+        maKhoaHoc: studentData[0].maKhoaHoc,
+        maChuyenNganh: studentData[0].maChuyenNganh,
+        maHeDaoTao: studentData[0].maHeDaoTao,
+        tinhTrangHocTap: studentData[0].tinhTrangHocTap,
+        ngaySinh: studentData[0].ngaySinh,
+        gioiTinh: studentData[0].gioiTinh,
+        email: studentData[0].email,
+        emailPassword: studentData[0].emailPassword,
+        username: studentData[0].username,
+        usernamePassword: studentData[0].usernamePassword,
+        soTaiKhoanNganHangDinhDanh: studentData[0].soTaiKhoanNganHangDinhDanh,
+        anhTheSinhVien: studentData[0].anhTheSinhVien,
+        ngayNhapHoc: studentData[0].ngayNhapHoc,
+        maSinhVien: studentData[0].maSinhVien
+      });
+      const selectedEducationType = educationTypeData.find(
+        education => education.maHeDaoTao === studentData[0].maHeDaoTao
+      );
+      setEducationType(
+        capitalizeFirstLetter(selectedEducationType.tenHeDaoTao)
+      );
+
+      const selectedFaculty = faculties.find(
+        faculty => faculty.maKhoaHoc === studentData[0].maKhoaDaoTao
+      );
+      setFaculty(capitalizeFirstLetter(selectedFaculty.tenKhoaDaoTao));
+
+      setGender(studentData[0].gioiTinh == 'Nam' ? 'Nam' : 'Nữ');
+      setLearningStatus(capitalizeFirstLetter(studentData[0].tinhTrangHocTap));
+
+      const selectedMajor = majors.find(
+        major => major.maChuyenNganh === studentData[0].maChuyenNganh
+      );
+      setMajor(capitalizeFirstLetter(selectedMajor.tenChuyenNganh));
+    }
+  }, [studentData, isLoadingStudentData, educationTypeData, faculties, majors]);
+
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Submitted student:', student);
@@ -197,6 +270,19 @@ const AddStudentForm = ({ id }: AddStudentFormProps) => {
     >
       <h1>Thông tin sinh viên</h1>
       <div className='mt-4 grid grid-cols-4 gap-8'>
+        <div>
+          <div className='mb-2 block'>
+            <Label htmlFor='maSinhVien' value='Mã sinh viên' />
+          </div>
+          <TextInput
+            id='maSinhVien'
+            type='text'
+            placeholder=''
+            value={student.maSinhVien}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
         <div>
           <div className='mb-2 block'>
             <Label htmlFor='name' value='Tên' />
@@ -376,16 +462,14 @@ const AddStudentForm = ({ id }: AddStudentFormProps) => {
           </div>
         </div>
       </div>
-      <div className='mt-10 flex space-x-5'>
+      <div className='mt-4 flex space-x-5'>
         <Button type='submit' color='failure'>
-          Thêm
+          Lưu
         </Button>
-        {/* <Button type='submit' form='student-form' className='bg-sidebar'>
-          Mặc định
-        </Button> */}
+        <Button className='bg-sidebar'>Xóa</Button>
       </div>
     </form>
   );
 };
 
-export default AddStudentForm;
+export default EditStudentForm;

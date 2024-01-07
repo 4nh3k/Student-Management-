@@ -17,6 +17,18 @@ const useStudent = () => {
     }
   });
 
+  const updateBookMutation = useMutation({
+    mutationFn: (data: {  student: CreateStudentDto, id: number, }) => studentApi.updateStudent(data.student, data.id),
+    onSuccess: data => {
+      studentApi.getAllStudents.refetch();
+      console.log(data);
+    },
+    onError: (error: unknown) => {
+      console.log(error);
+      toast.error(error.respone.data.message);
+    }
+  });
+
   return {
     createStudentMutation
   };

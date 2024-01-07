@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { studentApi } from 'src/apis/student.api';
 import Table from 'src/components/Table';
 import AddStudentForm from './AddStudentForm';
+import EditStudentForm from './EditStudentForm';
 
 const AllStudent = () => {
   const courseMajor = ['KTPM', 'KHMT', 'ATTT', 'MMT&TT'];
@@ -125,22 +126,13 @@ const AllStudent = () => {
         show={openModal}
         onClose={() => setOpenModal(false)}
       >
-        <Modal.Header>Terms of Service</Modal.Header>
+        <Modal.Header>Sửa / Xóa sinh viên</Modal.Header>
         <Modal.Body>
-          <AddStudentForm id={selectedRow} />
+          <EditStudentForm id={selectedRow} />
         </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={() => setOpenModal(false)}>I accept</Button>
-          <Button color='gray' onClick={() => setOpenModal(false)}>
-            Decline
-          </Button>
-        </Modal.Footer>
       </Modal>
     </div>
   );
 };
 
 export default AllStudent;
-function setCurrentPage(page: number) {
-  throw new Error('Function not implemented.');
-}

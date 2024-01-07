@@ -1,15 +1,17 @@
 export default interface CreateStudentDto {
   hoTenSinhVien: string;
-  gioiTinh: string;
-  ngaySinh: string;
   maKhoaHoc: number;
   maChuyenNganh: number;
-  chuyenNganh: string;
   maHeDaoTao: number;
-  heDaoTao: string;
-  email: string;
   tinhTrangHocTap: string;
-  soTKNganHangDinhDanh: string;
+  ngaySinh: string;
+  gioiTinh: string;
+  email: string;
+  emailPassword: string;
+  username: string;
+  usernamePassword: string;
+  soTaiKhoanNganHangDinhDanh: string;
+  anhTheSinhVien: string;
   ngayNhapHoc: string;
-//   anhTheSinhVien: string;
+  maSinhVien: number;
 }
