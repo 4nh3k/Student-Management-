@@ -39,7 +39,7 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
   });
 
   const { data: studentData, isLoading: isLoadingStudentData } = useQuery({
-    queryKey: ['students'],
+    queryKey: ['students', id],
     queryFn: ({ signal }) =>
       studentApi.getAllStudents(0, 1000, signal, parseInt(id)),
     select: data => {
