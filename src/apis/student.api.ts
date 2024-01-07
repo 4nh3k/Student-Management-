@@ -2,8 +2,9 @@ import { SuccessResponse } from 'src/types/utils.type';
 import http from 'src/utils/http';
 import Student from 'src/types/student.type';
 import Course from 'src/types/course.type';
-import { URL_GET_ALL_COURSES, URL_GET_ALL_EDUCATION_TYPES, URL_GET_ALL_FACULTY, URL_GET_ALL_MAJORS, URL_GET_ALL_STUDENTS } from 'src/constants/url';
+import { URL_CREATE_STUDENT, URL_GET_ALL_COURSES, URL_GET_ALL_EDUCATION_TYPES, URL_GET_ALL_FACULTY, URL_GET_ALL_MAJORS, URL_GET_ALL_STUDENTS } from 'src/constants/url';
 import Major from 'src/types/major.type';
+import CreateStudentDto from 'src/types/create-student.dto';
 
 export const studentApi = {
   getAllStudents(offset: number, limit: number, signal?: AbortSignal) {
@@ -75,6 +76,9 @@ export const studentApi = {
     );
   },
   createStudent(student: CreateStudentDto) {
-    return http.post<SuccessResponse<{ doc: Student }>>(URL_BOOKS, book);
+    return http.post<SuccessResponse<{ doc: CreateStudentDto }>>(
+      URL_CREATE_STUDENT,
+      student
+    );
   },
 };

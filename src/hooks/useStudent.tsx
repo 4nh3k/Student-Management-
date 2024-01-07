@@ -4,14 +4,22 @@ import { studentApi } from 'src/apis/student.api';
 import Student from 'src/types/student.type';
 import CreateStudentDto from 'src/types/create-student.dto';
 
-const useBook = () => {
+const useStudent = () => {
   const createStudentMutation = useMutation({
-    mutationFn: (body: CreateStudentDto) => studentApi.createBook(body)
+    mutationFn: (body: CreateStudentDto) => studentApi.createStudent(body),
+    onSuccess: data => {
+      toast.success('Thêm sinh viên mới thành công');
+      console.log(data);
+    },
+    onError: (error: unknown) => {
+      console.log(error);
+      toast.error('Thêm sinh viên thất bại');
+    }
   });
 
   return {
-    createBookMutation
+    createStudentMutation
   };
 };
 
-export default useBook;
+export default useStudent;
