@@ -12,7 +12,7 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import ExamScheduleManagement from './pages/ExamScheduleManagement/ExamScheduleManagement';
 import AddFee from './pages/Fee/AddFee';
 import FeeList from './pages/Fee/FeeList';
-import AddLecturer from './pages/Lecturer/AddLecturer';
+import AddLecturer from './pages/Lecturer/AddLecturerForm';
 import AllLecturer from './pages/Lecturer/AllLecturer';
 import Login from './pages/Login';
 import AddStudentForm from './pages/Student/AddStudentForm';

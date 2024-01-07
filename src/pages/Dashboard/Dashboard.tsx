@@ -6,7 +6,8 @@ import InfoCard from 'src/components/InfoCard/InfoCard';
 
 const Dashboard = () => {
   return (
-    <div className='flex space-x-5 '>
+    <div id='student-table-container' className='w-full bg-white p-5 shadow-lg'>
+    <div className='flex space-x-5 items-center justify-between'>
       <InfoCard icon_src={StudentCircle} label={'Sinh viên'} value={50000} />
       <InfoCard icon_src={LecturerCircle} label={'Giảng viên'} value={1500} />
       <InfoCard icon_src={CourseCircle} label={'Số môn học'} value={60000} />
@@ -15,6 +16,7 @@ const Dashboard = () => {
         label={'Tổng thu'}
         value={'2,000,000,000đ'}
       />
+    </div>
     </div>
   );
 };
