@@ -16,33 +16,30 @@ import Major from 'src/types/major.type';
 import CreateStudentDto from 'src/types/create-student.dto';
 
 export const studentApi = {
-  getAllStudents(offset: number, limit: number, signal?: AbortSignal, id?: number) {
+  getAllStudents(
+    offset: number,
+    limit: number,
+    signal?: AbortSignal,
+    id?: number
+  ) {
     const rawBody = {
       filterBy: {
         "maSinhVien": id
       }
     };
     const urlWithParams = `${URL_GET_ALL_STUDENTS}?offset=${offset}&limit=${limit}`;
-    return http.post<SuccessResponse<{ result: Student[] }>>(
-      urlWithParams,
-      rawBody,
-      {
-        signal
-      }
-    );
+    return http.post<SuccessResponse<Student[]>>(urlWithParams, rawBody, {
+      signal
+    });
   },
   getAllCourses(offset: number, limit: number, signal?: AbortSignal) {
     const rawBody = {
       filterBy: {}
     };
     const urlWithParams = `${URL_GET_ALL_COURSES}?offset=${offset}&limit=${limit}`;
-    return http.post<SuccessResponse<{ result: Course[] }>>(
-      urlWithParams,
-      rawBody,
-      {
-        signal
-      }
-    );
+    return http.post<SuccessResponse<Course[]>>(urlWithParams, rawBody, {
+      signal
+    });
   },
 
   getAllMajors(offset: number, limit: number, signal?: AbortSignal) {
@@ -50,13 +47,9 @@ export const studentApi = {
       filterBy: {}
     };
     const urlWithParams = `${URL_GET_ALL_MAJORS}?offset=${offset}&limit=${limit}`;
-    return http.post<SuccessResponse<{ result: Major[] }>>(
-      urlWithParams,
-      rawBody,
-      {
-        signal
-      }
-    );
+    return http.post<SuccessResponse<Major[]>>(urlWithParams, rawBody, {
+      signal
+    });
   },
 
   getAllEducationTypes(offset: number, limit: number, signal?: AbortSignal) {
@@ -64,13 +57,9 @@ export const studentApi = {
       filterBy: {}
     };
     const urlWithParams = `${URL_GET_ALL_EDUCATION_TYPES}?offset=${offset}&limit=${limit}`;
-    return http.post<SuccessResponse<{ result: Major[] }>>(
-      urlWithParams,
-      rawBody,
-      {
-        signal
-      }
-    );
+    return http.post<SuccessResponse<Major[]>>(urlWithParams, rawBody, {
+      signal
+    });
   },
 
   getAllFaculties(offset: number, limit: number, signal?: AbortSignal) {

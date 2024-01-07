@@ -1,3 +1,5 @@
+import Course from './course.type';
+
 export default interface Student {
   maSinhVien: number;
   hoTenSinhVien: string;
@@ -5,7 +7,7 @@ export default interface Student {
   maChuyenNganh: number;
   maHeDaoTao: number;
   tinhTrangHocTap: string;
-  ngaySinh: Date;
+  ngaySinh: string;
   gioiTinh: string;
   email: string;
   emailPassword: string;
@@ -20,7 +22,7 @@ export default interface Student {
   ketQuaHocTaps: null;
   ketQuaRenLuyens: null;
   khenThuongs: null;
-  khoaHoc: null;
+  khoaHoc: Course;
   thongTinDangKyHocPhans: null;
   thongTinHocKyNamHocs: null;
   thongTinHocPhis: null;
