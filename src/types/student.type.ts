@@ -16,8 +16,19 @@ export default interface Student {
   soTKDinhDanh: string;
   anhTheSinhVien: string;
   bangDiemHocPhan: null;
-  chuyenNganh: string;
-  heDaoTao: string;
+  chuyenNganh: {
+    khoaDaoTao: null;
+    maChuyenNganh: number;
+    maKhoaDaoTao: number;
+    sinhViens: null;
+    tenChuyenNganh: string;
+  };
+  heDaoTao: {
+    hocPhans: [];
+    maHeDaoTao: number;
+    sinhViens: null;
+    tenHeDaoTao: string;
+  };
   hoSos: null;
   ketQuaHocTaps: null;
   ketQuaRenLuyens: null;

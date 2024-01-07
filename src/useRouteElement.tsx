@@ -18,6 +18,7 @@ import Login from './pages/Login';
 import AddStudentForm from './pages/Student/AddStudentForm';
 import AllStudent from './pages/Student/AllStudent';
 import StudentConductPoints from './pages/StudentConductPoints/StudentConductPoints';
+import StudentDashboard from './pages/StudentDashboard/StudentDashboard';
 import StudentTestSchedule from './pages/StudentTestSchedule/StudentTestSchedule';
 import Transcript from './pages/Transcript/Transcript';
 import CoursesConfimation from './pages/UserCourseManagement/CoursesConfimation/CoursesConfimation';
@@ -37,17 +38,20 @@ function RejectedRoute() {
 const AuthRouteChildren: RouteObject[] = [
   {
     path: path.login,
-    element: <Login role={'sv'} />
+    element: <Login userRole={'sv'} />
   },
   {
     path: path.admin_login,
-    element: <Login role={'nv'} />
+    element: <Login userRole={'nv'} />
   }
 ];
 
+function AdminRoute(adminElement: JSX.Element, studentElement: JSX.Element) {
+  const isAdmin = getProfileFromLS().role === 'nv';
+  return isAdmin ? adminElement : studentElement;
+}
+
 export default function useRouteElement() {
-  const isAdmin = getProfileFromLS() === 'nv';
-  console.log(isAdmin);
   const routeElement = useRoutes([
     {
       element: <RejectedRoute />,
@@ -60,16 +64,8 @@ export default function useRouteElement() {
           element: <MainLayout />,
           children: [
             {
-              element: <Dashboard />,
+              element: AdminRoute(<Dashboard />, <StudentDashboard />),
               path: path.dashboard
-            },
-            {
-              path: '/test',
-              element: isAdmin ? (
-                <p>I&apos;m Admin </p>
-              ) : (
-                <p>I&apos;m Student </p>
-              )
             },
             {
               element: <AllStudent />,

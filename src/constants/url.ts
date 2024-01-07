@@ -12,6 +12,7 @@ export const URL_CREATE_STUDENT = 'sinh-vien/add-many';
 export const URL_GET_HOC_PHAN = 'hoc-phan/get-many';
 export const URL_GET_HOC_KY = 'hoc-ky-nam-hoc/get-many';
 export const URL_GET_MON_HOC = 'mon-hoc/get-many';
+export const URL_GET_TUTION_FEE = 'thong-tin-hoc-phi/get-many';
 export const URL_DELETE_STUDENT = 'sinh-vien/remove-many';
 export const URL_GET_ALL_LECTURERS = 'giang-vien/get-many';
 export const URL_CREATE_LECTURER = 'giang-vien/add-many';

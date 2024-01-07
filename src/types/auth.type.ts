@@ -1,7 +1,9 @@
-import { User } from './user.type';
-import { ResponseAPI, SuccessResponse } from './utils.type';
+import { SuccessResponse } from './utils.type';
 
+type Roles = 'nv' | 'sv';
 export interface AuthResponse extends SuccessResponse {
-  token: string;
-  user: User;
+  refreshToken: string;
+  accessToken: string;
+  userId: number;
+  role: Roles;
 }

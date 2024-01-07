@@ -8,23 +8,23 @@ import { useAppContext } from 'src/contexts/app.contexts';
 import { setAccessTokenToLS, setProfileToLS } from './../../utils/auth';
 
 interface Props {
-  role: string;
+  userRole: string;
 }
-export default function Login({ role }: Props) {
+export default function Login({ userRole }: Props) {
   const [username, setUsername] = useState(
-    role === 'nv' ? 'admin' : '6b0d48e184'
+    userRole === 'nv' ? 'admin' : '4825a65737'
   );
   const [password, setPassword] = useState(
-    role === 'nv' ? 'admin' : 'dbcd12e1b0'
+    userRole === 'nv' ? 'admin' : '2c5c4aec05'
   );
   const { setIsAuthenticated } = useAppContext();
 
   const loginMutation = useMutation({
-    mutationFn: () => authApi.login(username, password, role),
+    mutationFn: () => authApi.login(username, password, userRole),
     onSuccess: data => {
       console.log(data);
       setAccessTokenToLS(data.data.accessToken);
-      setProfileToLS(role);
+      setProfileToLS({ userId: data.data.userId, role: userRole });
       setIsAuthenticated(true);
       toast.success('Đăng nhập thành công');
     },

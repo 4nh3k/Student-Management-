@@ -6,21 +6,16 @@ import authApi from 'src/apis/auth.api';
 import Breadcrumbs from 'src/components/Breadcrumb';
 import SidebarComponent from 'src/components/Sidebar';
 import { useAppContext } from 'src/contexts/app.contexts';
-import {
-  getProfileFromLS,
-  setAccessTokenToLS,
-  setProfileToLS
-} from './../../utils/auth';
+import { clearLS, getProfileFromLS } from './../../utils/auth';
 
 export default function MainLayout() {
-  const { setIsAuthenticated, profile } = useAppContext();
-  const isAdmin = getProfileFromLS() === 'nv';
+  const { setIsAuthenticated } = useAppContext();
+  const isAdmin = getProfileFromLS().role === 'nv';
 
   const logoutMutation = useMutation({
     mutationFn: () => authApi.logout(),
     onSuccess: () => {
-      setAccessTokenToLS('');
-      setProfileToLS('');
+      clearLS();
       setIsAuthenticated(false);
       toast.success('Đăng xuất thành công');
     },
