@@ -169,7 +169,7 @@ const AddStudentForm = ({ id }: AddStudentFormProps) => {
           maChuyenNganh: 1,
           maHeDaoTao: 5,
           tinhTrangHocTap: 'đang học',
-          ngaySinh: new Date().toISOString(),
+          ngaySinh: new Date().toLocaleDateString('en-GB'),
           gioiTinh: 'Nam',
           email: '',
           emailPassword: '',
@@ -177,7 +177,7 @@ const AddStudentForm = ({ id }: AddStudentFormProps) => {
           usernamePassword: '',
           soTaiKhoanNganHangDinhDanh: '',
           anhTheSinhVien: '',
-          ngayNhapHoc: new Date().toISOString(),
+          ngayNhapHoc: new Date().toLocaleDateString('en-GB'),
           maSinhVien: 0
         });
         setMajor('Khoa học máy tính');

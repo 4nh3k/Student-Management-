@@ -1,10 +1,17 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient
+} from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { studentApi } from 'src/apis/student.api';
 import Student from 'src/types/student.type';
 import CreateStudentDto from 'src/types/create-student.dto';
 
 const useStudent = () => {
+  const queryClient = useQueryClient();
+
   const createStudentMutation = useMutation({
     mutationFn: (body: CreateStudentDto) => studentApi.createStudent(body),
     onSuccess: data => {
@@ -17,20 +24,37 @@ const useStudent = () => {
     }
   });
 
-  const updateBookMutation = useMutation({
-    mutationFn: (data: {  student: CreateStudentDto, id: number, }) => studentApi.updateStudent(data.student, data.id),
+  const updateStudentMutation = useMutation({
+    mutationFn: (data: { student: CreateStudentDto; id: number }) =>
+      studentApi.updateStudent(data.student, data.id),
     onSuccess: data => {
-      studentApi.getAllStudents.refetch();
+      toast.success('Cập nhật thông tin sinh viên thành công');
+      queryClient.invalidateQueries({ queryKey: ['students'] });
       console.log(data);
     },
     onError: (error: unknown) => {
+      toast.error('Cập nhật sinh viên gặp lỗi !');
       console.log(error);
-      toast.error(error.respone.data.message);
+    }
+  });
+
+  const deleteStudentMutation = useMutation({
+    mutationFn: (id: string) => studentApi.deleteStudent(id),
+    onSuccess: data => {
+      toast.success('Xóa sinh viên thành công!');
+      queryClient.invalidateQueries({ queryKey: ['students'] });
+      console.log(data);
+    },
+    onError: (error: unknown) => {
+      toast.error('Xóa sinh viên gặp lỗi');
+      console.log(error);
     }
   });
 
   return {
-    createStudentMutation
+    createStudentMutation,
+    updateStudentMutation,
+    deleteStudentMutation
   };
 };
 

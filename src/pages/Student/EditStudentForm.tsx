@@ -92,7 +92,7 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
 
   const learningStatuses = learningStatusList?.data.result;
 
-  const { createStudentMutation } = useStudent();
+  const { updateStudentMutation, deleteStudentMutation } = useStudent();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -226,40 +226,60 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
       );
       setMajor(capitalizeFirstLetter(selectedMajor.tenChuyenNganh));
     }
-  }, [studentData, isLoadingStudentData, educationTypeData, faculties, majors]);
+  }, [
+    studentData,
+    isLoadingStudentData,
+    educationTypeData,
+    faculties,
+    majors,
+    isEducationTypeLoading,
+    isMajorsLoading,
+    isFacultyLoading
+  ]);
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Submitted student:', student);
-    createStudentMutation.mutate(student, {
-      onSuccess: data => {
-        setStudent({
-          hoTenSinhVien: '',
-          maKhoaHoc: 1,
-          maChuyenNganh: 1,
-          maHeDaoTao: 5,
-          tinhTrangHocTap: 'đang học',
-          ngaySinh: new Date().toISOString(),
-          gioiTinh: 'Nam',
-          email: '',
-          emailPassword: '',
-          username: '',
-          usernamePassword: '',
-          soTaiKhoanNganHangDinhDanh: '',
-          anhTheSinhVien: '',
-          ngayNhapHoc: new Date().toISOString(),
-          maSinhVien: 0
-        });
-        setMajor('Khoa học máy tính');
-        setFaculty('Khoa học máy tính');
-        setEducationType('đại trà');
-        setGender('Nam');
-        setLearningStatus('Đang học');
-      },
-      onError: error => {
-        toast.error(error.response.data.message);
+    updateStudentMutation.mutate(
+      { student: student, id: parseInt(id) },
+      {
+        onSuccess: data => {
+          setStudent({
+            hoTenSinhVien: '',
+            maKhoaHoc: 1,
+            maChuyenNganh: 1,
+            maHeDaoTao: 5,
+            tinhTrangHocTap: 'đang học',
+            ngaySinh: new Date().toLocaleDateString('en-GB'),
+            gioiTinh: 'Nam',
+            email: '',
+            emailPassword: '',
+            username: '',
+            usernamePassword: '',
+            soTaiKhoanNganHangDinhDanh: '',
+            anhTheSinhVien: '',
+            ngayNhapHoc: new Date().toLocaleDateString('en-GB'),
+            maSinhVien: 0
+          });
+          setMajor('Khoa học máy tính');
+          setFaculty('Khoa học máy tính');
+          setEducationType('đại trà');
+          setGender('Nam');
+          setLearningStatus('Đang học');
+        },
+        onError: error => {
+          toast.error(error.response.data.message);
+        }
       }
-    });
+    );
+  };
+
+  const onDeleteStudent = () => {
+    const confirmBox = window.confirm('Bạn có thật sự muốn xóa sinh viên này không');
+    console.log('delete clicked');
+    if (confirmBox === true) {
+      deleteStudentMutation.mutate(id);
+    }
   };
 
   return (
@@ -440,7 +460,7 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
             <Label htmlFor='account' value='Số tài khoản định danh' />
           </div>
           <TextInput
-            id='soTKNganHangDinhDanh'
+            id='soTaiKhoanNganHangDinhDanh'
             type='number'
             placeholder='Nhập số tài khoản định danh'
             value={student.soTaiKhoanNganHangDinhDanh}
@@ -466,7 +486,7 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
         <Button type='submit' color='failure'>
           Lưu
         </Button>
-        <Button className='bg-sidebar'>Xóa</Button>
+        <Button className='bg-sidebar' onClick={onDeleteStudent}>Xóa</Button>
       </div>
     </form>
   );
