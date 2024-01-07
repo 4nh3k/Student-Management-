@@ -1,11 +1,12 @@
-import { Select, TextInput } from 'flowbite-react';
+import { Button, Modal, Select, TextInput } from 'flowbite-react';
 import Student from 'src/types/student.type';
 
-import { useState } from 'react';
-import Table from 'src/components/Table';
 import { useQuery } from '@tanstack/react-query';
+import { format } from 'date-fns';
+import { useState } from 'react';
 import { studentApi } from 'src/apis/student.api';
-import { parseISO, format } from 'date-fns';
+import Table from 'src/components/Table';
+import AddStudentForm from './AddStudentForm';
 
 const AllStudent = () => {
   const courseMajor = ['KTPM', 'KHMT', 'ATTT', 'MMT&TT'];
@@ -13,6 +14,8 @@ const AllStudent = () => {
   const [pageSize, setPageSize] = useState<number>(5);
   const [search, setSearchVal] = useState<string>('');
   const [selectedValue, setSelectedValue] = useState<string>('ID');
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedRow, setSelectedRow] = useState<string>('');
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchVal(e.target.value);
@@ -60,6 +63,11 @@ const AllStudent = () => {
   console.log(studentData); //to test the data load successfully
   const students = studentData;
 
+  const handleRowClick = (row: any) => {
+    setSelectedRow(row.maSinhVien);
+    setOpenModal(true);
+  };
+
   return (
     <div id='student-table-container' className='w-full bg-white p-5 shadow-lg'>
       <div id='input-row' className='flex items-center'>
@@ -105,11 +113,29 @@ const AllStudent = () => {
         <Table
           headers={headers}
           data={students}
+          onRowClick={handleRowClick}
           className='border-input mt-2 border-2'
           filters={{ [selectedValue]: search }}
           pageSize={pageSize}
         />
       )}
+      <Modal
+        size={'6xl'}
+        dismissible
+        show={openModal}
+        onClose={() => setOpenModal(false)}
+      >
+        <Modal.Header>Terms of Service</Modal.Header>
+        <Modal.Body>
+          <AddStudentForm id={selectedRow} />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={() => setOpenModal(false)}>I accept</Button>
+          <Button color='gray' onClick={() => setOpenModal(false)}>
+            Decline
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

@@ -1,13 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import {
-  Datepicker,
-  Button,
-  Label,
-  Select,
-  TextInput,
-  Dropdown,
-  FloatingLabel
-} from 'flowbite-react';
+import { Button, Datepicker, Label, Select, TextInput } from 'flowbite-react';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { studentApi } from 'src/apis/student.api';
@@ -15,11 +7,15 @@ import ImageLoader from 'src/components/ImageLoader/ImageLoader';
 import useStudent from 'src/hooks/useStudent';
 import CreateStudentDto from 'src/types/create-student.dto';
 
-const AddStudentForm = () => {
+interface AddStudentFormProps {
+  id?: string;
+}
+
+const AddStudentForm = ({ id }: AddStudentFormProps) => {
   const capitalizeFirstLetter = str => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
-
+  console.log(id);
   const { data: majorsData, isLoading: isMajorsLoading } = useQuery({
     queryKey: ['majors'],
     queryFn: ({ signal }) => studentApi.getAllMajors(0, 1000, signal)
