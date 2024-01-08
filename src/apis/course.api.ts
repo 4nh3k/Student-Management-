@@ -12,18 +12,19 @@ import MonHoc from 'src/types/mon-hoc.type';
 import { SuccessResponse } from 'src/types/utils.type';
 import http from 'src/utils/http';
 import CreateCourseDto from 'src/types/create-course.dto';
+import CreateHocPhanDto from 'src/types/create-hoc-phan.dto';
 
 export const courseApi = {
   getAllCourseData(
     offset: number,
     limit: number,
-    maMonHoc?: number,
+    maHocPhan?: number,
     signal?: AbortSignal
   ) {
     const urlWithParams = `${URL_GET_HOC_PHAN}?offset=${offset}&limit=${limit}`;
     const rawBody = {
       filterBy: {
-        maMonHoc: maMonHoc
+        maHocPhan: maHocPhan
       }
     };
     return http.post<SuccessResponse<HocPhan[]>>(urlWithParams, rawBody, {
@@ -31,26 +32,30 @@ export const courseApi = {
     });
   },
 
-  createCourse(course: CreateCourseDto) {
+  createCourse(course: CreateHocPhanDto) {
     const rawBody = {
       itemsToAdd: [course],
       returnJustIds: true
     };
 
-    return http.post<SuccessResponse<CreateCourseDto>>(
+    return http.post<SuccessResponse<CreateHocPhanDto>>(
       URL_CREATE_HOC_PHAN,
       rawBody
     );
   },
 
-  updateCourse(course: CreateCourseDto, id?: number) {
+  updateCourse(course: CreateHocPhanDto, id?: number) {
     const rawBody = {
       filterBy: {
         maHocPhan: id
       },
-      updateTo: course
+      updateTo: course,
+      returnJustIds: true
     };
-    return http.put<SuccessResponse<CreateCourseDto>>(
+
+    console.log(rawBody);
+
+    return http.put<SuccessResponse<CreateHocPhanDto>>(
       `${URL_UPDATE_HOC_PHAN}`,
       rawBody
     );
@@ -63,7 +68,7 @@ export const courseApi = {
       },
       returnJustIds: true
     };
-    return http.delete<SuccessResponse<CreateCourseDto>>(
+    return http.delete<SuccessResponse<CreateHocPhanDto>>(
       `${URL_DELETE_HOC_PHAN}`,
       {
         data: JSON.stringify(rawBody),

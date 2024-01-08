@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
-import { Select, TextInput } from 'flowbite-react';
+import { Modal, Select, TextInput } from 'flowbite-react';
 import { courseApi } from 'src/apis/course.api';
 import Table from 'src/components/Table';
 import { isoStringToDdMmYyyy } from 'src/utils/utils';
+import EditLecturer from '../Lecturer/EditLecturerForm';
+import EditCourseForm from './EditCourseForm';
 
 const CourseManagement = () => {
   const capitalizeFirstLetter = (str: string) => {
@@ -79,6 +81,15 @@ const CourseManagement = () => {
     setSelectedValue(e.target.value);
   };
 
+  const [openModal, setOpenModal] = useState(false);
+
+  const [selectedRow, setSelectedRow] = useState<string>('');
+
+  const handleRowClick = (row: any) => {
+    setSelectedRow(row.maHocPhan);
+    setOpenModal(true);
+  };
+
   return (
     <div>
       <div
@@ -131,8 +142,20 @@ const CourseManagement = () => {
             className='border-input mt-2 overflow-x-auto border-2'
             pageSize={pageSize}
             filters={{ [selectedValue]: search }}
+            onRowClick={handleRowClick}
           />
         )}
+        <Modal
+          size={'6xl'}
+          dismissible
+          show={openModal}
+          onClose={() => setOpenModal(false)}
+        >
+          <Modal.Header>Sửa / Xóa học phần</Modal.Header>
+          <Modal.Body>
+            <EditCourseForm id={selectedRow} />
+          </Modal.Body>
+        </Modal>
       </div>
     </div>
   );

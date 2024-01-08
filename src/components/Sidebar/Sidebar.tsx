@@ -9,7 +9,8 @@ import {
   PiFiles,
   PiMagnifyingGlass,
   PiMoney,
-  PiStudent
+  PiStudent,
+  PiDotsNine
 } from 'react-icons/pi';
 import { useLocation } from 'react-router-dom';
 import logo from 'src/assets/icons/UITLogo.svg';
@@ -79,6 +80,12 @@ export default function SidebarComponent({ isAdmin }: SidebarProp) {
                 >
                   Thêm sinh viên
                 </Sidebar.Item>
+                <Sidebar.Item
+                  href={path.student_file_management}
+                  active={getIsActive(path.student_file_management)}
+                >
+                  Quản lý hồ sơ sinh viên
+                </Sidebar.Item>
               </Sidebar.Collapse>
               <Sidebar.Collapse
                 label='Giảng viên'
@@ -116,7 +123,11 @@ export default function SidebarComponent({ isAdmin }: SidebarProp) {
                   Thêm học phí
                 </Sidebar.Item>
               </Sidebar.Collapse>
-              <Sidebar.Collapse label='Học phần' open={getIsOpen('courses')}>
+              <Sidebar.Collapse
+                label='Học phần'
+                open={getIsOpen('courses')}
+                icon={PiBooks}
+              >
                 <Sidebar.Item
                   href={path.course_management}
                   active={getIsActive(path.course_management)}
@@ -132,7 +143,7 @@ export default function SidebarComponent({ isAdmin }: SidebarProp) {
               </Sidebar.Collapse>
               <Sidebar.Collapse
                 label='Học tập'
-                icon={PiBooks}
+                icon={PiDotsNine}
                 open={getIsOpen('management')}
               >
                 <Sidebar.Item
@@ -159,18 +170,12 @@ export default function SidebarComponent({ isAdmin }: SidebarProp) {
                 >
                   Quản lý KQ rèn luyện
                 </Sidebar.Item>
-                <Sidebar.Item
+                {/* <Sidebar.Item
                   href={path.student_reward_management}
                   active={getIsActive(path.student_reward_management)}
                 >
                   Quản lý khen thưởng
-                </Sidebar.Item>
-                <Sidebar.Item
-                  href={path.student_file_management}
-                  active={getIsActive(path.student_file_management)}
-                >
-                  Quản lý hồ sơ sinh viên
-                </Sidebar.Item>
+                </Sidebar.Item> */}
               </Sidebar.Collapse>
             </Sidebar.ItemGroup>
           </Sidebar.Items>
@@ -235,9 +240,9 @@ export default function SidebarComponent({ isAdmin }: SidebarProp) {
                   Điểm rèn luyện
                 </Sidebar.Item>
               </Sidebar.Collapse>
-              <Sidebar.Collapse label='Đăng ký dịch vụ' icon={PiClipboardText}>
+              {/* <Sidebar.Collapse label='Đăng ký dịch vụ' icon={PiClipboardText}>
                 <Sidebar.Item>Đăng ký xét tốt nghiệp</Sidebar.Item>
-              </Sidebar.Collapse>
+              </Sidebar.Collapse> */}
             </Sidebar.ItemGroup>
           </Sidebar.Items>
         </Sidebar>

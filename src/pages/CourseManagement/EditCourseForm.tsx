@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Label, TextInput, Select, Datepicker, Button } from 'flowbite-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { courseApi } from 'src/apis/course.api';
 
 import { studentApi } from 'src/apis/student.api';
@@ -9,9 +9,10 @@ import { semesterApi } from 'src/apis/semester.api';
 import HocPhan from 'src/types/hoc-phan.type';
 import CreateHocPhanDto from 'src/types/create-hoc-phan.dto';
 import useCourse from 'src/hooks/useCourse';
+import CreateCourseDto from 'src/types/create-course.dto';
 import { toast } from 'react-toastify';
 
-const AddCourseForm = () => {
+const EditCourseForm = ({ id }) => {
   const decapitalizeFirstLetter = (str: string) => {
     return str.charAt(0).toLowerCase() + str.slice(1);
   };
@@ -19,6 +20,29 @@ const AddCourseForm = () => {
   const capitalizeFirstLetter = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
+
+  const { data: courseData, isLoading: isLoadingCourseData } = useQuery({
+    queryKey: ['course', id],
+    queryFn: ({ signal }) => courseApi.getAllCourseData(0, 1000, parseInt(id)),
+    select: data => {
+      return data.data.result.map((item: CreateHocPhanDto) => {
+        return {
+          maMonHoc: item.maMonHoc,
+          maHeDaoTao: item.maHeDaoTao,
+          hinhThucThi: item.hinhThucThi,
+          maHocPhan: item.maHocPhan,
+          loaiHocPhan: item.loaiHocPhan,
+          maGiangVien: item.maGiangVien,
+          siSoSinhVien: item.siSoSinhVien,
+          thoiDiemBatDau: item.thoiDiemBatDau,
+          thoiDiemKetThuc: item.thoiDiemKetThuc,
+          maHocKyNamHoc: item.maHocKyNamHoc,
+          ghiChu: item.ghiChu
+        };
+      });
+    }
+  });
+
   const [monHoc, setMonHoc] = useState<string>('');
   const { data: getMonHocData, isLoading: isLoadingMonHoc } = useQuery({
     queryKey: ['monHocs'],
@@ -151,15 +175,7 @@ const AddCourseForm = () => {
     }));
   };
 
-  const handleGhiChuChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e?.target.value;
-    setCourse(prevCourse => ({
-      ...prevCourse,
-      ['ghiChu']: value
-    }));
-  };
-
-  const { createCourseMutation } = useCourse();
+  const { updateCourseMutation, deleteCourseMutation } = useCourse();
 
   const [course, setCourse] = useState<CreateHocPhanDto>({
     maMonHoc: 1,
@@ -169,8 +185,8 @@ const AddCourseForm = () => {
     loaiHocPhan: 'tự chọn',
     maGiangVien: 2,
     siSoSinhVien: 0,
-    thoiDiemBatDau: new Date().toISOString(),
-    thoiDiemKetThuc: new Date().toISOString(),
+    thoiDiemBatDau: new Date().toUTCString(),
+    thoiDiemKetThuc: new Date().toUTCString(),
     maHocKyNamHoc: 1,
     ghiChu: ''
   });
@@ -179,7 +195,7 @@ const AddCourseForm = () => {
     console.log(date);
     setCourse(prevCourse => ({
       ...prevCourse,
-      thoiDiemBatDau: date.toISOString()
+      thoiDiemBatDau: date.toUTCString()
     }));
   };
 
@@ -187,7 +203,15 @@ const AddCourseForm = () => {
     console.log(date);
     setCourse(prevCourse => ({
       ...prevCourse,
-      thoiDiemKetThuc: date.toISOString()
+      thoiDiemKetThuc: date.toUTCString()
+    }));
+  };
+
+  const handleGhiChuChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e?.target.value;
+    setCourse(prevCourse => ({
+      ...prevCourse,
+      ['ghiChu']: value
     }));
   };
 
@@ -195,32 +219,127 @@ const AddCourseForm = () => {
     e.preventDefault();
     console.log('Submitted course:', course);
 
-    if (course.siSoSinhVien <= 0){
+    if (course.siSoSinhVien <= 0) {
       toast.error('Sĩ số sinh viên phải là số dương');
       return;
     }
 
-    createCourseMutation.mutate(course, {
-      onSuccess: data => {
-        setCourse({
-          maMonHoc: 0,
-          maHeDaoTao: 0,
-          hinhThucThi: '',
-          maHocPhan: 0,
-          loaiHocPhan: '',
-          maGiangVien: 0,
-          siSoSinhVien: 0,
-          thoiDiemBatDau: new Date().toISOString(),
-          thoiDiemKetThuc: new Date().toISOString(),
-          maHocKyNamHoc: 0,
-          ghiChu: ''
-        });
-      },
-      onError: error => {
-        toast.error(error.response.data.message);
+    console.log(course);
+
+    updateCourseMutation.mutate(
+      { course: course, id: id },
+      {
+        onSuccess: data => {
+          setCourse({
+            maMonHoc: 1,
+            maHeDaoTao: 5,
+            hinhThucThi: 'bài kiểm tra lý thuyết cuối kỳ',
+            maHocPhan: 0,
+            loaiHocPhan: 'tự chọn',
+            maGiangVien: 2,
+            siSoSinhVien: 0,
+            thoiDiemBatDau: new Date().toUTCString(),
+            thoiDiemKetThuc: new Date().toUTCString(),
+            maHocKyNamHoc: 1,
+            ghiChu: ''
+          });
+        },
+        onError: error => {
+          toast.error(error.response.data.message);
+        }
       }
-    });
+    );
   };
+
+  useEffect(() => {
+    if (
+      !isEducationTypeLoading &&
+      !isHinhThucThiLoading &&
+      !isLecturerLoading &&
+      !isLoadingCourseData &&
+      !isLoadingMonHoc &&
+      !isLoaiHocPhanLoading &&
+      !isSemesterLoading &&
+      courseData
+    ) {
+      console.log(courseData);
+      setCourse({
+        maMonHoc: courseData[0].maMonHoc,
+        maHeDaoTao: courseData[0].maHeDaoTao,
+        hinhThucThi: courseData[0].hinhThucThi,
+        maHocPhan: courseData[0].maHocPhan,
+        loaiHocPhan: courseData[0].loaiHocPhan,
+        maGiangVien: courseData[0].maGiangVien,
+        siSoSinhVien: courseData[0].siSoSinhVien,
+        thoiDiemBatDau: courseData[0].thoiDiemBatDau,
+        thoiDiemKetThuc: courseData[0].thoiDiemKetThuc,
+        maHocKyNamHoc: courseData[0].maHocKyNamHoc,
+        ghiChu: courseData[0].ghiChu
+      });
+
+      const selectedEducationType = educationTypeData.find(
+        education => education.maHeDaoTao === courseData[0].maHeDaoTao
+      );
+      setEducationType(
+        capitalizeFirstLetter(selectedEducationType.tenHeDaoTao)
+      );
+
+      setHinhThucThi(courseData[0].hinhThucThi);
+
+      const selectedLecturer = lecturers?.find(
+        lecturer => lecturer.maGiangVien === courseData[0].maGiangVien
+      );
+
+      setLecturer(selectedLecturer?.tenGiangVien);
+
+      const selectedMonHoc = getMonHocData?.find(
+        monHoc => monHoc.maMonHoc === courseData[0].maMonHoc
+      );
+
+      setMonHoc(selectedMonHoc?.tenMonHoc);
+
+      setLoaiHocPhan(courseData[0].loaiHocPhan);
+
+      const selectedSemester = semesters?.find(
+        semester => semester.maHocKyNamHoc === courseData[0].maHocKyNamHoc
+      );
+
+      setSemester(selectedSemester.tenHocKy + ' ' + selectedSemester.tenNamHoc);
+    }
+  }, [
+    educationTypeData,
+    isEducationTypeLoading,
+    isHinhThucThiLoading,
+    isLecturerLoading,
+    isLoadingCourseData,
+    isLoadingMonHoc,
+    isLoaiHocPhanLoading,
+    isSemesterLoading,
+    courseData,
+    lecturers,
+    getMonHocData,
+    semesters
+  ]);
+
+  const onDeleteCourse = () => {
+    const confirmBox = window.confirm(
+      'Bạn có thật sự muốn xóa học phần này không'
+    );
+    console.log('delete clicked');
+    if (confirmBox === true) {
+      deleteCourseMutation.mutate(id);
+    }
+  };
+
+  const [openModal, setOpenModal] = useState(false);
+
+  const [selectedRow, setSelectedRow] = useState<string>('');
+
+  const handleRowClick = (row: any) => {
+    setSelectedRow(row.maGiangVien);
+    setOpenModal(true);
+  };
+
   return (
     <form
       id='add-course-container'
@@ -383,13 +502,14 @@ const AddCourseForm = () => {
           />
         </div>
       </div>
-      <div className='mt-4'>
+      <div className='mt-4 flex space-x-5'>
         <Button type='submit' color='failure'>
-          Thêm
+          Lưu
         </Button>
+        <Button className='bg-sidebar' onClick={onDeleteCourse}>Xóa</Button>
       </div>
     </form>
   );
 };
 
-export default AddCourseForm;
+export default EditCourseForm;

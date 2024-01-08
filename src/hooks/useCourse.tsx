@@ -21,7 +21,7 @@ const useCourse = () => {
   });
 
   const updateCourseMutation = useMutation({
-    mutationFn: (data: { course: HocPhan; id: number }) =>
+    mutationFn: (data: { course: CreateHocPhanDto; id: number }) =>
       courseApi.updateCourse(data.course, data.id),
     onSuccess: data => {
       toast.success('Cập nhật học phần thành công');
