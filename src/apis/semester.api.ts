@@ -24,5 +24,14 @@ export const semesterApi = {
     return http.post<SuccessResponse<Semester[]>>(urlWithParams, rawBody, {
       signal
     });
+  },
+  getAllSemester(offset: number, limit: number, signal?: AbortSignal) {
+    const urlWithParams = `${URL_GET_HOC_KY}?offset=${offset}&limit=${limit}`;
+    const rawBody = {
+      filterBy: {}
+    };
+    return http.post<SuccessResponse<Semester[]>>(urlWithParams, rawBody, {
+      signal
+    });
   }
 };

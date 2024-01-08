@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Modal, Select, TextInput } from 'flowbite-react';
-import Table from 'src/components/Table';
 import { useQuery } from '@tanstack/react-query';
+import { Modal, Select, TextInput } from 'flowbite-react';
+import React, { useState } from 'react';
 import { tuitionFeeApi } from 'src/apis/tution-fee.api';
-import EditLecturer from './EditFee';
+import Table from 'src/components/Table';
+import { isoStringToDdMmYyyy } from 'src/utils/utils';
 import EditFee from './EditFee';
 
 const FeeList = () => {
@@ -27,14 +27,21 @@ const FeeList = () => {
       dataIndex: 'thoiDiemThanhToanHocPhi'
     },
 
-    { title: 'Ghi chú bổ sung', dataIndex: 'ghiChuBoSung' },
+    { title: 'Ghi chú bổ sung', dataIndex: 'ghiChuBoSung' }
   ];
 
   const { data: getStudentFee, isLoading: isStudentFeeLoading } = useQuery({
     queryKey: ['fees'],
     queryFn: ({ signal }) => tuitionFeeApi.getAllTuitionFees(0, 1000, signal)
   });
-  const studentFeeData = getStudentFee?.data.result;
+  const studentFeeData = getStudentFee?.data.result.map(studentFee => {
+    return {
+      ...studentFee,
+      thoiDiemThanhToanHocPhi: isoStringToDdMmYyyy(
+        studentFee.thoiDiemThanhToanHocPhi
+      )
+    };
+  });
 
   const [search, setSearchVal] = useState<string>('');
   const [selectedValue, setSelectedValue] = useState<string>('');
@@ -45,7 +52,7 @@ const FeeList = () => {
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setSelectedValue(e.target.value);
-  };  
+  };
   const [pageSize, setPageSize] = useState<number>(10);
   const [openModal, setOpenModal] = useState(false);
 
@@ -55,7 +62,6 @@ const FeeList = () => {
     setSelectedRow(row.maThongTinHocPhi);
     setOpenModal(true);
   };
-
 
   return (
     <div id='student-table-container' className='w-full bg-white p-5 shadow-lg'>

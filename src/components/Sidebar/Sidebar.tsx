@@ -217,7 +217,9 @@ export default function SidebarComponent({ isAdmin }: SidebarProp) {
                 <Sidebar.Item href={path.student_fee_info}>
                   Thông tin học phí
                 </Sidebar.Item>
-                <Sidebar.Item>Thời khóa biểu</Sidebar.Item>
+                <Sidebar.Item href={path.student_schedule}>
+                  Thời khóa biểu
+                </Sidebar.Item>
                 <Sidebar.Item href={path.student_test_schedule}>
                   Lịch thi
                 </Sidebar.Item>

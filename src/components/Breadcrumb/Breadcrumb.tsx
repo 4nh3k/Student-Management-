@@ -23,7 +23,9 @@ const Breadcrumbs = ({ separator = '/' }: BreadcrumbProps) => {
     { path: path.course_registration, breadcrumb: 'Đăng ký học phần' },
     { path: path.course_registered, breadcrumb: 'Học phần đã đăng ký' },
     { path: path.student_fee_info, breadcrumb: 'Thông tin học phí' },
-    { path: path.student_test_schedule, breadcrumbs: 'Lịch thi' }
+    { path: path.student_schedule, breadcrumb: 'Thời khoá biểu' },
+    { path: path.student_transcript, breadcrumb: 'Bảng điểm' },
+    { path: path.student_test_schedule, breadcrumb: 'Lịch thi' }
   ];
   const breadcrumbs = useBreadcrumbs(routes);
   const separatorSpan = <span key='separator'> {separator} </span>;

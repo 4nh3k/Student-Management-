@@ -1,18 +1,10 @@
 import React, { useState } from 'react';
-import Pagination from 'src/components/Pagination';
 
-import Table from 'src/components/Table';
-import {
-  Button,
-  Label,
-  Select,
-  TextInput,
-  Datepicker,
-  Dropdown,
-  FloatingLabel
-} from 'flowbite-react';
 import { useQuery } from '@tanstack/react-query';
+import { Button, Datepicker, Label, Select, TextInput } from 'flowbite-react';
 import { courseApi } from 'src/apis/course.api';
+import Table from 'src/components/Table';
+import { isoStringToDdMmYyyy } from 'src/utils/utils';
 
 const CourseManagement = () => {
   const capitalizeFirstLetter = (str: string) => {
@@ -65,8 +57,8 @@ const CourseManagement = () => {
           loaiHocPhan: capitalizeFirstLetter(course.loaiHocPhan),
           maGiangVien: course.maGiangVien,
           siSoSinhVien: course.siSoSinhVien,
-          thoiDiemBatDau: course.thoiDiemBatDau,
-          thoiDiemKetThuc: course.thoiDiemKetThuc,
+          thoiDiemBatDau: isoStringToDdMmYyyy(course.thoiDiemBatDau),
+          thoiDiemKetThuc: isoStringToDdMmYyyy(course.thoiDiemKetThuc),
           maHocKyNamHoc: course.maHocKyNamHoc,
           ghiChu: course.ghiChu
         };
@@ -136,7 +128,7 @@ const CourseManagement = () => {
           <Table
             headers={headers}
             data={getCourseData}
-            className='border-input mt-2 border-2 overflow-x-auto'
+            className='border-input mt-2 overflow-x-auto border-2'
             pageSize={pageSize}
             filters={{ [selectedValue]: search }}
           />

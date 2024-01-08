@@ -15,7 +15,8 @@ import FeeList from './pages/Fee/FeeList';
 import AddLecturer from './pages/Lecturer/AddLecturerForm';
 import AllLecturer from './pages/Lecturer/AllLecturer';
 import Login from './pages/Login';
-import ScheduleManageMent from './pages/ScheduleManageMent/ScheduleManageMent';
+import ScheduleManagement from './pages/ScheduleManagement/ScheduleManagement';
+import ScheduleTable from './pages/ScheduleTable/ScheduleTable';
 import AddStudentForm from './pages/Student/AddStudentForm';
 import AllStudent from './pages/Student/AllStudent';
 import StudentConductPoints from './pages/StudentConductPoints/StudentConductPoints';
@@ -129,8 +130,12 @@ export default function useRouteElement() {
               element: <CoursesRegistered />
             },
             {
+              path: path.student_schedule,
+              element: <ScheduleTable />
+            },
+            {
               path: path.timetable_management,
-              element: <ScheduleManageMent />
+              element: <ScheduleManagement />
             }
           ]
         },

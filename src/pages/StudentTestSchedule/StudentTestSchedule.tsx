@@ -1,16 +1,13 @@
-import React from 'react';
-import Pagination from 'src/components/Pagination';
-import { useState } from 'react';
+import React, { useState } from 'react';
+
+import { useQuery } from '@tanstack/react-query';
+import { Button, Label, Select } from 'flowbite-react';
+import { semesterApi } from 'src/apis/semester.api';
+import { testScheduleApi } from 'src/apis/test-schedule.api';
+import LoadingIndicator from 'src/components/LoadingIndicator';
 import Table from 'src/components/Table';
-import {
-  Button,
-  Label,
-  Select,
-  TextInput,
-  Datepicker,
-  Dropdown,
-  FloatingLabel
-} from 'flowbite-react';
+import { Semester } from 'src/types/semester.type';
+import { isoStringToDdMmYyyy } from 'src/utils/utils';
 
 const StudentTestSchedule = () => {
   const [totalPage, setTotalPage] = useState(50);
@@ -28,142 +25,103 @@ const StudentTestSchedule = () => {
     { title: 'Ghi chú', dataIndex: 'note' }
   ];
 
-  const data = [
-    {
-      examID: 1,
-      courseID: 'SE121.O11',
-      examDate: '04/01/2024',
-      roomID: 'E7.06',
-      examPhase: 1,
-      examWeekday: 5,
-      note: 'A'
-    },
-    {
-      examID: 2,
-      courseID: 'SE121.O11',
-      examDate: '04/01/2024',
-      roomID: 'E7.06',
-      examPhase: 2,
-      examWeekday: 5,
-      note: 'B'
-    },
-    {
-      examID: 3,
-      courseID: 'SE121.O11',
-      examDate: '04/01/2024',
-      roomID: 'E7.06',
-      examPhase: 3,
-      examWeekday: 5,
-      note: 'C'
-    },
-    {
-      examID: 4,
-      courseID: 'SE121.O11',
-      examDate: '04/01/2024',
-      roomID: 'E7.06',
-      examPhase: 4,
-      examWeekday: 5,
-      note: 'D'
-    }
-  ];
-
   const midEndTermValues = [
     { data: 'Giữa kỳ', dataIndex: 'midTerm' },
     { data: 'Cuối kỳ', dataIndex: 'endTerm' }
   ];
 
   const firstSecondTermValues = [
-    { data: 'Học kỳ 1', dataIndex: 'firstSemester' },
-    { data: 'Học kỳ 2', dataIndex: 'secondSemester' }
+    { data: 'Học kỳ 1', value: 'kỳ 1' },
+    { data: 'Học kỳ 2', value: 'kỳ 2' },
+    { data: 'Học kỳ hè', value: 'kỳ hè' }
   ];
-
-  const [selectedMidEndTermValue, setSelectedMidEndTermValue] =
-    useState<string>('');
+  const { data: semesterData, isLoading: isLoadingSemesterData } = useQuery({
+    queryKey: ['semester'],
+    queryFn: ({ signal }) => semesterApi.getAllSemester(0, 10000, signal),
+    select: data => {
+      const semester: Semester[] = data.data.result;
+      console.log(semester);
+      return semester;
+    }
+  });
+  // wait api to load by semester
+  const { data: testScheduleData, isLoading: isLoadingSchedule } = useQuery({
+    queryKey: ['testSchedules'],
+    queryFn: () => testScheduleApi.getAllTestSchedule(0, 1000),
+    select: data => {
+      console.log(data);
+      return data.data.result.map(testSchedule => {
+        return {
+          examID: testSchedule.maBuoiThi,
+          courseID: testSchedule.maHocPhan,
+          examDate: isoStringToDdMmYyyy(testSchedule.ngayThi),
+          roomID: testSchedule.maPhongThi,
+          examWeekday: testSchedule.thuThi,
+          examPhase: testSchedule.caThi,
+          note: testSchedule.ghiChu
+        };
+      });
+    }
+  });
   const [selectedFirstSecondTermValue, setSelectedFirstSecondTermValue] =
     useState<string>('');
   const [pageSize, setPageSize] = useState<number>(10);
-
-  const handleSelectedMidEndTermValue = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setSelectedMidEndTermValue(e.target.value);
-  };
 
   const handleSelectedFirstSecondTermValue = (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setSelectedFirstSecondTermValue(e.target.value);
   };
-
+  if (isLoadingSchedule) return <LoadingIndicator />;
   return (
     <div>
       <div
         id='student-course-container'
         className='w-full bg-white p-5 shadow-lg'
       >
-        <div id='input-row' className=' flex items-center'>
-          <div className='flex space-x-10'>
-            <div className='space-y-2'>
-              <Label>Kỳ thi GK/CK</Label>
-              <Select
-                id='filter'
-                value={selectedMidEndTermValue}
-                onChange={handleSelectedMidEndTermValue}
-                required
-              >
-                {midEndTermValues.map(values => {
-                  return (
-                    <option key={values.dataIndex} value={values.dataIndex}>
-                      {values.data}
-                    </option>
-                  );
-                })}
-              </Select>
-            </div>
-
-            <div className='space-y-2'>
-              <Label>Học kỳ</Label>
-              <Select
-                id='filter'
-                value={selectedFirstSecondTermValue}
-                onChange={handleSelectedFirstSecondTermValue}
-                required
-              >
-                {firstSecondTermValues.map(values => {
-                  return (
-                    <option key={values.dataIndex} value={values.dataIndex}>
-                      {values.data}
-                    </option>
-                  );
-                })}
-              </Select>
-            </div>
-
-            <div className='space-y-2'>
-              <Label>Năm học</Label>
-              <Select
-                id='filter'
-                value={selectedFirstSecondTermValue}
-                onChange={handleSelectedFirstSecondTermValue}
-                required
-              >
-                <option key={'year'} value={'2022-2023'}>
-                  {'2022-2023'}
-                </option>
-                <option key={'year'} value={'2023-2024'}>
-                  {'2023-2024'}
-                </option>
-              </Select>
-            </div>
+        <div id='input-row' className='flex items-end space-x-4'>
+          <div className='space-y-2'>
+            <Label>Học kỳ</Label>
+            <Select
+              id='filter'
+              value={selectedFirstSecondTermValue}
+              onChange={handleSelectedFirstSecondTermValue}
+              required
+            >
+              {firstSecondTermValues.map(values => {
+                return (
+                  <option key={values.dataIndex} value={values.dataIndex}>
+                    {values.data}
+                  </option>
+                );
+              })}
+            </Select>
           </div>
+
+          <div className='space-y-2'>
+            <Label>Năm học</Label>
+            <Select id='filter' required>
+              {semesterData
+                ?.filter(
+                  (item, index, self) =>
+                    self.findIndex(s => s.tenNamHoc === item.tenNamHoc) ===
+                    index
+                )
+                .map(item => {
+                  return (
+                    <option key={item.tenNamHoc} value={item.tenNamHoc}>
+                      {item.tenNamHoc}
+                    </option>
+                  );
+                })}
+            </Select>
+          </div>
+          <Button color='failure'>Xem</Button>
         </div>
-
-        <Button className='my-5 bg-sidebar'>Xem</Button>
-
         <Table
           headers={headers}
-          data={data}
-          className='border-input mt-2 border-2'
+          data={testScheduleData}
+          className='border-input mt-4 border-2'
           pageSize={pageSize}
         />
       </div>

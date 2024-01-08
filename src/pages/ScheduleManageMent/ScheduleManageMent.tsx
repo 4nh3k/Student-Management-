@@ -9,7 +9,7 @@ import useSemester from 'src/hooks/useSemester';
 import HocPhan from 'src/types/hoc-phan.type';
 import { Schedule } from 'src/types/schedule.type';
 
-export default function ScheduleManageMent() {
+export default function ScheduleManagement() {
   const [date, setDate] = useState<Date>(new Date());
   const handleDateChange = (date: Date) => {
     setDate(date);
