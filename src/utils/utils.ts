@@ -25,6 +25,18 @@ export const averageGrade = (grades: number[]) => {
 export function capitalizeFirstLetter(string: string): string {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
+export function getWeekday(date: Date) {
+  // Create a new Date object from the input string
+
+  // Get the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+  const dayOfWeek = date.getDay();
+
+  // Array of weekday names
+  const weekdays = ['CN', '2', '3', '4', '5', '6', '7'];
+
+  // Return the corresponding weekday name
+  return weekdays[dayOfWeek];
+}
 
 export const calculateSemesterFilter = () => {
   const currentDate = new Date();

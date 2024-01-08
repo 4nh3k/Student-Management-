@@ -1,5 +1,9 @@
-import { URL_CREATE_TEST_SCHEDULE, URL_DELETE_TEST_SCHEDULE, URL_GET_ALL_TEST_SCHEDULE, URL_UPDATE_TEST_SCHEDULE } from 'src/constants/url';
-import Lecturer from 'src/types/lecturer.type';
+import {
+  URL_CREATE_TEST_SCHEDULE,
+  URL_DELETE_TEST_SCHEDULE,
+  URL_GET_ALL_TEST_SCHEDULE,
+  URL_UPDATE_TEST_SCHEDULE
+} from 'src/constants/url';
 import TestSchedule from 'src/types/test-schedule';
 import { SuccessResponse } from 'src/types/utils.type';
 import http from 'src/utils/http';
@@ -22,7 +26,7 @@ export const testScheduleApi = {
     });
   },
 
-  createTestSchedule(testSchedule: TestSchedule) {
+  createTestSchedule(testSchedule: Partial<TestSchedule>) {
     const rawBody = {
       itemsToAdd: [testSchedule],
       returnJustIds: true

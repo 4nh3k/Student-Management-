@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
-import Pagination from 'src/components/Pagination';
 
-import Table from 'src/components/Table';
-import {
-  Button,
-  Label,
-  Select,
-  TextInput,
-  Datepicker,
-  Dropdown,
-  FloatingLabel
-} from 'flowbite-react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { Button, Datepicker, Label, Select, TextInput } from 'flowbite-react';
+import { toast } from 'react-toastify';
+import { courseApi } from 'src/apis/course.api';
 import { testScheduleApi } from 'src/apis/test-schedule.api';
+import LoadingIndicator from 'src/components/LoadingIndicator';
+import Table from 'src/components/Table';
+import useSemester from 'src/hooks/useSemester';
+import HocPhan from 'src/types/hoc-phan.type';
+import TestSchedule from 'src/types/test-schedule';
+import { getWeekday, isoStringToDdMmYyyy } from 'src/utils/utils';
 
 const ExamScheduleManagement = () => {
   const [totalPage, setTotalPage] = useState(50);
   const [pageRange, setPageRange] = useState(5);
+  const [date, setDate] = useState<Date>(new Date());
   const onPageChange = (page: number) => setCurrentPage(page);
   const courseMajor = ['KTPM', 'KHMT', 'ATTT', 'MMT&TT'];
 
@@ -30,7 +29,11 @@ const ExamScheduleManagement = () => {
     { title: 'Ghi chú', dataIndex: 'ghiChu' }
   ];
 
-  const { data: getTestScheduleData, isLoading: isLoadingSchedule } = useQuery({
+  const {
+    data: getTestScheduleData,
+    isLoading: isLoadingSchedule,
+    refetch
+  } = useQuery({
     queryKey: ['testSchedules'],
     queryFn: () => testScheduleApi.getAllTestSchedule(0, 1000),
     select: data => {
@@ -38,7 +41,7 @@ const ExamScheduleManagement = () => {
         return {
           maBuoiThi: testSchedule.maBuoiThi,
           maHocPhan: testSchedule.maHocPhan,
-          ngayThi: testSchedule.ngayThi,
+          ngayThi: isoStringToDdMmYyyy(testSchedule.ngayThi),
           maPhongThi: testSchedule.maPhongThi,
           thuThi: testSchedule.thuThi,
           caThi: testSchedule.caThi,
@@ -46,6 +49,29 @@ const ExamScheduleManagement = () => {
         };
       });
     }
+  });
+
+  const createTestScheduleMutation = useMutation({
+    mutationFn: (data: Partial<TestSchedule>) =>
+      testScheduleApi.createTestSchedule(data),
+    onSuccess: () => {
+      refetch();
+      toast.success('Thêm thành công');
+    },
+    onError: () => {
+      toast.error('Thêm thất bại');
+    }
+  });
+
+  const { currentSemester, currentSemesterIsLoading } = useSemester();
+  const { data: courseData, isLoading } = useQuery({
+    queryKey: ['courses', 5],
+    queryFn: ({ signal }) =>
+      courseApi.getAllCourseDataInASemester(0, 10000, 5, signal),
+    select: data => {
+      return data.data.result;
+    },
+    enabled: !!currentSemester?.maHocKyNamHoc
   });
 
   const [search, setSearchVal] = useState<string>('');
@@ -60,6 +86,23 @@ const ExamScheduleManagement = () => {
   ) => {
     setSelectedValue(e.target.value);
   };
+  const handleDateChange = (date: Date) => {
+    setDate(date);
+  };
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data = {
+      maHocPhan: e.currentTarget['courseName'].value,
+      ngayThi: date.toISOString(),
+      maPhongThi: e.currentTarget['roomID'].value,
+      thuThi: e.currentTarget['examWeekday'].value,
+      caThi: e.currentTarget['examPhase'].value,
+      ghiChu: e.currentTarget['note'].value
+    };
+    createTestScheduleMutation.mutate(data);
+  };
+  if (isLoadingSchedule || isLoading || currentSemesterIsLoading)
+    return <LoadingIndicator />;
 
   return (
     <div>
@@ -116,48 +159,57 @@ const ExamScheduleManagement = () => {
           />
         )}
       </div>
-      <div
+      <form
         id='add-course-container'
         className='mt-10 w-full bg-white p-5 shadow-lg'
+        onSubmit={handleSubmit}
       >
         <div className='mt-4 grid grid-cols-3 gap-8'>
           <div>
             <div className='mb-2 block'>
-              <Label htmlFor='examID' value='Mã lịch thi' />
+              <Label htmlFor='courseName' value='Mã học phần' />
             </div>
-            <TextInput
-              id='examID'
-              type='text'
-              placeholder='Nhập mã lịch thi'
-              required
-            />
-          </div>
-          <div>
-            <div className='mb-2 block'>
-              <Label htmlFor='courseName' value='Mã môn học' />
-            </div>
-            <TextInput
-              id='courseName'
-              type='text'
-              placeholder='Nhập mã môn học'
-              required
-            />
+            <Select id='courseName' required>
+              {courseData?.map((course: HocPhan) => {
+                return (
+                  <option key={course.maHocPhan} value={course.maHocPhan}>
+                    {course.maHocPhan} ({course.monHoc.tenMonHoc})
+                  </option>
+                );
+              })}
+            </Select>
           </div>
           <div>
             <div className='mb-2 block'>
               <Label htmlFor='examDate' value='Ngày thi' />
             </div>
-            <Datepicker></Datepicker>
+            <Datepicker
+              id='examDate'
+              onSelectedDateChanged={handleDateChange}
+            />
           </div>
-
+          <div>
+            <div className='mb-2 block'>
+              <Label htmlFor='examWeekday' value='Thứ thi' />
+            </div>
+            <TextInput
+              id='examWeekday'
+              type='text'
+              placeholder=''
+              value={getWeekday(date)}
+              required
+              disabled={true}
+            />
+          </div>
           <div>
             <div className='mb-2 block'>
               <Label htmlFor='roomID' value='Phòng thi' />
             </div>
             <Select id='roomID' required>
               <option>B.102</option>
-              <option>C.113</option>
+              <option>B.502</option>
               <option>B.402</option>
+              <option>C.113</option>
               <option>C.304</option>
             </Select>
           </div>
@@ -172,28 +224,12 @@ const ExamScheduleManagement = () => {
               <option>4</option>
             </Select>
           </div>
-          <div>
-            <div className='mb-2 block'>
-              <Label htmlFor='examWeekday' value='Thứ thi' />
-            </div>
-            <TextInput
-              id='examWeekday'
-              type='number'
-              placeholder=''
-              required
-              disabled={true}
-            />
-          </div>
+
           <div>
             <div className='mb-2 block'>
               <Label htmlFor='note' value='Ghi chú' />
             </div>
-            <TextInput
-              id='note'
-              type='number'
-              placeholder='Nhập ghi chú'
-              required
-            />
+            <TextInput id='note' type='text' placeholder='Nhập ghi chú' />
           </div>
         </div>
         <div className='mt-4'>
@@ -201,7 +237,7 @@ const ExamScheduleManagement = () => {
             Thêm
           </Button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

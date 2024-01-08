@@ -3,9 +3,9 @@ import { Button, Select, TextInput } from 'flowbite-react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { courseApi } from 'src/apis/course.api';
-import { semesterApi } from 'src/apis/semester.api';
 import LoadingIndicator from 'src/components/LoadingIndicator';
 import Table, { Header } from 'src/components/Table/Table';
+import useSemester from 'src/hooks/useSemester';
 import HocPhan from 'src/types/hoc-phan.type';
 import { capitalizeFirstLetter, isoStringToDdMmYyyy } from 'src/utils/utils';
 
@@ -47,13 +47,7 @@ export default function CoursesRegistration() {
 
   const [courseSelected, setCourseSelected] = useState<TableData[]>([]);
 
-  const { data: semesterData, isLoading: isLoadingSemester } = useQuery({
-    queryKey: ['currentSemester'],
-    queryFn: ({ signal }) => semesterApi.getCurrentSemester(0, 1000, signal),
-    select: data => {
-      return data.data.result[0];
-    }
-  });
+  const { currentSemester, currentSemesterIsLoading } = useSemester();
   const { data: courseData, isLoading } = useQuery({
     queryKey: ['courses', 5],
     queryFn: ({ signal }) =>
@@ -78,7 +72,7 @@ export default function CoursesRegistration() {
         };
       });
     },
-    enabled: !!semesterData?.maHocKyNamHoc
+    enabled: !!currentSemester?.maHocKyNamHoc
   });
   const isCourseSelected = (row: TableData): boolean => {
     return courseSelected.some(item => {
@@ -145,7 +139,7 @@ export default function CoursesRegistration() {
     console.log(courseSelected);
   };
 
-  if (isLoading || isLoadingSemester) return <LoadingIndicator />;
+  if (isLoading || currentSemesterIsLoading) return <LoadingIndicator />;
 
   return (
     <div className=' w-full bg-white p-5 pb-20 shadow-lg'>
