@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
-import { Button, Datepicker, Label, Select, TextInput } from 'flowbite-react';
+import { Select, TextInput } from 'flowbite-react';
 import { courseApi } from 'src/apis/course.api';
 import Table from 'src/components/Table';
 import { isoStringToDdMmYyyy } from 'src/utils/utils';
@@ -133,96 +133,6 @@ const CourseManagement = () => {
             filters={{ [selectedValue]: search }}
           />
         )}
-      </div>
-      <div
-        id='add-course-container'
-        className='mt-10 w-full bg-white p-5 shadow-lg'
-      >
-        <div className='mt-4 grid grid-cols-3 gap-8'>
-          <div>
-            <div className='mb-2 block'>
-              <Label htmlFor='courseID' value='Mã môn học' />
-            </div>
-            <TextInput
-              id='courseID'
-              type='text'
-              placeholder='Nhập mã môn học'
-              required
-            />
-          </div>
-          <div>
-            <div className='mb-2 block'>
-              <Label htmlFor='courseName' value='Tên môn học' />
-            </div>
-            <TextInput
-              id='courseName'
-              type='text'
-              placeholder='Nhập tên môn học'
-              required
-            />
-          </div>
-          <div>
-            <div className='mb-2 block'>
-              <Label htmlFor='lecturerName' value='Tên giảng viên' />
-            </div>
-            <TextInput
-              id='lecturerName'
-              type='text'
-              placeholder='Nhập tên giảng viên'
-              required
-            />
-          </div>
-          <div>
-            <div className='mb-2 block'>
-              <Label htmlFor='major' value='Khoa' />
-            </div>
-            <Select id='gender' required>
-              <option>MMT&TT</option>
-              <option>ATTT</option>
-              <option>KTPM</option>
-              <option>KTTT</option>
-            </Select>
-          </div>
-          <div>
-            <div className='mb-2 block'>
-              <Label htmlFor='department' value='Ngày bắt đầu học' />
-            </div>
-            <Datepicker></Datepicker>
-          </div>
-          <div>
-            <div className='mb-2 block'>
-              <Label htmlFor='department' value='Ngày kết thúc' />
-            </div>
-            <Datepicker></Datepicker>
-          </div>
-          <div>
-            <div className='mb-2 block'>
-              <Label htmlFor='creditLT' value='Số tín chỉ LT' />
-            </div>
-            <TextInput
-              id='creditLT'
-              type='number'
-              placeholder='Nhập số tín chỉ LT'
-              required
-            />
-          </div>
-          <div>
-            <div className='mb-2 block'>
-              <Label htmlFor='creditTH' value='Số tín chỉ TH' />
-            </div>
-            <TextInput
-              id='creditTH'
-              type='number'
-              placeholder='Nhập số tín chỉ TH'
-              required
-            />
-          </div>
-        </div>
-        <div className='mt-4'>
-          <Button type='submit' color='failure'>
-            Thêm
-          </Button>
-        </div>
       </div>
     </div>
   );

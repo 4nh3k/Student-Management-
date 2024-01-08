@@ -2,12 +2,13 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import HocPhan from 'src/types/hoc-phan.type';
 import { courseApi } from 'src/apis/course.api';
+import CreateHocPhanDto from 'src/types/create-hoc-phan.dto';
 
 const useCourse = () => {
   const queryClient = useQueryClient();
 
   const createCourseMutation = useMutation({
-    mutationFn: (body: HocPhan) => courseApi.createCourse(body),
+    mutationFn: (body: CreateHocPhanDto) => courseApi.createCourse(body),
     onSuccess: data => {
       queryClient.invalidateQueries({ queryKey: ['courses'] });
       toast.success('Thêm học phần mới thành công');

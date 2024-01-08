@@ -26,6 +26,7 @@ const path = {
   student_conduct_points_management: '/student-conduct-points-management',
   student_reward_management: '/student-reward-management',
   student_file_management: '/student-file-management',
+  add_course_form: '/add-course-form',
   all: '*'
 } as const;
 

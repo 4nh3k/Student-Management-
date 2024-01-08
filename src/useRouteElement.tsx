@@ -27,6 +27,7 @@ import Transcript from './pages/Transcript/Transcript';
 import CoursesRegistered from './pages/UserCourseManagement/CoursesRegistered/CoursesRegistered';
 import CoursesRegistration from './pages/UserCourseManagement/CoursesRegistration/CoursesRegistration';
 import { getProfileFromLS } from './utils/auth';
+import AddCourseForm from './pages/CourseManagement/AddCourseForm';
 function ProtectedRoute() {
   const { isAuthenticated } = useAppContext();
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
@@ -96,6 +97,10 @@ export default function useRouteElement() {
             {
               path: path.course_management,
               element: <CourseManagement />
+            },
+            {
+              path: path.add_course_form,
+              element: <AddCourseForm />
             },
             {
               path: path.exam_schedule_management,
