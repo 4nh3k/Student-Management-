@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Select, TextInput } from 'flowbite-react';
+import { Modal, Select, TextInput } from 'flowbite-react';
 import Table from 'src/components/Table';
 import { useQuery } from '@tanstack/react-query';
 import { tuitionFeeApi } from 'src/apis/tution-fee.api';
+import EditLecturer from './EditFee';
+import EditFee from './EditFee';
 
 const FeeList = () => {
   const headers = [
@@ -26,7 +28,6 @@ const FeeList = () => {
     },
 
     { title: 'Ghi chú bổ sung', dataIndex: 'ghiChuBoSung' },
-
   ];
 
   const { data: getStudentFee, isLoading: isStudentFeeLoading } = useQuery({
@@ -35,7 +36,6 @@ const FeeList = () => {
   });
   const studentFeeData = getStudentFee?.data.result;
 
-  const [pageSize, setPageSize] = useState<number>(10);
   const [search, setSearchVal] = useState<string>('');
   const [selectedValue, setSelectedValue] = useState<string>('');
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,7 +45,17 @@ const FeeList = () => {
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setSelectedValue(e.target.value);
+  };  
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [openModal, setOpenModal] = useState(false);
+
+  const [selectedRow, setSelectedRow] = useState<string>('');
+
+  const handleRowClick = (row: any) => {
+    setSelectedRow(row.maThongTinHocPhi);
+    setOpenModal(true);
   };
+
 
   return (
     <div id='student-table-container' className='w-full bg-white p-5 shadow-lg'>
@@ -96,8 +106,20 @@ const FeeList = () => {
           className='border-input mt-2 border-2'
           filters={{ [selectedValue]: search }}
           pageSize={pageSize}
+          onRowClick={handleRowClick}
         />
       )}
+      <Modal
+        size={'6xl'}
+        dismissible
+        show={openModal}
+        onClose={() => setOpenModal(false)}
+      >
+        <Modal.Header>Cập nhật thông tin học phí</Modal.Header>
+        <Modal.Body>
+          <EditFee id={selectedRow} />
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

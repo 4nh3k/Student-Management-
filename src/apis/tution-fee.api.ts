@@ -31,11 +31,11 @@ export const tuitionFeeApi = {
     });
   },
 
-  getAllTuitionFees(offset: number, limit: number, signal?: AbortSignal) {
+  getAllTuitionFees(offset: number, limit: number, signal?: AbortSignal, id?: number) {
     const urlWithParams = `${URL_GET_ALL_FEES}?offset=${offset}&limit=${limit}`;
     const rawBody = {
       filterBy: {
-
+        maThongTinHocPhi: id
       }
     }
     return http.post<SuccessResponse<TutionFee[]>>(urlWithParams, rawBody, {

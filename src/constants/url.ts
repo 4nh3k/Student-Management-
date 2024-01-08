@@ -25,3 +25,7 @@ export const URL_GET_ALL_FEES = 'thong-tin-hoc-phi/get-many';
 export const URL_CREATE_FEE = 'thong-tin-hoc-phi/add-many';
 export const URL_DELETE_FEE = 'thong-tin-hoc-phi/remove-many';
 export const URL_UPDATE_FEE = 'thong-tin-hoc-phi/update-many';
+export const URL_GET_ALL_TEST_SCHEDULE = 'buoi-thi/get-many';
+export const URL_CREATE_TEST_SCHEDULE = 'buoi-thi/add-many';
+export const URL_DELETE_TEST_SCHEDULE = 'buoi-thi/remove-many';
+export const URL_UPDATE_TEST_SCHEDULE = 'buoi-thi/update-many';

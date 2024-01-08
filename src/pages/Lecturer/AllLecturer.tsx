@@ -115,7 +115,7 @@ const AllLecturer = () => {
         show={openModal}
         onClose={() => setOpenModal(false)}
       >
-        <Modal.Header>Sửa / Xóa sinh viên</Modal.Header>
+        <Modal.Header>Sửa / Xóa giảng viên</Modal.Header>
         <Modal.Body>
           <EditLecturer id={selectedRow} />
         </Modal.Body>

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Pagination from 'src/components/Pagination';
-import { useState } from 'react';
+
 import Table from 'src/components/Table';
 import {
   Button,
@@ -11,6 +11,8 @@ import {
   Dropdown,
   FloatingLabel
 } from 'flowbite-react';
+import { useQuery } from '@tanstack/react-query';
+import { testScheduleApi } from 'src/apis/test-schedule.api';
 
 const ExamScheduleManagement = () => {
   const [totalPage, setTotalPage] = useState(50);
@@ -19,53 +21,32 @@ const ExamScheduleManagement = () => {
   const courseMajor = ['KTPM', 'KHMT', 'ATTT', 'MMT&TT'];
 
   const headers = [
-    { title: 'Mã lịch thi', dataIndex: 'examID' },
-    { title: 'Mã môn học', dataIndex: 'courseID' },
-    { title: 'Ngày thi', dataIndex: 'examDate' },
-    { title: 'Phòng thi', dataIndex: 'roomID' },
-    { title: 'Ca thi', dataIndex: 'examPhase' },
-    { title: 'Thứ thi', dataIndex: 'examWeekday' },
-    { title: 'Ghi chú', dataIndex: 'note' }
+    { title: 'Mã buổi thi', dataIndex: 'maBuoiThi' },
+    { title: 'Mã học phần', dataIndex: 'maHocPhan' },
+    { title: 'Ngày thi', dataIndex: 'ngayThi' },
+    { title: 'Mã phòng thi', dataIndex: 'maPhongThi' },
+    { title: 'Thứ thi', dataIndex: 'thuThi' },
+    { title: 'Ca thi', dataIndex: 'caThi' },
+    { title: 'Ghi chú', dataIndex: 'ghiChu' }
   ];
 
-  const data = [
-    {
-      examID: 1,
-      courseID: 'SE121.O11',
-      examDate: '04/01/2024',
-      roomID: 'E7.06',
-      examPhase: 1,
-      examWeekday: 5,
-      note: 'A'
-    },
-    {
-      examID: 2,
-      courseID: 'SE121.O11',
-      examDate: '04/01/2024',
-      roomID: 'E7.06',
-      examPhase: 2,
-      examWeekday: 5,
-      note: 'B'
-    },
-    {
-      examID: 3,
-      courseID: 'SE121.O11',
-      examDate: '04/01/2024',
-      roomID: 'E7.06',
-      examPhase: 3,
-      examWeekday: 5,
-      note: 'C'
-    },
-    {
-      examID: 4,
-      courseID: 'SE121.O11',
-      examDate: '04/01/2024',
-      roomID: 'E7.06',
-      examPhase: 4,
-      examWeekday: 5,
-      note: 'D'
+  const { data: getTestScheduleData, isLoading: isLoadingSchedule } = useQuery({
+    queryKey: ['testSchedules'],
+    queryFn: () => testScheduleApi.getAllTestSchedule(0, 1000),
+    select: data => {
+      return data.data.result.map(testSchedule => {
+        return {
+          maBuoiThi: testSchedule.maBuoiThi,
+          maHocPhan: testSchedule.maHocPhan,
+          ngayThi: testSchedule.ngayThi,
+          maPhongThi: testSchedule.maPhongThi,
+          thuThi: testSchedule.thuThi,
+          caThi: testSchedule.caThi,
+          ghiChu: testSchedule.ghiChu
+        };
+      });
     }
-  ];
+  });
 
   const [search, setSearchVal] = useState<string>('');
   const [selectedValue, setSelectedValue] = useState<string>('');
@@ -125,13 +106,15 @@ const ExamScheduleManagement = () => {
             <span className='ml-2 text-gray-500'>kết quả</span>
           </div>
         </div>
-        <Table
-          headers={headers}
-          data={data}
-          className='border-input mt-2 border-2'
-          pageSize={pageSize}
-          filters={{ [selectedValue]: search }}
-        />
+        {!isLoadingSchedule && getTestScheduleData && (
+          <Table
+            headers={headers}
+            data={getTestScheduleData}
+            className='border-input mt-2 border-2'
+            pageSize={pageSize}
+            filters={{ [selectedValue]: search }}
+          />
+        )}
       </div>
       <div
         id='add-course-container'

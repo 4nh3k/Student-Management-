@@ -22,6 +22,10 @@ const path = {
   student_conduct_points: '/student-conduct-points',
   student_register_graduation: '/student-register-graduation',
   student_transcript: '/student-transcript',
+  student_result_management: '/student-result-management',
+  student_conduct_points_management: '/student-conduct-points-management',
+  student_reward_management: '/student-reward-management',
+  student_file_management: '/student-file-management',
   all: '*'
 } as const;
 

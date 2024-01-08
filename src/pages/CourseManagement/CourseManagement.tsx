@@ -15,6 +15,14 @@ import { useQuery } from '@tanstack/react-query';
 import { courseApi } from 'src/apis/course.api';
 
 const CourseManagement = () => {
+  const capitalizeFirstLetter = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
+
+  const decapitalizeFirstLetter = (str: string) => {
+    return str.charAt(0).toLowerCase() + str.slice(1);
+  };
+
   const [totalPage, setTotalPage] = useState(50);
   const [pageRange, setPageRange] = useState(5);
   const onPageChange = (page: number) => setCurrentPage(page);
@@ -53,8 +61,8 @@ const CourseManagement = () => {
           loaiMonHoc: course.monHoc.loaiMonHoc,
           soTinChiLyThuyet: course.monHoc.soTinChiLyThuyet,
           soTinChiThucHanh: course.monHoc.soTinChiThucHanh,
-          hinhThucThi: course.hinhThucThi,
-          loaiHocPhan: course.loaiHocPhan,
+          hinhThucThi: capitalizeFirstLetter(course.hinhThucThi),
+          loaiHocPhan: capitalizeFirstLetter(course.loaiHocPhan),
           maGiangVien: course.maGiangVien,
           siSoSinhVien: course.siSoSinhVien,
           thoiDiemBatDau: course.thoiDiemBatDau,

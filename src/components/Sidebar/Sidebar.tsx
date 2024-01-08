@@ -139,6 +139,30 @@ export default function SidebarComponent({ isAdmin }: SidebarProp) {
                 >
                   Quản lý lịch thi
                 </Sidebar.Item>
+                <Sidebar.Item
+                  href={path.student_result_management}
+                  active={getIsActive(path.student_result_management)}
+                >
+                  Quản lý KQ học tập
+                </Sidebar.Item>
+                <Sidebar.Item
+                  href={path.student_conduct_points_management}
+                  active={getIsActive(path.student_conduct_points_management)}
+                >
+                  Quản lý KQ rèn luyện
+                </Sidebar.Item>
+                <Sidebar.Item
+                  href={path.student_reward_management}
+                  active={getIsActive(path.student_reward_management)}
+                >
+                  Quản lý khen thưởng
+                </Sidebar.Item>
+                <Sidebar.Item
+                  href={path.student_file_management}
+                  active={getIsActive(path.student_file_management)}
+                >
+                  Quản lý hồ sơ sinh viên
+                </Sidebar.Item>
               </Sidebar.Collapse>
             </Sidebar.ItemGroup>
           </Sidebar.Items>
