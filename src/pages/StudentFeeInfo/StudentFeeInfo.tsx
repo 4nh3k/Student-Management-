@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { tuitionFeeApi } from 'src/apis/tution-fee.api';
 import LoadingIndicator from 'src/components/LoadingIndicator';
 import StudentFeeInfoCard from 'src/components/StudentFeeInfoCard';
+import TutionFee from 'src/types/tution-fee';
 import { getProfileFromLS } from 'src/utils/auth';
 
 const StudentFeeInfo = () => {

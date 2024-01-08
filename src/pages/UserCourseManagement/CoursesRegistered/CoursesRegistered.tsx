@@ -110,7 +110,7 @@ export default function CoursesRegistered() {
   };
 
   return (
-    <div className=' w-full bg-white p-5 shadow-lg'>
+    <div className=' w-full bg-white p-5 pb-20 shadow-lg'>
       <Table
         headers={headers}
         hasCheckbox={true}

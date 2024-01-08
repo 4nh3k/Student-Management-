@@ -47,7 +47,7 @@ const AuthRouteChildren: RouteObject[] = [
 ];
 
 function AdminRoute(adminElement: JSX.Element, studentElement: JSX.Element) {
-  const isAdmin = getProfileFromLS().role === 'nv';
+  const isAdmin = getProfileFromLS()?.role === 'nv';
   return isAdmin ? adminElement : studentElement;
 }
 
@@ -63,10 +63,10 @@ export default function useRouteElement() {
         {
           element: <MainLayout />,
           children: [
-            // {
-            //   element: AdminRoute(<Dashboard />, <StudentDashboard />),
-            //   path: path.dashboard
-            // },
+            {
+              element: AdminRoute(<Dashboard />, <StudentDashboard />),
+              path: path.dashboard
+            },
             {
               element: <AllStudent />,
               path: path.all_students
