@@ -29,3 +29,7 @@ export const URL_GET_ALL_TEST_SCHEDULE = 'buoi-thi/get-many';
 export const URL_CREATE_TEST_SCHEDULE = 'buoi-thi/add-many';
 export const URL_DELETE_TEST_SCHEDULE = 'buoi-thi/remove-many';
 export const URL_UPDATE_TEST_SCHEDULE = 'buoi-thi/update-many';
+export const URL_GET_ALL_SCHEDULE = 'buoi-hoc/get-many';
+export const URL_CREATE_SCHEDULE = 'buoi-hoc/add-many';
+export const URL_DELETE_SCHEDULE = 'buoi-hoc/remove-many';
+export const URL_UPDATE_SCHEDULE = 'buoi-hoc/update-many';
