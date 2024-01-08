@@ -21,6 +21,11 @@ export const averageGrade = (grades: number[]) => {
   const total = grades.reduce((acc, grade) => acc + grade, 0);
   return formatGrade(total / grades.length);
 };
+
+export function capitalizeFirstLetter(string: string): string {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 export const calculateSemesterFilter = () => {
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth() + 1;

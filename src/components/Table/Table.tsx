@@ -24,11 +24,12 @@ export interface TableProps {
   onSelect?: (row: any) => void;
   selectedRow?: number;
   onRowClick?: (row: any) => void;
+  checkedList?: any[];
   filters?: any;
   tableStyle?: TableTheme;
   pageSize?: number; // Number of rows per page
   hasCheckbox?: boolean; // Whether to display checkboxes
-  onCheck?: (row: any, checked: boolean) => void; // Callback when checkbox is checked/unchecked
+  onCheck?: (row: any, checked: boolean) => boolean; // Callback when checkbox is checked/unchecked
 }
 
 const Table: React.FC<TableProps> = ({
@@ -38,6 +39,7 @@ const Table: React.FC<TableProps> = ({
   classNameTable,
   classNameBody,
   classNameHeader,
+  checkedList,
   classNameRow,
   classNameRowSelected,
   canSelected,
@@ -51,11 +53,12 @@ const Table: React.FC<TableProps> = ({
   onCheck
 }) => {
   const [selected, setSelected] = useState(selectedRow || null);
-  const [checkedRows, setCheckedRows] = useState<any[]>([]); // Array of row indexes that are checked
   const [sortColumn, setSortColumn] = useState('');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [currentPage, setCurrentPage] = useState(1);
-
+  const [checkedState, setCheckedState] = useState(
+    new Array(data.length).fill(false)
+  );
   const handleRowClick = (row: any, index: number) => {
     setSelected(index);
     if (onRowClick) {
@@ -65,7 +68,7 @@ const Table: React.FC<TableProps> = ({
       onSelect(row);
     }
   };
-
+  console.log(data);
   const handleSort = (column: string) => {
     if (sortColumn === column) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -77,6 +80,12 @@ const Table: React.FC<TableProps> = ({
 
   const handlePageChange = (data: { selected: number }) => {
     setCurrentPage(data.selected + 1);
+  };
+  const handleCheckChange = (index: number, isCheck: boolean) => {
+    const updatedCheckedState = checkedState.map((item, i) =>
+      i === index ? isCheck : item
+    );
+    setCheckedState(updatedCheckedState);
   };
 
   const filteredData = React.useMemo(() => {
@@ -207,14 +216,20 @@ const Table: React.FC<TableProps> = ({
                   <td className='pl-2'>
                     <Checkbox
                       color={'red'}
+                      checked={checkedState[index]}
                       onChange={() => {
-                        if (checkedRows.includes(row.ID)) {
-                          setCheckedRows(checkedRows.filter(r => r !== row.ID));
-                          if (onCheck) onCheck(row, false);
-                        } else {
-                          setCheckedRows([...checkedRows, row.ID]);
+                        console.log(
+                          checkedList?.find(item => item.ID === row.ID)
+                        );
+                        if (checkedList?.find(item => item.ID === row.ID)) {
                           if (onCheck) {
-                            onCheck(row, true);
+                            const isCheck = onCheck(row, false);
+                            handleCheckChange(index, isCheck);
+                          }
+                        } else {
+                          if (onCheck) {
+                            const isCheck = onCheck(row, true);
+                            handleCheckChange(index, isCheck);
                           }
                         }
                       }}
