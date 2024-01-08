@@ -29,3 +29,6 @@ export const URL_GET_ALL_TEST_SCHEDULE = 'buoi-thi/get-many';
 export const URL_CREATE_TEST_SCHEDULE = 'buoi-thi/add-many';
 export const URL_DELETE_TEST_SCHEDULE = 'buoi-thi/remove-many';
 export const URL_UPDATE_TEST_SCHEDULE = 'buoi-thi/update-many';
+export const URL_GET_ALL_HINH_THUC_THI = 'hoc-phan/get-danh-sach-loai-hinh-thuc-thi';
+export const URL_GET_ALL_LOAI_HOC_PHAN = '/hoc-phan/get-danh-sach-loai-hoc-phan';
+export const URL_GET_ALL_HOC_KY_NAM_HOC = ''
