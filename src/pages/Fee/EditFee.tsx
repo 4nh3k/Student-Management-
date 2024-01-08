@@ -52,7 +52,8 @@ const EditFee = ({ id }) => {
         maHocKyNamHoc: feeData.maHocKyNamHoc,
         maSinhVien: feeData.maSinhVien,
         hocKyNamHoc: feeData.hocKyNamHoc,
-        inverseThongTinHocPhiHocKyTruoc: feeData.inverseThongTinHocPhiHocKyTruoc,
+        inverseThongTinHocPhiHocKyTruoc:
+          feeData.inverseThongTinHocPhiHocKyTruoc,
         sinhVien: fee.sinhVien,
         thongTinHocKyNamHoc: fee.thongTinHocKyNamHoc,
         thongTinHocPhiHocKyTruoc: fee.thongTinHocPhiHocKyTruoc
@@ -70,11 +71,39 @@ const EditFee = ({ id }) => {
   const { updateTuitionFeeMutation, deleteTuitionFeeMutation } =
     useTuitionFee();
 
+  const validateRemainMoney = (
+    payAmount: number,
+    paidAmount: number,
+    remainer: number
+  ) => {
+    const threshold = 0.0001;
+    console.log(payAmount, paidAmount, remainer);
+    const isValidValue = payAmount > 0 && paidAmount >= 0 && remainer >= 0;
+    console.log(paidAmount - payAmount);
+    if (paidAmount > payAmount) {
+      return paidAmount - payAmount - remainer < threshold && isValidValue;
+    } else {
+      return remainer < threshold && isValidValue;
+    }
+  };
+
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Submitted lecturer:', fee);
+
+    if (
+      !validateRemainMoney(fee.soTienPhaiDong, fee.soTienDaDong, fee.soTienDu)
+    ) {
+      toast.error('Giá trị hoặc số tiền dư không hợp lệ');
+      return;
+    }
+
     updateTuitionFeeMutation.mutate(
-      { tuitionFee: fee, id: parseInt(id) },
+      {
+        tuitionFee: fee,
+        studentId: fee.maSinhVien,
+        semesterId: fee.maHocKyNamHoc
+      },
       {
         onSuccess: data => {
           setFee({
@@ -109,7 +138,10 @@ const EditFee = ({ id }) => {
     );
     console.log('delete clicked');
     if (confirmBox === true) {
-      deleteTuitionFeeMutation.mutate(id);
+      deleteTuitionFeeMutation.mutate({
+        studentId: fee.maSinhVien,
+        semesterId: fee.maHocKyNamHoc
+      });
     }
   };
 
@@ -138,7 +170,7 @@ const EditFee = ({ id }) => {
         </div>
         <div>
           <div className='mb-2 block'>
-            <Label htmlFor='tenGiangVien' value='Tên' />
+            <Label htmlFor='tenGiangVien' value='Số tiền đã đóng' />
           </div>
           {!isLoadingFee && (
             <TextInput
