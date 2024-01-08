@@ -237,9 +237,71 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
     isFacultyLoading
   ]);
 
+  function validateName(name: string) {
+    let isValidName = true;
+    if (
+      /[!@#$%^&*(),.?":{}|<>]/g.test(name) ||
+      !/^[A-Z]/.test(name) ||
+      /\d+/g.test(name)
+    ) {
+      isValidName = false;
+    }
+    return isValidName;
+  }
+
+  const validateEmail = (inputEmail: string) => {
+    // Regular expression for a simple email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Test the input email against the regular expression
+    return emailRegex.test(inputEmail);
+  };
+
+  const validateAge = (inputDob: string) => {
+    const birthDate = new Date(inputDob);
+    const currentDate = new Date();
+
+    // Calculate the age based on the difference in years
+    const age = currentDate.getFullYear() - birthDate.getFullYear();
+
+    // Validate that the age is between 18 and 65
+    return age >= 18 && age <= 65;
+  };
+
+  const validateAccountNumber = inputString => {
+    // Regular expression for validating a string with only numbers and length between 9 and 14
+    const regex = /^\d{9,14}$/;
+
+    // Test the input string against the regular expression
+    return regex.test(inputString);
+  };
+
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Submitted student:', student);
+
+    if (!validateName(student.hoTenSinhVien)) {
+      toast.error('Tên không hợp lệ');
+      return;
+    }
+
+    if (!validateEmail(student.email)) {
+      toast.error('Email không hợp lệ');
+      return;
+    }
+
+    if (!validateAge(student.ngaySinh)) {
+      toast.error('Tuổi sinh viên phải nằm trong khoảng 18 đến 65');
+      return;
+    }
+
+    if (!validateAccountNumber(student.soTaiKhoanNganHangDinhDanh)) {
+      toast.error(
+        'Số tài khoản ngân hàng phải chỉ chứa toàn số và độ dài 9-14 số'
+      );
+      return;
+    }
+
     updateStudentMutation.mutate(
       { student: student, id: parseInt(id) },
       {
@@ -275,7 +337,9 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
   };
 
   const onDeleteStudent = () => {
-    const confirmBox = window.confirm('Bạn có thật sự muốn xóa sinh viên này không');
+    const confirmBox = window.confirm(
+      'Bạn có thật sự muốn xóa sinh viên này không'
+    );
     console.log('delete clicked');
     if (confirmBox === true) {
       deleteStudentMutation.mutate(id);
@@ -486,7 +550,9 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
         <Button type='submit' color='failure'>
           Lưu
         </Button>
-        <Button className='bg-sidebar' onClick={onDeleteStudent}>Xóa</Button>
+        <Button className='bg-sidebar' onClick={onDeleteStudent}>
+          Xóa
+        </Button>
       </div>
     </form>
   );

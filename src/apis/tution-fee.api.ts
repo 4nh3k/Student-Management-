@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { URL_CREATE_FEE, URL_GET_ALL_FEES, URL_GET_TUTION_FEE, URL_UPDATE_FEE } from 'src/constants/url';
+import { URL_CREATE_FEE, URL_DELETE_FEE, URL_GET_ALL_FEES, URL_GET_TUTION_FEE, URL_UPDATE_FEE } from 'src/constants/url';
 import TutionFee from 'src/types/tution-fee';
 import { SuccessResponse } from 'src/types/utils.type';
 import http from 'src/utils/http';
@@ -42,12 +42,13 @@ export const tuitionFeeApi = {
       signal
     });
   },
-
   createTuitionFee(studentFee: TutionFee) {
     const rawBody = {
-      itemsToAdd: [studentFee],
+      itemsToAdd: studentFee,
       returnJustIds: true
     };
+    console.log('student fee:', studentFee)
+    console.log('rawBody', rawBody)
 
     return http.post<SuccessResponse<TutionFee>>(URL_CREATE_FEE, rawBody);
   },
@@ -64,6 +65,8 @@ export const tuitionFeeApi = {
       },
       updateTo: studentFee
     };
+
+    console.log(rawBody);
     return http.put<SuccessResponse<TutionFee>>(`${URL_UPDATE_FEE}`, rawBody);
   },
 
@@ -76,7 +79,7 @@ export const tuitionFeeApi = {
       returnJustIds: true
     };
     return http.delete<SuccessResponse<TutionFee>>(
-      `${URL_UPDATE_FEE}`,
+      `${URL_DELETE_FEE}`,
       {
         data: JSON.stringify(rawBody),
         headers: {

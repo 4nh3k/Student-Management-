@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { lecturerApi } from 'src/apis/lecturer.api';
 import useLecturer from 'src/hooks/useLecturer';
 import CreateLecturerDto from 'src/types/create-lecturer.dto';
+import { validateName } from 'src/utils/utils';
 
 const EditLecturer = ({ id }) => {
   const [lecturer, setLecturer] = useState<CreateLecturerDto>({
@@ -45,6 +46,12 @@ const EditLecturer = ({ id }) => {
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Submitted lecturer:', lecturer);
+
+    if (!validateName(lecturer.tenGiangVien)) {
+      toast.error('Tên không hợp lệ');
+      return;
+    };
+
     updateLecturerMutation.mutate(
       { lecturer: lecturer, id: parseInt(id) },
       {

@@ -12,8 +12,9 @@ const useTuitionFee = () => {
   const queryClient = useQueryClient();
 
   const createTuitionFeeMutation = useMutation({
-    mutationFn: (body: TutionFee) => tuitionFeeApi.createTuitionFee(body),
+    mutationFn: (body: any) => tuitionFeeApi.createTuitionFee(body),
     onSuccess: data => {
+      queryClient.invalidateQueries({ queryKey: ['fees'] });
       toast.success('Thêm học phí mới cho sinh viên thành công');
       console.log(data);
     },

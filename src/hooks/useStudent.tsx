@@ -15,6 +15,7 @@ const useStudent = () => {
   const createStudentMutation = useMutation({
     mutationFn: (body: CreateStudentDto) => studentApi.createStudent(body),
     onSuccess: data => {
+      queryClient.invalidateQueries({ queryKey: ['students'] });
       toast.success('Thêm sinh viên mới thành công');
       console.log(data);
     },
