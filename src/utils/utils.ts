@@ -69,3 +69,42 @@ export function isoStringToDdMmYyyy(isoString: string) {
 
   return `${day}/${month}/${year}`;
 }
+
+export function validateName(name: string) {
+  let isValidName = true;
+  if (
+    /[!@#$%^&*(),.?":{}|<>]/g.test(name) ||
+    !/^[A-Z]/.test(name) ||
+    /\d+/g.test(name)
+  ) {
+    isValidName = false;
+  }
+  return isValidName;
+}
+
+export function validateEmail(inputEmail: string){
+  // Regular expression for a simple email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // Test the input email against the regular expression
+  return emailRegex.test(inputEmail);
+};
+
+export function validateAge(inputDob: string){
+  const birthDate = new Date(inputDob);
+  const currentDate = new Date();
+
+  // Calculate the age based on the difference in years
+  const age = currentDate.getFullYear() - birthDate.getFullYear();
+
+  // Validate that the age is between 18 and 65
+  return age >= 18 && age <= 65;
+};
+
+export const validateAccountNumber = (inputString) => {
+  // Regular expression for validating a string with only numbers and length between 9 and 14
+  const regex = /^\d{9,14}$/;
+
+  // Test the input string against the regular expression
+  return regex.test(inputString);
+};

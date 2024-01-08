@@ -9,6 +9,7 @@ const useCourse = () => {
   const createCourseMutation = useMutation({
     mutationFn: (body: HocPhan) => courseApi.createCourse(body),
     onSuccess: data => {
+      queryClient.invalidateQueries({ queryKey: ['courses'] });
       toast.success('Thêm học phần mới thành công');
       console.log(data);
     },

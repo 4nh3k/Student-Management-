@@ -31,11 +31,6 @@ const AddFee = () => {
   const [csvData, setCsvData] = useState([]);
   const [jsonResult, setJsonResult] = useState<TutionFee>();
 
-  const isDate = (value) => {
-    const dateTimeRegex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}.\d+\+\d{2}$/;
-    return dateTimeRegex.test(value);
-  };
-
   const handleCsvText = csvText => {
     // Split CSV text into lines
     const lines = csvText.split('\n');
@@ -55,22 +50,22 @@ const AddFee = () => {
       ];
 
       // Convert CSV data into JSON format
-      const jsonResult = lines.slice(1).map(line => {
+      const jsonResult = lines.slice(1, -1).map(line => {
         const values = line.split(';');
         const obj = {};
         headers.forEach((header, index) => {
           // Check if the value is a date
           if (header === 'maThongTinHocPhiHocKyTruoc'){
             obj[header] = null;
-          } else if (isDate(values[index])) {
-            console.log(values[index])
-            obj[header] = values[index]
+          } else if (header === 'thoiDiemThanhToanHocPhi'){
+            obj[header] = values[index];
           } else {
             // Check if the value can be parsed as a float
             const parsedValue = parseFloat(values[index]);
             obj[header] = isNaN(parsedValue) ? values[index] : parsedValue;
           }
         });
+        obj['ma']
         return obj;
       });
 

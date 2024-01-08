@@ -17,6 +17,7 @@ const useTestSchdule = () => {
     mutationFn: (body: TestSchedule) =>
       testScheduleApi.createTestSchedule(body),
     onSuccess: data => {
+      queryClient.invalidateQueries({ queryKey: ['testSchedules'] });
       toast.success('Thêm buổi thi thành công');
       console.log(data);
     },

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import useLecturer from 'src/hooks/useLecturer';
 import CreateLecturerDto from 'src/types/create-lecturer.dto';
+import { validateName } from 'src/utils/utils';
 
 const AddLecturer = () => {
   const [lecturer, setLecturer] = useState<CreateLecturerDto>({
@@ -24,6 +25,12 @@ const AddLecturer = () => {
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Submitted lecturer:', lecturer);
+
+    if (!validateName(lecturer.tenGiangVien)) {
+      toast.error('Tên không hợp lệ');
+      return;
+    };
+
     createLecturerMutation.mutate(lecturer, {
       onSuccess: data => {
         setLecturer({

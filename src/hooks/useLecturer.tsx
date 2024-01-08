@@ -17,6 +17,7 @@ const useLecturer = () => {
   const createLecturerMutation = useMutation({
     mutationFn: (body: CreateLecturerDto) => lecturerApi.createLecturer(body),
     onSuccess: data => {
+      queryClient.invalidateQueries({ queryKey: ['lecturers'] });
       toast.success('Thêm giảng viên mới thành công');
       console.log(data);
     },

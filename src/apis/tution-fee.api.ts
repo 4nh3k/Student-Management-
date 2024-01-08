@@ -42,12 +42,13 @@ export const tuitionFeeApi = {
       signal
     });
   },
-
   createTuitionFee(studentFee: TutionFee) {
     const rawBody = {
-      itemsToAdd: [studentFee],
+      itemsToAdd: studentFee,
       returnJustIds: true
     };
+    console.log('student fee:', studentFee)
+    console.log('rawBody', rawBody)
 
     return http.post<SuccessResponse<TutionFee>>(URL_CREATE_FEE, rawBody);
   },

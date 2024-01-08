@@ -6,6 +6,7 @@ import { studentApi } from 'src/apis/student.api';
 import ImageLoader from 'src/components/ImageLoader/ImageLoader';
 import useStudent from 'src/hooks/useStudent';
 import CreateStudentDto from 'src/types/create-student.dto';
+import { validateAccountNumber, validateAge, validateEmail, validateName } from 'src/utils/utils';
 
 interface AddStudentFormProps {
   id?: string;
@@ -160,7 +161,30 @@ const AddStudentForm = ({ id }: AddStudentFormProps) => {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Submitted student:', student);
+    console.log('Submitted student:', student); 
+
+    if (!validateName(student.hoTenSinhVien)) {
+      toast.error('Tên không hợp lệ');
+      return;
+    };
+
+    if (!validateEmail(student.email)) {
+      toast.error('Email không hợp lệ');
+      return;
+    };
+
+    if (!validateAge(student.ngaySinh)) {
+      toast.error('Tuổi sinh viên phải nằm trong khoảng 18 đến 65');
+      return;
+    };
+
+    if (!validateAccountNumber(student.soTaiKhoanNganHangDinhDanh)){
+      toast.error(
+        'Số tài khoản ngân hàng phải chỉ chứa toàn số và độ dài 9-14 số'
+      );
+      return;
+    };
+
     createStudentMutation.mutate(student, {
       onSuccess: data => {
         setStudent({
@@ -357,7 +381,7 @@ const AddStudentForm = ({ id }: AddStudentFormProps) => {
             <Label htmlFor='account' value='Số tài khoản định danh' />
           </div>
           <TextInput
-            id='soTKNganHangDinhDanh'
+            id='soTaiKhoanNganHangDinhDanh'
             type='number'
             placeholder='Nhập số tài khoản định danh'
             value={student.soTaiKhoanNganHangDinhDanh}
