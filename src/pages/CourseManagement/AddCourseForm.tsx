@@ -1,13 +1,20 @@
 import { useQuery } from '@tanstack/react-query';
 import { Label, TextInput, Select, Datepicker, Button } from 'flowbite-react';
-import React from 'react';
+import React, { useState } from 'react';
 import { courseApi } from 'src/apis/course.api';
-import { useState } from 'react';
+
 import { studentApi } from 'src/apis/student.api';
 import { lecturerApi } from 'src/apis/lecturer.api';
 import { semesterApi } from 'src/apis/semester.api';
+import HocPhan from 'src/types/hoc-phan.type';
+import CreateHocPhanDto from 'src/types/create-hoc-phan.dto';
+import useCourse from 'src/hooks/useCourse';
 
 const AddCourseForm = () => {
+  const decapitalizeFirstLetter = (str: string) => {
+    return str.charAt(0).toLowerCase() + str.slice(1);
+  };
+
   const capitalizeFirstLetter = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
@@ -28,14 +35,13 @@ const AddCourseForm = () => {
   const handleMonHocChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e?.target.value;
     const selectedOption = getMonHocData.find(
-      monHoc => monHoc.tenChuyenNganh === value
+      monHoc => monHoc.tenMonHoc === value
     );
     setMonHoc(value);
-    // set(prevStudent => ({
-    //   ...prevStudent,
-    //   maChuyenNganh: selectedOption.maChuyenNganh,
-    //   chuyenNganh: value
-    // }));
+    setCourse(prevCourse => ({
+      ...prevCourse,
+      maMonHoc: selectedOption.maMonHoc
+    }));
   };
 
   const { data: educationTypes, isLoading: isEducationTypeLoading } = useQuery({
@@ -50,15 +56,14 @@ const AddCourseForm = () => {
 
   const handleEducationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e?.target.value;
-    // const selectedOption = educationTypeData.find(
-    //   education => education.tenHeDaoTao === decapitalizeFirstLetter(value)
-    // );
+    const selectedOption = educationTypeData.find(
+      education => education.tenHeDaoTao === decapitalizeFirstLetter(value)
+    );
     setEducationType(value);
-    // setStudent(prevStudent => ({
-    //   ...prevStudent,
-    //   maHeDaoTao: selectedOption.maHeDaoTao,
-    //   heDaoTao: decapitalizeFirstLetter(value)
-    // }));
+    setCourse(prevCourse => ({
+      ...prevCourse,
+      maHeDaoTao: selectedOption.maHeDaoTao
+    }));
   };
 
   const [hinhThucThi, setHinhThucThi] = useState<string>(
@@ -75,6 +80,10 @@ const AddCourseForm = () => {
   const handleHinhThucThiChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e?.target.value;
     setHinhThucThi(value);
+    setCourse(prevCourse => ({
+      ...prevCourse,
+      hinhThucThi: value
+    }));
   };
 
   const [loaiHocPhan, setLoaiHocPhan] = useState<string>('tự chọn');
@@ -89,6 +98,10 @@ const AddCourseForm = () => {
   const handleLoaiHocPhanChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e?.target.value;
     setLoaiHocPhan(value);
+    setCourse(prevCourse => ({
+      ...prevCourse,
+      loaiHocPhan: value
+    }));
   };
 
   const [lecturer, setLecturer] = useState<string>('');
@@ -100,7 +113,14 @@ const AddCourseForm = () => {
 
   const handleLecturerChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e?.target.value;
+    const selectedOption = lecturers.find(
+      lecturer => lecturer.tenGiangVien === value
+    );
     setLecturer(value);
+    setCourse(prevCourse => ({
+      ...prevCourse,
+      maGiangVien: selectedOption.maGiangVien
+    }));
   };
 
   const [semester, setSemester] = useState<string>('');
@@ -112,12 +132,86 @@ const AddCourseForm = () => {
 
   const handleSemesterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e?.target.value;
+    const selectedOption = semesters.find(
+      semester => semester.tenHocKy + ' ' + semester.tenNamHoc === value
+    );
     setSemester(value);
+    setCourse(prevCourse => ({
+      ...prevCourse,
+      maGiangVien: selectedOption.maHocKyNamHoc
+    }));
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e?.target.value;
+    setCourse(prevCourse => ({
+      ...prevCourse,
+      ['siSoSinhVien']: parseInt(value)
+    }));
+  };
+
+  const { createCourseMutation } = useCourse();
+
+  const [course, setCourse] = useState<CreateHocPhanDto>({
+    maMonHoc: 1,
+    maHeDaoTao: 5,
+    hinhThucThi: 'bài kiểm tra lý thuyết cuối kỳ',
+    maHocPhan: 0,
+    loaiHocPhan: 'tự chọn',
+    maGiangVien: 2,
+    siSoSinhVien: 0,
+    thoiDiemBatDau: new Date().toISOString(),
+    thoiDiemKetThuc: new Date().toISOString(),
+    maHocKyNamHoc: 1,
+    ghiChu: ''
+  });
+
+  const handleStartDateChange = date => {
+    console.log(date);
+    setCourse(prevCourse => ({
+      ...prevCourse,
+      thoiDiemBatDau: date.toISOString()
+    }));
+  };
+
+  const handleEndDateChange = date => {
+    console.log(date);
+    setCourse(prevCourse => ({
+      ...prevCourse,
+      thoiDiemKetThuc: date.toISOString()
+    }));
+  };
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Submitted course:', course);
+
+    createCourseMutation.mutate(course, {
+      onSuccess: data => {
+        setCourse({
+          maMonHoc: 0,
+          maHeDaoTao: 0,
+          hinhThucThi: '',
+          maHocPhan: 0,
+          loaiHocPhan: '',
+          maGiangVien: 0,
+          siSoSinhVien: 0,
+          thoiDiemBatDau: new Date().toISOString(),
+          thoiDiemKetThuc: new Date().toISOString(),
+          maHocKyNamHoc: 0,
+          ghiChu: ''
+        });
+      },
+      onError: error => {
+        toast.error(error.response.data.message);
+      }
+    });
   };
   return (
-    <div
+    <form
       id='add-course-container'
       className='mt-10 w-full bg-white p-5 shadow-lg'
+      onSubmit={onSubmit}
     >
       <div className='mt-4 grid grid-cols-3 gap-8'>
         <div>
@@ -219,6 +313,8 @@ const AddCourseForm = () => {
             type='number'
             placeholder='Nhập sĩ số sinh viên'
             required
+            value={course.siSoSinhVien}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -227,8 +323,8 @@ const AddCourseForm = () => {
           </div>
           <Datepicker
             id='thoiDiemBatDau'
-            // value={new Date(student.ngaySinh).toLocaleDateString('en-GB')}
-            // onSelectedDateChanged={handleDateOfBirthChange}
+            value={new Date(course.thoiDiemBatDau).toLocaleDateString('en-GB')}
+            onSelectedDateChanged={handleStartDateChange}
           ></Datepicker>
         </div>
         <div>
@@ -237,8 +333,8 @@ const AddCourseForm = () => {
           </div>
           <Datepicker
             id='thoiDiemKetThuc'
-            // value={new Date(student.ngaySinh).toLocaleDateString('en-GB')}
-            // onSelectedDateChanged={handleDateOfBirthChange}
+            value={new Date(course.thoiDiemKetThuc).toLocaleDateString('en-GB')}
+            onSelectedDateChanged={handleEndDateChange}
           ></Datepicker>
         </div>
         <div>
@@ -276,7 +372,7 @@ const AddCourseForm = () => {
           Thêm
         </Button>
       </div>
-    </div>
+    </form>
   );
 };
 
