@@ -20,6 +20,7 @@ export const testScheduleApi = {
         maBuoiThi: id
       }
     };
+    console.log(rawBody);
     const urlWithParams = `${URL_GET_ALL_TEST_SCHEDULE}?offset=${offset}&limit=${limit}`;
     return http.post<SuccessResponse<TestSchedule[]>>(urlWithParams, rawBody, {
       signal

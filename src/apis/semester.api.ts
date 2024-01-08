@@ -8,7 +8,6 @@ export const semesterApi = {
   getCurrentSemester(offset: number, limit: number, signal?: AbortSignal) {
     const urlWithParams = `${URL_GET_HOC_KY}?offset=${offset}&limit=${limit}`;
     const rawBody = calculateSemesterFilter();
-    console.log(rawBody);
     return http.post<SuccessResponse<Semester[]>>(urlWithParams, rawBody, {
       signal
     });
@@ -20,7 +19,6 @@ export const semesterApi = {
         maHocKyNamHoc: id
       }
     };
-    console.log(rawBody);
     return http.post<SuccessResponse<Semester[]>>(urlWithParams, rawBody, {
       signal
     });

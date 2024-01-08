@@ -116,25 +116,25 @@ export default function SidebarComponent({ isAdmin }: SidebarProp) {
                   Thêm học phí
                 </Sidebar.Item>
               </Sidebar.Collapse>
+              <Sidebar.Collapse label='Học phần' open={getIsOpen('courses')}>
+                <Sidebar.Item
+                  href={path.course_management}
+                  active={getIsActive(path.course_management)}
+                >
+                  Tất cả học phần
+                </Sidebar.Item>
+                <Sidebar.Item
+                  href={path.add_course_form}
+                  active={getIsActive(path.add_course_form)}
+                >
+                  Thêm học phần
+                </Sidebar.Item>
+              </Sidebar.Collapse>
               <Sidebar.Collapse
                 label='Học tập'
                 icon={PiBooks}
                 open={getIsOpen('management')}
               >
-                <Sidebar.Collapse label='Học phần' open={getIsOpen('courses')}>
-                  <Sidebar.Item
-                    href={path.course_management}
-                    active={getIsActive(path.course_management)}
-                  >
-                    Tất cả học phần
-                  </Sidebar.Item>
-                  <Sidebar.Item
-                    href={path.add_course_form}
-                    active={getIsActive(path.add_course_form)}
-                  >
-                    Thêm học phần
-                  </Sidebar.Item>
-                </Sidebar.Collapse>
                 <Sidebar.Item
                   href={path.timetable_management}
                   active={getIsActive(path.timetable_management)}

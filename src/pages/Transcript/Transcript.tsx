@@ -7,8 +7,8 @@ import { isoStringToDdMmYyyy } from 'src/utils/utils';
 // Now you can use 'data' and 'Header' in your application.
 
 const header: Header[] = [
-  { title: 'Mã HP', dataIndex: 'ID' },
-  { title: 'Tên học phần', dataIndex: 'courseName' },
+  { title: 'Mã MH', dataIndex: 'ID' },
+  { title: 'Tên môn học', dataIndex: 'courseName' },
   { title: 'Tín chỉ', dataIndex: 'credit' },
   { title: 'Điểm QT', dataIndex: 'progressGrade' },
   { title: 'Điểm GK', dataIndex: 'midtermGrade' },
@@ -22,9 +22,14 @@ interface TranscriptProps {
 }
 
 function Transcript({ isPrint = false }: TranscriptProps) {
-  const { data, isLoading, studentData, studentIsLoading } = useTranscript(8);
-  if (isLoading || studentIsLoading) return <LoadingIndicator />;
-  console.log(studentData);
+  const {
+    transcriptData,
+    isLoadingTranscriptData,
+    studentData,
+    studentIsLoading
+  } = useTranscript();
+  if (isLoadingTranscriptData || studentIsLoading) return <LoadingIndicator />;
+  console.log(transcriptData);
   return (
     <div id='student-table-container' className='w-full bg-white p-5 shadow-lg'>
       <div className='relative'>
@@ -46,7 +51,7 @@ function Transcript({ isPrint = false }: TranscriptProps) {
         <span className='font-bold'>{studentData?.hoTenSinhVien}</span>
         <span>Ngày sinh:</span>
         <span className='font-bold'>
-          {isoStringToDdMmYyyy(studentData?.ngaySinh)}
+          {isoStringToDdMmYyyy(studentData?.ngaySinh ?? '')}
         </span>
         <span>Giới tính:</span>
         <span className='font-bold'>{studentData?.gioiTinh}</span>
@@ -65,7 +70,7 @@ function Transcript({ isPrint = false }: TranscriptProps) {
           {studentData?.heDaoTao?.tenHeDaoTao}
         </span>
       </div>
-      <Table data={data} headers={header} tableStyle='transcript' />
+      <Table data={transcriptData} headers={header} tableStyle='transcript' />
     </div>
   );
 }

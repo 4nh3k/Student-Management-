@@ -45,10 +45,7 @@ export const calculateSemesterFilter = () => {
   let tenHocKy = '';
   let tenNamHoc = '';
 
-  console.log(currentMonth);
-
   if ((currentMonth >= 9 && currentMonth <= 12) || currentMonth === 1) {
-    console.log('a');
     tenHocKy = 'kỳ 1';
     tenNamHoc =
       currentMonth === 1
@@ -94,15 +91,15 @@ export function validateName(name: string) {
   return isValidName;
 }
 
-export function validateEmail(inputEmail: string){
+export function validateEmail(inputEmail: string) {
   // Regular expression for a simple email validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   // Test the input email against the regular expression
   return emailRegex.test(inputEmail);
-};
+}
 
-export function validateAge(inputDob: string){
+export function validateAge(inputDob: string) {
   const birthDate = new Date(inputDob);
   const currentDate = new Date();
 
@@ -111,9 +108,9 @@ export function validateAge(inputDob: string){
 
   // Validate that the age is between 18 and 65
   return age >= 18 && age <= 65;
-};
+}
 
-export const validateAccountNumber = (inputString) => {
+export const validateAccountNumber = inputString => {
   // Regular expression for validating a string with only numbers and length between 9 and 14
   const regex = /^\d{9,14}$/;
 
