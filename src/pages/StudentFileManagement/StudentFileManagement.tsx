@@ -8,9 +8,12 @@ import Lecturer from 'src/types/lecturer.type';
 import EditStudentForm from '../Student/EditStudentForm';
 import { studentFileApi } from 'src/apis/student-file.api';
 import StudentFile from 'src/types/student-file.type';
+import { getProfileFromLS } from 'src/utils/auth';
 ('use client');
 
 const StudentFileManagement = () => {
+  const id = getProfileFromLS().userId;
+  console.log(id);
   const [search, setSearch] = useState<string>('');
   const [selectedValue, setSelectedValue] = useState<string>('ID');
   const [pageSize, setPageSize] = useState<number>(10);
@@ -24,7 +27,7 @@ const StudentFileManagement = () => {
 
   const { data: fileData, isLoading: isFileLoading } = useQuery({
     queryKey: ['files'],
-    queryFn: ({ signal }) => studentFileApi.getAllStudentFiles(0, 1000),
+    queryFn: ({ signal }) => studentFileApi.getStudentFileByStudentId(0, 1000, id),
     select: data => {
       return data.data.result.map((file: StudentFile) => {
         return {
