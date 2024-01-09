@@ -3,10 +3,24 @@ import { courseGradeApi } from 'src/apis/course-grade.api';
 import { studentApi } from 'src/apis/student.api';
 import { Transcript } from 'src/types/transcript.type';
 import { getProfileFromLS } from 'src/utils/auth';
-import { capitalizeFirstLetter } from 'src/utils/utils';
+import { capitalizeFirstLetter, formatGrade } from 'src/utils/utils';
 import useSemester from './useSemester';
 
 export const transcriptDataMapper = (transcript: Transcript) => {
+  const semesterTotalCredit =
+    transcript.danhSachBangDiemChiTietTungMonHoc.reduce(
+      (acc, item) =>
+        acc + item.monHoc.soTinChiLyThuyet + item.monHoc.soTinChiThucHanh,
+      0
+    );
+  const semesterAvg =
+    transcript.danhSachBangDiemChiTietTungMonHoc.reduce(
+      (acc, course) =>
+        acc +
+        course.diemTongKet *
+          (course.monHoc.soTinChiLyThuyet + course.monHoc.soTinChiThucHanh),
+      0
+    ) / semesterTotalCredit;
   return [
     {
       ID: {
@@ -24,11 +38,11 @@ export const transcriptDataMapper = (transcript: Transcript) => {
         ID: course.monHoc.maMonHoc,
         courseName: course.monHoc.tenMonHoc,
         credit: course.monHoc.soTinChiLyThuyet + course.monHoc.soTinChiThucHanh,
-        progressGrade: course.diemQuaTrinh,
-        midtermGrade: course.diemGiuaKy,
-        practicalGrade: course.diemThucHanh,
-        finalGrade: course.diemCuoiKy,
-        averageGrade: course.diemTongKet
+        progressGrade: formatGrade(course.diemQuaTrinh),
+        midtermGrade: formatGrade(course.diemGiuaKy),
+        practicalGrade: formatGrade(course.diemThucHanh),
+        finalGrade: formatGrade(course.diemCuoiKy),
+        averageGrade: formatGrade(course.diemTongKet)
       };
     }),
     {
@@ -39,15 +53,11 @@ export const transcriptDataMapper = (transcript: Transcript) => {
       progressGrade: null,
       courseName: <p className='font-bold'>Trung bình học kỳ</p>,
       credit: {
-        content: transcript.danhSachBangDiemChiTietTungMonHoc.reduce(
-          (acc, item) =>
-            acc + item.monHoc.soTinChiLyThuyet + item.monHoc.soTinChiThucHanh,
-          0
-        ),
+        content: semesterTotalCredit,
         className: 'px-4 py-3 font-bold'
       },
       averageGrade: {
-        content: transcript.diemTrungBinhHocKy,
+        content: formatGrade(semesterAvg),
         className: 'px-4 py-3 font-bold'
       }
     }
@@ -55,7 +65,6 @@ export const transcriptDataMapper = (transcript: Transcript) => {
 };
 
 const useTranscript = () => {
-  const semesterID = 55;
   const studentID = getProfileFromLS().userId;
   const { data: studentData, isLoading: studentIsLoading } = useQuery({
     queryKey: ['student', studentID],

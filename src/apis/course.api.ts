@@ -7,26 +7,26 @@ import {
   URL_GET_MON_HOC,
   URL_UPDATE_HOC_PHAN
 } from 'src/constants/url';
+import CreateHocPhanDto from 'src/types/create-hoc-phan.dto';
 import HocPhan from 'src/types/hoc-phan.type';
 import MonHoc from 'src/types/mon-hoc.type';
 import { SuccessResponse } from 'src/types/utils.type';
 import http from 'src/utils/http';
-import CreateCourseDto from 'src/types/create-course.dto';
-import CreateHocPhanDto from 'src/types/create-hoc-phan.dto';
 
 export const courseApi = {
   getAllCourseData(
     offset: number,
     limit: number,
-    maHocPhan?: number,
-    signal?: AbortSignal
+    signal?: AbortSignal,
+    maHocPhan?: number
   ) {
     const urlWithParams = `${URL_GET_HOC_PHAN}?offset=${offset}&limit=${limit}`;
     const rawBody = {
       filterBy: {
-        maHocPhan: maHocPhan
+        maHocPhan
       }
     };
+    console.log(rawBody);
     return http.post<SuccessResponse<HocPhan[]>>(urlWithParams, rawBody, {
       signal
     });

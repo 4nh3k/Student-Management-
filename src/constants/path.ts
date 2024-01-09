@@ -22,7 +22,7 @@ const path = {
   student_conduct_points: '/student-conduct-points',
   student_register_graduation: '/student-register-graduation',
   student_transcript: '/student-transcript',
-  student_result_management: '/student-result-management',
+  student_result_management: '/result-management',
   conduct_points_management: '/conduct-points-management',
   reward_management: '/reward-management',
   file_management: '/file-management',

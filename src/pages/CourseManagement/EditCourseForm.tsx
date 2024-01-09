@@ -1,16 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
-import { Label, TextInput, Select, Datepicker, Button } from 'flowbite-react';
+import { Button, Datepicker, Label, Select, TextInput } from 'flowbite-react';
 import React, { useEffect, useState } from 'react';
 import { courseApi } from 'src/apis/course.api';
 
-import { studentApi } from 'src/apis/student.api';
+import { toast } from 'react-toastify';
 import { lecturerApi } from 'src/apis/lecturer.api';
 import { semesterApi } from 'src/apis/semester.api';
-import HocPhan from 'src/types/hoc-phan.type';
-import CreateHocPhanDto from 'src/types/create-hoc-phan.dto';
+import { studentApi } from 'src/apis/student.api';
 import useCourse from 'src/hooks/useCourse';
-import CreateCourseDto from 'src/types/create-course.dto';
-import { toast } from 'react-toastify';
+import CreateHocPhanDto from 'src/types/create-hoc-phan.dto';
 
 const EditCourseForm = ({ id }) => {
   const decapitalizeFirstLetter = (str: string) => {
@@ -23,7 +21,8 @@ const EditCourseForm = ({ id }) => {
 
   const { data: courseData, isLoading: isLoadingCourseData } = useQuery({
     queryKey: ['course', id],
-    queryFn: ({ signal }) => courseApi.getAllCourseData(0, 1000, parseInt(id)),
+    queryFn: ({ signal }) =>
+      courseApi.getAllCourseData(0, 1000, signal, parseInt(id)),
     select: data => {
       return data.data.result.map((item: CreateHocPhanDto) => {
         return {
@@ -506,7 +505,9 @@ const EditCourseForm = ({ id }) => {
         <Button type='submit' color='failure'>
           Lưu
         </Button>
-        <Button className='bg-sidebar' onClick={onDeleteCourse}>Xóa</Button>
+        <Button className='bg-sidebar' onClick={onDeleteCourse}>
+          Xóa
+        </Button>
       </div>
     </form>
   );

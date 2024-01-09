@@ -20,18 +20,17 @@ import HocPhan from 'src/types/hoc-phan.type';
 import TestSchedule from 'src/types/test-schedule';
 import { getWeekday, isoStringToDdMmYyyy } from 'src/utils/utils';
 
+const headers = [
+  { title: 'Mã buổi thi', dataIndex: 'maBuoiThi' },
+  { title: 'Mã học phần', dataIndex: 'maHocPhan' },
+  { title: 'Ngày thi', dataIndex: 'ngayThi' },
+  { title: 'Mã phòng thi', dataIndex: 'maPhongThi' },
+  { title: 'Thứ thi', dataIndex: 'thuThi' },
+  { title: 'Ca thi', dataIndex: 'caThi' },
+  { title: 'Ghi chú', dataIndex: 'ghiChu' }
+];
 const ExamScheduleManagement = () => {
   const [date, setDate] = useState<Date>(new Date());
-
-  const headers = [
-    { title: 'Mã buổi thi', dataIndex: 'maBuoiThi' },
-    { title: 'Mã học phần', dataIndex: 'maHocPhan' },
-    { title: 'Ngày thi', dataIndex: 'ngayThi' },
-    { title: 'Mã phòng thi', dataIndex: 'maPhongThi' },
-    { title: 'Thứ thi', dataIndex: 'thuThi' },
-    { title: 'Ca thi', dataIndex: 'caThi' },
-    { title: 'Ghi chú', dataIndex: 'ghiChu' }
-  ];
 
   const {
     data: getTestScheduleData,
@@ -105,6 +104,7 @@ const ExamScheduleManagement = () => {
       caThi: e.currentTarget['examPhase'].value,
       ghiChu: e.currentTarget['note'].value
     };
+    console.log(data);
     createTestScheduleMutation.mutate(data);
   };
 
@@ -119,10 +119,7 @@ const ExamScheduleManagement = () => {
 
   return (
     <div>
-      <div
-        id='student-course-container'
-        className='w-full bg-white p-5 shadow-lg'
-      >
+      <div className='w-full bg-white p-5 shadow-lg'>
         <div id='input-row' className='flex items-center'>
           <div className='w-96'>
             <TextInput

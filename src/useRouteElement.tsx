@@ -7,14 +7,18 @@ import {
 import path from './constants/path';
 import { useAppContext } from './contexts/app.contexts';
 import MainLayout from './layouts/MainLayout';
+import ConductPointsManagement from './pages/ConductPointsManagement/ConductPointsManagement';
+import AddCourseForm from './pages/CourseManagement/AddCourseForm';
 import CourseManagement from './pages/CourseManagement/CourseManagement';
 import Dashboard from './pages/Dashboard/Dashboard';
 import ExamScheduleManagement from './pages/ExamScheduleManagement/ExamScheduleManagement';
 import AddFee from './pages/Fee/AddFee';
 import FeeList from './pages/Fee/FeeList';
+import FileManagement from './pages/FileManagement/FileManagement';
 import AddLecturer from './pages/Lecturer/AddLecturerForm';
 import AllLecturer from './pages/Lecturer/AllLecturer';
 import Login from './pages/Login';
+import RewardManagement from './pages/RewardManagement/RewardManagement';
 import ScheduleManagement from './pages/ScheduleManagement/ScheduleManagement';
 import ScheduleTable from './pages/ScheduleTable/ScheduleTable';
 import AddStudentForm from './pages/Student/AddStudentForm';
@@ -22,18 +26,15 @@ import AllStudent from './pages/Student/AllStudent';
 import StudentConductPoints from './pages/StudentConductPoints/StudentConductPoints';
 import StudentDashboard from './pages/StudentDashboard/StudentDashboard';
 import StudentFeeInfo from './pages/StudentFeeInfo/StudentFeeInfo';
+import AddFileForm from './pages/StudentFileManagement/AddFileForm';
+import StudentFileManagement from './pages/StudentFileManagement/StudentFileManagement';
+import StudentRewardManagement from './pages/StudentRewardManagement/StudentRewardManagement';
 import StudentTestSchedule from './pages/StudentTestSchedule/StudentTestSchedule';
+import StudentTranscriptInput from './pages/StudentTranscriptInput/StudentTranscriptInput';
 import Transcript from './pages/Transcript/Transcript';
 import CoursesRegistered from './pages/UserCourseManagement/CoursesRegistered/CoursesRegistered';
 import CoursesRegistration from './pages/UserCourseManagement/CoursesRegistration/CoursesRegistration';
 import { getProfileFromLS } from './utils/auth';
-import AddCourseForm from './pages/CourseManagement/AddCourseForm';
-import FileManagement from './pages/FileManagement/FileManagement';
-import ConductPointsManagement from './pages/ConductPointsManagement/ConductPointsManagement';
-import StudentFileManagement from './pages/StudentFileManagement/StudentFileManagement';
-import AddFileForm from './pages/StudentFileManagement/AddFileForm';
-import RewardManagement from './pages/RewardManagement/RewardManagement';
-import StudentRewardManagement from './pages/StudentRewardManagement/StudentRewardManagement';
 function ProtectedRoute() {
   const { isAuthenticated } = useAppContext();
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
@@ -91,6 +92,10 @@ export default function useRouteElement() {
             {
               element: <StudentRewardManagement />,
               path: path.student_reward_management
+            },
+            {
+              element: <StudentTranscriptInput />,
+              path: path.student_result_management
             },
             {
               element: <AddFileForm />,

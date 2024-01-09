@@ -223,6 +223,8 @@ const ScheduleTable = () => {
                         {isoStringToDdMmYyyy(
                           hocPhanData?.hocPhan.thoiDiemKetThuc ?? ''
                         )}
+                        <br />
+                        {matchingData.soTuanHocCachNhau}
                       </Table.Cell>
                     );
                   } else if (
