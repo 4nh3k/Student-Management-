@@ -8,6 +8,7 @@ import { studentApi } from 'src/apis/student.api';
 import Table from 'src/components/Table';
 import AddStudentForm from './AddStudentForm';
 import EditStudentForm from './EditStudentForm';
+import StudentIcon from 'src/assets/imgs/student.png';
 
 const AllStudent = () => {
   const courseMajor = ['KTPM', 'KHMT', 'ATTT', 'MMT&TT'];
@@ -34,6 +35,15 @@ const AllStudent = () => {
     select: data => {
       return data.data.result.map((item: Student) => {
         return {
+          anhSinhVien: (
+            <img
+              alt='student-icon'
+              className='h-8 w-8 rounded-full'
+              src={
+                item.anhTheSinhVien !== '' ? item.anhTheSinhVien : StudentIcon
+              }
+            ></img>
+          ),
           maSinhVien: item.maSinhVien,
           hoTenSinhVien: item.hoTenSinhVien,
           maKhoaHoc: item.maKhoaHoc,
@@ -41,7 +51,9 @@ const AllStudent = () => {
           maHeDaoTao: item.maHeDaoTao,
           tinhTrangHocTap: capitalizeFirstLetter(item.tinhTrangHocTap),
           ngaySinh: format(item.ngaySinh, 'dd/MM/yyyy'),
-          gioiTinh: item.gioiTinh === 'Nam' ? 'Nam' : 'Nữ'
+          gioiTinh: item.gioiTinh === 'Nam' ? 'Nam' : 'Nữ',
+          username: item.username,
+          usernamePassword: item.usernamePassword
         };
       });
     }
@@ -52,6 +64,7 @@ const AllStudent = () => {
   }
 
   const headers = [
+    { title: 'Ảnh sinh viên', dataIndex: 'anhSinhVien' },
     { title: 'Mã sinh viên', dataIndex: 'maSinhVien' },
     { title: 'Họ tên sinh viên', dataIndex: 'hoTenSinhVien' },
     { title: 'Mã khóa học', dataIndex: 'maKhoaHoc' },
@@ -59,7 +72,9 @@ const AllStudent = () => {
     { title: 'Mã hệ đào tạo', dataIndex: 'maHeDaoTao' },
     { title: 'Tình trạng học tập', dataIndex: 'tinhTrangHocTap' },
     { title: 'Ngày sinh', dataIndex: 'ngaySinh' },
-    { title: 'Giới tính', dataIndex: 'gioiTinh' }
+    { title: 'Giới tính', dataIndex: 'gioiTinh' },
+    { title: 'Tên tài khoản SV', dataIndex: 'username' },
+    { title: 'Mật khẩu tài khoản SV', dataIndex: 'usernamePassword' }
   ];
   console.log(studentData); //to test the data load successfully
   const students = studentData;

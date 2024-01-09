@@ -56,3 +56,4 @@ export const URL_DELETE_CONDUCT_POINTS = 'ket-qua-ren-luyen/remove-many';
 export const URL_UPDATE_CONDUCT_POINTS = 'ket-qua-ren-luyen/update-many';
 export const URL_XET_KHEN_THUONG = 'khen-thuong/xet-khen-thuong';
 export const URL_GET_KHEN_THUONG = 'khen-thuong/get-many';
+export const URL_CREATE_STUDENT_PICTURE = 'files/upload';

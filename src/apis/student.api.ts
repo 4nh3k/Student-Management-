@@ -8,11 +8,13 @@ import {
   URL_GET_ALL_LEARNING_STATUS,
   URL_GET_ALL_MAJORS,
   URL_GET_ALL_STUDENTS,
-  URL_UPDATE_STUDENT
+  URL_UPDATE_STUDENT,
+  URL_CREATE_STUDENT_PICTURE
 } from 'src/constants/url';
 import Course from 'src/types/course.type';
 import CreateStudentDto from 'src/types/create-student.dto';
 import Major from 'src/types/major.type';
+import Picture from 'src/types/picture.type';
 import Student from 'src/types/student.type';
 import { SuccessResponse } from 'src/types/utils.type';
 import http from 'src/utils/http';
@@ -119,6 +121,21 @@ export const studentApi = {
         data: JSON.stringify(rawBody),
         headers: {
           'Content-Type': 'application/json'
+        }
+      }
+    );
+  },
+
+  updateImageBook(data: { id: string; image: File }) {
+    const formData = new FormData();
+    console.log(data.image);
+    formData.append('photos', data.image);
+    return http.post<SuccessResponse<{ result: Picture }>>(
+      `${URL_CREATE_STUDENT_PICTURE}`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
         }
       }
     );
