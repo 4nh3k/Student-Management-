@@ -22,7 +22,7 @@ class Http {
 
     this.instance = axios.create({
       baseURL: 'https://student-management-server.up.railway.app',
-      timeout: 10000,
+      timeout: 50000,
       headers: {
         'Content-Type': 'application/json'
       },

@@ -54,3 +54,5 @@ export const URL_GET_ALL_CONDUCT_POINTS = '/ket-qua-ren-luyen/get-many';
 export const URL_CREATE_CONDUCT_POINTS = 'ket-qua-ren-luyen/add-many';
 export const URL_DELETE_CONDUCT_POINTS = 'ket-qua-ren-luyen/remove-many';
 export const URL_UPDATE_CONDUCT_POINTS = 'ket-qua-ren-luyen/update-many';
+export const URL_XET_KHEN_THUONG = 'khen-thuong/xet-khen-thuong';
+export const URL_GET_KHEN_THUONG = 'khen-thuong/get-many';

@@ -29,6 +29,7 @@ const path = {
   student_file_management: '/student-file-management',
   add_course_form: '/add-course-form',
   add_student_file_form: '/add-student-file-form',
+  student_reward_management: '/student-reward-management',
   all: '*'
 } as const;
 

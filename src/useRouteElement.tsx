@@ -32,6 +32,8 @@ import FileManagement from './pages/FileManagement/FileManagement';
 import ConductPointsManagement from './pages/ConductPointsManagement/ConductPointsManagement';
 import StudentFileManagement from './pages/StudentFileManagement/StudentFileManagement';
 import AddFileForm from './pages/StudentFileManagement/AddFileForm';
+import RewardManagement from './pages/RewardManagement/RewardManagement';
+import StudentRewardManagement from './pages/StudentRewardManagement/StudentRewardManagement';
 function ProtectedRoute() {
   const { isAuthenticated } = useAppContext();
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
@@ -79,8 +81,16 @@ export default function useRouteElement() {
               path: path.all_students
             },
             {
+              element: <RewardManagement />,
+              path: path.reward_management
+            },
+            {
               element: <StudentFileManagement />,
               path: path.student_file_management
+            },
+            {
+              element: <StudentRewardManagement />,
+              path: path.student_reward_management
             },
             {
               element: <AddFileForm />,

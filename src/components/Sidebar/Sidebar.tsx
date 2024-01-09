@@ -247,8 +247,14 @@ export default function SidebarComponent({ isAdmin }: SidebarProp) {
                 <Sidebar.Item href={path.student_test_schedule}>
                   Lịch thi
                 </Sidebar.Item>
-                <Sidebar.Item href={path.student_conduct_points}>
+                <Sidebar.Item
+                  href={path.student_conduct_points}
+                  active={getIsActive(path.student_conduct_points)}
+                >
                   Điểm rèn luyện
+                </Sidebar.Item>
+                <Sidebar.Item href={path.student_reward_management}>
+                  Khen thưởng
                 </Sidebar.Item>
               </Sidebar.Collapse>
               {/* <Sidebar.Collapse label='Đăng ký dịch vụ' icon={PiClipboardText}>

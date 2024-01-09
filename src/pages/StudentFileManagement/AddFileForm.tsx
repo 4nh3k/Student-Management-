@@ -38,14 +38,19 @@ const AddFileForm = () => {
   const additionalValuesArray = ['nhập học', 'thôi học', 'tốt nghiệp']; // Replace this with your actual array
 
   additionalValuesArray.forEach(value => {
-    if (uniqueStudentFileType.has(value)) {
-      // Value exists in the set, so delete it
-      uniqueStudentFileType.delete(value);
-    } else {
-      // Value does not exist in the set, so add it
-      uniqueStudentFileType.add(value);
+    if (!(value === 'xin nhập học lại' || value === 'bảo lưu')){
+      if (uniqueStudentFileType.has(value)) {
+        // Value exists in the set, so delete it
+        uniqueStudentFileType.delete(value);
+      } else {
+        // Value does not exist in the set, so add it
+        uniqueStudentFileType.add(value);
+      }
     }
   });
+
+  uniqueStudentFileType.add('xin nhập học lại');
+  uniqueStudentFileType.add('bảo lưu');
 
   const { data: getAllStudentFileTypes, isLoading: isLoadingFileTypes } =
     useQuery({
