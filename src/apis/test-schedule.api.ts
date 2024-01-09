@@ -17,7 +17,7 @@ export const testScheduleApi = {
   ) {
     const rawBody = {
       filterBy: {
-        maBuoiThi: id
+        maHocPhan: id
       }
     };
     console.log(rawBody);

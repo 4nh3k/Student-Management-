@@ -2,12 +2,9 @@ import { useQueries } from '@tanstack/react-query';
 import { Label, Select, Table } from 'flowbite-react';
 import { useEffect, useMemo, useState } from 'react';
 import { scheduleApi } from 'src/apis/schedule.api';
-import { semesterApi } from 'src/apis/semester.api';
 import LoadingIndicator from 'src/components/LoadingIndicator';
-import useSemester from 'src/hooks/useSemester';
-import { CourseRegistered } from 'src/types/course-registed.type';
+import useStudentSemeseterCourse from 'src/hooks/useStudentSemesterCourse';
 import { Schedule } from 'src/types/schedule.type';
-import { Semester } from 'src/types/semester.type';
 import { calculateSemesterFilter } from 'src/utils/utils';
 ('use client');
 const schedule = [
@@ -48,38 +45,14 @@ const ScheduleTable = () => {
   const [selectedSemesterCourse, setSelectedSemesterCourse] = useState<
     number[]
   >([]);
-  const { studentSemesterQuery } = useSemester();
-  const { data: studentSemesterData, isLoading: isLoadingStudentSemester } =
-    studentSemesterQuery;
-  studentSemesterQuery.refetch();
+  const {
+    maHocPhanList,
+    semesterData,
+    studentSemesterData,
+    isLoadingSemesterData,
+    isLoadingStudentSemester
+  } = useStudentSemeseterCourse();
 
-  const { data: semesterData, isLoading: isLoadingSemesterData } = useQueries({
-    queries: studentSemesterData
-      ? studentSemesterData?.map((item: CourseRegistered) => {
-          return {
-            queryKey: ['semester', item.maHocKyNamHoc],
-            queryFn: ({ signal }) =>
-              semesterApi.getSemesterById(item.maHocKyNamHoc, signal),
-            select: data => {
-              const semester: Semester = data.data.result;
-              return semester;
-            }
-          };
-        })
-      : [],
-    combine: results => {
-      return {
-        data: results.map(result => result.data).flat(),
-        isLoading: results.some(result => result.isLoading)
-      };
-    }
-  });
-
-  const maHocPhanList = studentSemesterData
-    ?.map((item: CourseRegistered) =>
-      item.danhSachDangKyHocPhans.map(i => i.maHocPhan)
-    )
-    .flat();
   const { data: scheduleData, isLoading: isLoadingScheduleData } = useQueries({
     queries: maHocPhanList
       ? maHocPhanList?.map((item: number) => {

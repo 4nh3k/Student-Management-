@@ -68,7 +68,6 @@ const Table: React.FC<TableProps> = ({
       onSelect(row);
     }
   };
-  console.log(data);
   const handleSort = (column: string) => {
     if (sortColumn === column) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -202,6 +201,13 @@ const Table: React.FC<TableProps> = ({
             </tr>
           </thead>
           <tbody className={resolvedStyles.classNameBody}>
+            {paginatedData?.length === 0 && (
+              <tr className='text-center'>
+                <td className='py-4' colSpan={headers.length}>
+                  Chưa có dữ liệu
+                </td>
+              </tr>
+            )}
             {paginatedData?.map((row, index) => (
               <tr
                 className={
