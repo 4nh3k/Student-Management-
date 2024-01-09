@@ -26,7 +26,17 @@ export const testScheduleApi = {
       signal
     });
   },
-
+  getTestScheduleById(id?: number) {
+    const rawBody = {
+      filterBy: {
+        maBuoiThi: id
+      }
+    };
+    return http.post<SuccessResponse<TestSchedule[]>>(
+      `${URL_GET_ALL_TEST_SCHEDULE}?offset=0&limit=10000`,
+      rawBody
+    );
+  },
   createTestSchedule(testSchedule: Partial<TestSchedule>) {
     const rawBody = {
       itemsToAdd: [testSchedule],

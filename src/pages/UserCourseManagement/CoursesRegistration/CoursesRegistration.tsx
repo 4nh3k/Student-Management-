@@ -49,8 +49,6 @@ export default function CoursesRegistration() {
 
   const [courseSelected, setCourseSelected] = useState<TableData[]>([]);
   const id = getProfileFromLS().userId;
-  const { currentSemester, currentSemesterIsLoading } = useSemester();
-  console.log(id);
   const registerCourseMutation = useMutation({
     mutationFn: () =>
       courseRegistrationApi.registerCourse(
@@ -65,11 +63,11 @@ export default function CoursesRegistration() {
       toast.error('Đăng ký thất bại');
     }
   });
-
+  const { currentSemester, currentSemesterIsLoading } = useSemester();
   const { data: courseData, isLoading } = useQuery({
     queryKey: ['courses', 5],
     queryFn: ({ signal }) =>
-      courseApi.getAllCourseDataInASemester(0, 10000, 5, signal),
+      courseApi.getAllCourseDataInASemester(0, 10000, 56, signal),
     select: data => {
       return data.data.result.map((item: HocPhan) => {
         return {

@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
 
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Button, Datepicker, Label, Select, TextInput } from 'flowbite-react';
+import {
+  Button,
+  Datepicker,
+  Label,
+  Modal,
+  Select,
+  TextInput
+} from 'flowbite-react';
 import { toast } from 'react-toastify';
 import { courseApi } from 'src/apis/course.api';
 import { testScheduleApi } from 'src/apis/test-schedule.api';
+import ExamSchedule from 'src/components/ExamSchedule/ExamSchedule';
 import LoadingIndicator from 'src/components/LoadingIndicator';
 import Table from 'src/components/Table';
 import useSemester from 'src/hooks/useSemester';
@@ -13,11 +21,7 @@ import TestSchedule from 'src/types/test-schedule';
 import { getWeekday, isoStringToDdMmYyyy } from 'src/utils/utils';
 
 const ExamScheduleManagement = () => {
-  const [totalPage, setTotalPage] = useState(50);
-  const [pageRange, setPageRange] = useState(5);
   const [date, setDate] = useState<Date>(new Date());
-  const onPageChange = (page: number) => setCurrentPage(page);
-  const courseMajor = ['KTPM', 'KHMT', 'ATTT', 'MMT&TT'];
 
   const headers = [
     { title: 'Mã buổi thi', dataIndex: 'maBuoiThi' },
@@ -77,6 +81,8 @@ const ExamScheduleManagement = () => {
   const [search, setSearchVal] = useState<string>('');
   const [selectedValue, setSelectedValue] = useState<string>('');
   const [pageSize, setPageSize] = useState<number>(10);
+  const [openModal, setOpenModal] = useState(false);
+  const [id, setId] = useState<number | undefined>(undefined);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchVal(e.target.value);
@@ -101,6 +107,13 @@ const ExamScheduleManagement = () => {
     };
     createTestScheduleMutation.mutate(data);
   };
+
+  const onRowClick = (record: any) => {
+    console.log(record);
+    setId(record.maBuoiThi);
+    setOpenModal(true);
+  };
+
   if (isLoadingSchedule || isLoading || currentSemesterIsLoading)
     return <LoadingIndicator />;
 
@@ -155,6 +168,7 @@ const ExamScheduleManagement = () => {
             data={getTestScheduleData}
             className='border-input mt-2 border-2'
             pageSize={pageSize}
+            onRowClick={onRowClick}
             filters={{ [selectedValue]: search }}
           />
         )}
@@ -238,12 +252,14 @@ const ExamScheduleManagement = () => {
           </Button>
         </div>
       </form>
+      <Modal show={openModal} onClose={() => setOpenModal(false)}>
+        <Modal.Header>Sửa/Xoá lịch thi</Modal.Header>
+        <Modal.Body>
+          <ExamSchedule id={id} />
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };
 
 export default ExamScheduleManagement;
-
-function setCurrentPage(page: number) {
-  throw new Error('Function not implemented.');
-}
