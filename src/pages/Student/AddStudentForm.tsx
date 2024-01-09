@@ -166,6 +166,30 @@ const AddStudentForm = ({ id }: AddStudentFormProps) => {
     }));
   };
 
+  const handleLoadImage = () => {
+    if (inputRef.current) {
+      inputRef.current.click();
+    }
+  };
+
+  const [file, setFile] = useState<File>();
+
+  const handleFileChange = event => {
+    const file = event.target.files[0];
+
+    if (file) {
+      // Check if the selected file is an image
+      if (file.type.startsWith('image/')) {
+        // Update the image source with the selected file
+        const newImageSrc = URL.createObjectURL(file);
+        setImageSrc(newImageSrc);
+        setFile(file);
+      } else {
+        console.error('Invalid file format. Please select an image.');
+      }
+    }
+  };
+
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Submitted student:', student);
@@ -201,71 +225,50 @@ const AddStudentForm = ({ id }: AddStudentFormProps) => {
             ...prevStudent,
             anhTheSinhVien: data.data.imageUrls[0]
           }));
-          createStudentMutation.mutate(student, {
-            onSuccess: data => {
-              setStudent({
-                hoTenSinhVien: '',
-                maKhoaHoc: 1,
-                maChuyenNganh: 1,
-                maHeDaoTao: 5,
-                tinhTrangHocTap: 'đang học',
-                ngaySinh: new Date().toLocaleDateString('en-GB'),
-                gioiTinh: 'Nam',
-                email: '',
-                emailPassword: '',
-                username: '',
-                usernamePassword: '',
-                soTaiKhoanNganHangDinhDanh: '',
-                anhTheSinhVien: '',
-                ngayNhapHoc: new Date().toLocaleDateString('en-GB'),
-                maSinhVien: 0
-              });
-              setMajor('Khoa học máy tính');
-              setFaculty('Khoa học máy tính');
-              setEducationType('đại trà');
-              setGender('Nam');
-              setLearningStatus('Đang học');
+          createStudentMutation.mutate(
+            {
+              ...student,
+              anhTheSinhVien: data.data.imageUrls[0]
             },
-            onError: error => {
-              console.log(student)
-              toast.error(error.response.data.message);
+            {
+              onSuccess: data => {
+                setStudent({
+                  hoTenSinhVien: '',
+                  maKhoaHoc: 1,
+                  maChuyenNganh: 1,
+                  maHeDaoTao: 5,
+                  tinhTrangHocTap: 'đang học',
+                  ngaySinh: new Date().toLocaleDateString('en-GB'),
+                  gioiTinh: 'Nam',
+                  email: '',
+                  emailPassword: '',
+                  username: '',
+                  usernamePassword: '',
+                  soTaiKhoanNganHangDinhDanh: '',
+                  anhTheSinhVien: '',
+                  ngayNhapHoc: new Date().toLocaleDateString('en-GB'),
+                  maSinhVien: 0
+                });
+                setMajor('Khoa học máy tính');
+                setFaculty('Khoa học máy tính');
+                setEducationType('đại trà');
+                setGender('Nam');
+                setLearningStatus('Đang học');
+              },
+              onError: error => {
+                console.log(student);
+                toast.error(error.response.data.message);
+              }
             }
-          });
+          );
         },
         onError: error => {
           toast.error(error.response.data.message);
         }
       }
     );
-
-    
   };
-
   const inputRef = useRef(null);
-
-  const handleLoadImage = () => {
-    if (inputRef.current) {
-      inputRef.current.click();
-    }
-  };
-
-  const [file, setFile] = useState<File>();
-
-  const handleFileChange = event => {
-    const file = event.target.files[0];
-
-    if (file) {
-      // Check if the selected file is an image
-      if (file.type.startsWith('image/')) {
-        // Update the image source with the selected file
-        const newImageSrc = URL.createObjectURL(file);
-        setImageSrc(newImageSrc);
-        setFile(file);
-      } else {
-        console.error('Invalid file format. Please select an image.');
-      }
-    }
-  };
 
   return (
     <form
