@@ -61,8 +61,7 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
           username: item.username,
           usernamePassword: item.usernamePassword,
           soTaiKhoanNganHangDinhDanh: item.soTaiKhoanNganHangDinhDanh,
-          anhTheSinhVien:
-            item.anhTheSinhVien !== '' ? item.anhTheSinhVien : StudentIcon,
+          anhTheSinhVien: item.anhTheSinhVien !== '' ? item.anhTheSinhVien : '',
           ngayNhapHoc: item.ngayNhapHoc,
           maSinhVien: item.maSinhVien
         };
@@ -288,9 +287,33 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
     // Test the input string against the regular expression
     return regex.test(inputString);
   };
+
+  const inputRef = useRef(null);
+
+  const handleLoadImage = () => {
+    if (inputRef.current) {
+      inputRef.current.click();
+    }
+  };
+
+  const handleFileChange = event => {
+    const file = event.target.files[0];
+
+    if (file) {
+      // Check if the selected file is an image
+      if (file.type.startsWith('image/')) {
+        // Update the image source with the selected file
+        const newImageSrc = URL.createObjectURL(file);
+        setImageSrc(newImageSrc);
+        setFile(file);
+      } else {
+        console.error('Invalid file format. Please select an image.');
+      }
+    }
+  };
+
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Submitted student:', student);
 
     if (!validateName(student.hoTenSinhVien)) {
       toast.error('Tên không hợp lệ');
@@ -318,13 +341,19 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
       { id: 'test', image: file },
       {
         onSuccess: data => {
-          console.log(data);
           setStudent(prevStudent => ({
             ...prevStudent,
             anhTheSinhVien: data.data.imageUrls[0]
           }));
+
           updateStudentMutation.mutate(
-            { student: student, id: student.maSinhVien },
+            {
+              student: {
+                ...student,
+                anhTheSinhVien: data.data.imageUrls[0]
+              },
+              id: id
+            },
             {
               onSuccess: data => {
                 setStudent({
@@ -333,7 +362,7 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
                   maChuyenNganh: 1,
                   maHeDaoTao: 5,
                   tinhTrangHocTap: 'đang học',
-                  ngaySinh: new Date().toISOString().split('T')[0],
+                  ngaySinh: new Date().toLocaleDateString('en-GB'),
                   gioiTinh: 'Nam',
                   email: '',
                   emailPassword: '',
@@ -341,7 +370,7 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
                   usernamePassword: '',
                   soTaiKhoanNganHangDinhDanh: '',
                   anhTheSinhVien: '',
-                  ngayNhapHoc: new Date().toISOString().split('T')[0],
+                  ngayNhapHoc: new Date().toLocaleDateString('en-GB'),
                   maSinhVien: 0
                 });
                 setMajor('Khoa học máy tính');
@@ -362,30 +391,6 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
         }
       }
     );
-  };
-
-  const inputRef = useRef(null);
-
-  const handleLoadImage = () => {
-    if (inputRef.current) {
-      inputRef.current.click();
-    }
-  };
-
-  const handleFileChange = event => {
-    const file = event.target.files[0];
-
-    if (file) {
-      // Check if the selected file is an image
-      if (file.type.startsWith('image/')) {
-        // Update the image source with the selected file
-        const newImageSrc = URL.createObjectURL(file);
-        setImageSrc(newImageSrc);
-        setFile(file);
-      } else {
-        console.error('Invalid file format. Please select an image.');
-      }
-    }
   };
 
   const onDeleteStudent = () => {
@@ -580,6 +585,45 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
             type='number'
             placeholder='Nhập số tài khoản định danh'
             value={student.soTaiKhoanNganHangDinhDanh}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div>
+          <div className='mb-2 block'>
+            <Label htmlFor='account' value='Số tài khoản định danh' />
+          </div>
+          <TextInput
+            id='soTaiKhoanNganHangDinhDanh'
+            type='number'
+            placeholder='Nhập số tài khoản định danh'
+            value={student.soTaiKhoanNganHangDinhDanh}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div>
+          <div className='mb-2 block'>
+            <Label htmlFor='username' value='Tên tài khoản SV' />
+          </div>
+          <TextInput
+            id='username'
+            type='text'
+            placeholder='Nhập tên tài khoản sinh viên'
+            value={student.username}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div>
+          <div className='mb-2 block'>
+            <Label htmlFor='usernamePassword' value='Mật khẩu tài khoản SV' />
+          </div>
+          <TextInput
+            id='usernamePassword'
+            type='text'
+            placeholder='Nhập mật khẩu tài khoản SV'
+            value={student.usernamePassword}
             onChange={handleInputChange}
             required
           />
