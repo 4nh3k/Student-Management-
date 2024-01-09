@@ -28,6 +28,9 @@ import CoursesRegistered from './pages/UserCourseManagement/CoursesRegistered/Co
 import CoursesRegistration from './pages/UserCourseManagement/CoursesRegistration/CoursesRegistration';
 import { getProfileFromLS } from './utils/auth';
 import AddCourseForm from './pages/CourseManagement/AddCourseForm';
+import FileManagement from './pages/FileManagement/FileManagement';
+import ConductPointsManagement from './pages/ConductPointsManagement/ConductPointsManagement';
+import StudentFileManagement from './pages/StudentFileManagement/StudentFileManagement';
 function ProtectedRoute() {
   const { isAuthenticated } = useAppContext();
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
@@ -75,6 +78,14 @@ export default function useRouteElement() {
               path: path.all_students
             },
             {
+              element: <StudentFileManagement />,
+              path: path.student_file_management
+            },
+            {
+              element: <StudentFileManagement />,
+              path: path.add_student_file_form
+            },
+            {
               element: <AddStudentForm />,
               path: path.add_student
             },
@@ -97,6 +108,14 @@ export default function useRouteElement() {
             {
               path: path.course_management,
               element: <CourseManagement />
+            },
+            {
+              path: path.file_management,
+              element: <FileManagement />
+            },
+            {
+              path: path.conduct_points_management,
+              element: <ConductPointsManagement />
             },
             {
               path: path.add_course_form,

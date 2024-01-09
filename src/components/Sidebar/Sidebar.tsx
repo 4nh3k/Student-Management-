@@ -81,8 +81,8 @@ export default function SidebarComponent({ isAdmin }: SidebarProp) {
                   Thêm sinh viên
                 </Sidebar.Item>
                 <Sidebar.Item
-                  href={path.student_file_management}
-                  active={getIsActive(path.student_file_management)}
+                  href={path.file_management}
+                  active={getIsActive(path.file_management)}
                 >
                   Quản lý hồ sơ sinh viên
                 </Sidebar.Item>
@@ -204,7 +204,18 @@ export default function SidebarComponent({ isAdmin }: SidebarProp) {
               >
                 Bảng điều khiển
               </Sidebar.Item>
-              <Sidebar.Item icon={PiFiles}>Hồ sơ sinh viên</Sidebar.Item>
+              <Sidebar.Collapse
+                label='Hồ sơ sinh viên'
+                icon={PiFiles}
+                open={getIsOpen('file')}
+              >
+                <Sidebar.Item href={path.student_file_management}>
+                  Tất cả hồ sơ
+                </Sidebar.Item>
+                <Sidebar.Item href={path.add_student_file_form}>
+                  Thêm hồ sơ
+                </Sidebar.Item>
+              </Sidebar.Collapse>
               <Sidebar.Collapse
                 label='Học phần'
                 icon={PiBookOpen}
