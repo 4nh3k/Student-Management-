@@ -20,6 +20,16 @@ export const studentFileApi = {
     return http.post<SuccessResponse<StudentFile[]>>(urlWithParams, rawBody);
   },
 
+  getStudentFileByStudentId(offset: number, limit: number, studentId?: number) {
+    const rawBody = {
+      filterBy: {
+        maSinhVien: studentId
+      }
+    };
+    const urlWithParams = `${URL_GET_ALL_STUDENT_FILES}?offset=${offset}&limit=${limit}`;
+    return http.post<SuccessResponse<StudentFile[]>>(urlWithParams, rawBody);
+  },
+
   getAllStudentFileTypes(){
     return http.get<SuccessResponse<string[]>>(URL_GET_ALL_STUDENT_FILE_TYPES);
   },

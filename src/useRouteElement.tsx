@@ -31,6 +31,7 @@ import AddCourseForm from './pages/CourseManagement/AddCourseForm';
 import FileManagement from './pages/FileManagement/FileManagement';
 import ConductPointsManagement from './pages/ConductPointsManagement/ConductPointsManagement';
 import StudentFileManagement from './pages/StudentFileManagement/StudentFileManagement';
+import AddFileForm from './pages/StudentFileManagement/AddFileForm';
 function ProtectedRoute() {
   const { isAuthenticated } = useAppContext();
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />;
@@ -82,7 +83,7 @@ export default function useRouteElement() {
               path: path.student_file_management
             },
             {
-              element: <StudentFileManagement />,
+              element: <AddFileForm />,
               path: path.add_student_file_form
             },
             {
