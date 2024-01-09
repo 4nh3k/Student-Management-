@@ -1,97 +1,131 @@
-import React, { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-import { useQuery } from '@tanstack/react-query';
-import { Button, Label, Select } from 'flowbite-react';
-import { semesterApi } from 'src/apis/semester.api';
+import { useQueries } from '@tanstack/react-query';
+import { Label, Select } from 'flowbite-react';
 import { testScheduleApi } from 'src/apis/test-schedule.api';
 import LoadingIndicator from 'src/components/LoadingIndicator';
 import Table from 'src/components/Table';
-import { Semester } from 'src/types/semester.type';
-import { isoStringToDdMmYyyy } from 'src/utils/utils';
+import useStudentSemeseterCourse from 'src/hooks/useStudentSemesterCourse';
+import { calculateSemesterFilter, isoStringToDdMmYyyy } from 'src/utils/utils';
+const headers = [
+  { title: 'Mã lịch thi', dataIndex: 'examID' },
+  { title: 'Mã môn học', dataIndex: 'courseID' },
+  { title: 'Ngày thi', dataIndex: 'examDate' },
+  { title: 'Phòng thi', dataIndex: 'roomID' },
+  { title: 'Ca thi', dataIndex: 'examPhase' },
+  { title: 'Thứ thi', dataIndex: 'examWeekday' },
+  { title: 'Ghi chú', dataIndex: 'note' }
+];
 
+const firstSecondTermValues = [
+  { data: 'Học kỳ 1', value: 'kỳ 1' },
+  { data: 'Học kỳ 2', value: 'kỳ 2' },
+  { data: 'Học kỳ hè', value: 'kỳ hè' }
+];
 const StudentTestSchedule = () => {
-  const [totalPage, setTotalPage] = useState(50);
-  const [pageRange, setPageRange] = useState(5);
-  const onPageChange = (page: number) => setCurrentPage(page);
-  const courseMajor = ['KTPM', 'KHMT', 'ATTT', 'MMT&TT'];
+  const currentSemester = calculateSemesterFilter();
+  const [selectedTerm, setSelectedTerm] = useState(
+    currentSemester.filterBy.tenHocKy
+  );
+  const [selectedYear, setSelectedYear] = useState(
+    currentSemester.filterBy.tenNamHoc
+  );
+  const [selectedSemesterCourse, setSelectedSemesterCourse] = useState<
+    number[]
+  >([]);
+  const {
+    maHocPhanList,
+    semesterData,
+    studentSemesterData,
+    isLoadingSemesterData,
+    isLoadingStudentSemester
+  } = useStudentSemeseterCourse();
 
-  const headers = [
-    { title: 'Mã lịch thi', dataIndex: 'examID' },
-    { title: 'Mã môn học', dataIndex: 'courseID' },
-    { title: 'Ngày thi', dataIndex: 'examDate' },
-    { title: 'Phòng thi', dataIndex: 'roomID' },
-    { title: 'Ca thi', dataIndex: 'examPhase' },
-    { title: 'Thứ thi', dataIndex: 'examWeekday' },
-    { title: 'Ghi chú', dataIndex: 'note' }
-  ];
-
-  const midEndTermValues = [
-    { data: 'Giữa kỳ', dataIndex: 'midTerm' },
-    { data: 'Cuối kỳ', dataIndex: 'endTerm' }
-  ];
-
-  const firstSecondTermValues = [
-    { data: 'Học kỳ 1', value: 'kỳ 1' },
-    { data: 'Học kỳ 2', value: 'kỳ 2' },
-    { data: 'Học kỳ hè', value: 'kỳ hè' }
-  ];
-  const { data: semesterData, isLoading: isLoadingSemesterData } = useQuery({
-    queryKey: ['semester'],
-    queryFn: ({ signal }) => semesterApi.getAllSemester(0, 10000, signal),
-    select: data => {
-      const semester: Semester[] = data.data.result;
-      console.log(semester);
-      return semester;
-    }
-  });
-  // wait api to load by semester
-  const { data: testScheduleData, isLoading: isLoadingSchedule } = useQuery({
-    queryKey: ['testSchedules'],
-    queryFn: () => testScheduleApi.getAllTestSchedule(0, 1000),
-    select: data => {
-      console.log(data);
-      return data.data.result.map(testSchedule => {
+  const { data: testSchedulesData, isLoading: isLoadingtestSchedulesData } =
+    useQueries({
+      queries: maHocPhanList
+        ? maHocPhanList?.map((item: number) => {
+            return {
+              queryKey: ['testSchedules', item],
+              queryFn: ({ signal }) =>
+                testScheduleApi.getAllTestSchedule(0, 1000, signal, item),
+              select: data => {
+                console.log(data.data.result, item);
+                return data.data.result.map(testSchedule => {
+                  return {
+                    examID: testSchedule.maBuoiThi,
+                    courseID: testSchedule.maHocPhan,
+                    examDate: isoStringToDdMmYyyy(testSchedule.ngayThi),
+                    roomID: testSchedule.maPhongThi,
+                    examWeekday: testSchedule.thuThi,
+                    examPhase: testSchedule.caThi,
+                    note: testSchedule.ghiChu
+                  };
+                });
+              }
+            };
+          })
+        : [],
+      combine: results => {
         return {
-          examID: testSchedule.maBuoiThi,
-          courseID: testSchedule.maHocPhan,
-          examDate: isoStringToDdMmYyyy(testSchedule.ngayThi),
-          roomID: testSchedule.maPhongThi,
-          examWeekday: testSchedule.thuThi,
-          examPhase: testSchedule.caThi,
-          note: testSchedule.ghiChu
+          data: results.map(result => result.data).flat(),
+          isLoading: results.some(result => result.isLoading)
         };
-      });
+      }
+    });
+  const currentSemesterID = useMemo(() => {
+    if (semesterData) {
+      const currentSemester = semesterData.find(
+        item =>
+          item?.tenHocKy === selectedTerm && item?.tenNamHoc === selectedYear
+      );
+      return currentSemester?.maHocKyNamHoc;
     }
-  });
-  const [selectedFirstSecondTermValue, setSelectedFirstSecondTermValue] =
-    useState<string>('');
-  const [pageSize, setPageSize] = useState<number>(10);
+  }, [selectedTerm, selectedYear, semesterData]);
 
-  const handleSelectedFirstSecondTermValue = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setSelectedFirstSecondTermValue(e.target.value);
-  };
-  if (isLoadingSchedule) return <LoadingIndicator />;
+  useEffect(() => {
+    if (studentSemesterData) {
+      const data = studentSemesterData.filter(
+        item => item?.maHocKyNamHoc === currentSemesterID
+      );
+      console.log(
+        data
+          .map(item => item.danhSachDangKyHocPhans.map(i => i.maHocPhan))
+          .flat()
+      );
+      setSelectedSemesterCourse(
+        data
+          .map(item => item.danhSachDangKyHocPhans.map(i => i.maHocPhan))
+          .flat()
+      );
+    }
+  }, [currentSemesterID, studentSemesterData]);
+
+  if (
+    isLoadingtestSchedulesData ||
+    isLoadingSemesterData ||
+    isLoadingStudentSemester
+  )
+    return <LoadingIndicator />;
   return (
     <div>
       <div
         id='student-course-container'
         className='w-full bg-white p-5 shadow-lg'
       >
-        <div id='input-row' className='flex items-end space-x-4'>
+        <div className='flex items-end space-x-4'>
           <div className='space-y-2'>
             <Label>Học kỳ</Label>
             <Select
               id='filter'
-              value={selectedFirstSecondTermValue}
-              onChange={handleSelectedFirstSecondTermValue}
+              value={selectedTerm}
+              onChange={e => setSelectedTerm(e.target.value)}
               required
             >
-              {firstSecondTermValues.map(values => {
+              {firstSecondTermValues.map(item => {
                 return (
-                  <option key={values.dataIndex} value={values.dataIndex}>
-                    {values.data}
+                  <option key={item.value} value={item.value}>
+                    {item.data}
                   </option>
                 );
               })}
@@ -100,29 +134,35 @@ const StudentTestSchedule = () => {
 
           <div className='space-y-2'>
             <Label>Năm học</Label>
-            <Select id='filter' required>
-              {semesterData
-                ?.filter(
-                  (item, index, self) =>
-                    self.findIndex(s => s.tenNamHoc === item.tenNamHoc) ===
-                    index
-                )
-                .map(item => {
-                  return (
-                    <option key={item.tenNamHoc} value={item.tenNamHoc}>
-                      {item.tenNamHoc}
-                    </option>
-                  );
-                })}
+            <Select
+              id='filter'
+              required
+              value={selectedYear}
+              onChange={e => setSelectedYear(e.target.value)}
+            >
+              {semesterData &&
+                semesterData
+                  ?.filter(
+                    (item, index, self) =>
+                      self.findIndex(s => s?.tenNamHoc === item?.tenNamHoc) ===
+                      index
+                  )
+                  .map(item => {
+                    return (
+                      <option key={item?.tenNamHoc} value={item?.tenNamHoc}>
+                        {item?.tenNamHoc}
+                      </option>
+                    );
+                  })}
             </Select>
           </div>
-          <Button color='failure'>Xem</Button>
         </div>
         <Table
           headers={headers}
-          data={testScheduleData}
+          data={testSchedulesData.filter(item =>
+            selectedSemesterCourse.includes(item?.courseID)
+          )}
           className='border-input mt-4 border-2'
-          pageSize={pageSize}
         />
       </div>
     </div>
@@ -130,7 +170,3 @@ const StudentTestSchedule = () => {
 };
 
 export default StudentTestSchedule;
-
-function setCurrentPage(page: number) {
-  throw new Error('Function not implemented.');
-}

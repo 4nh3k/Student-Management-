@@ -1,11 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
-import { Button, Label, Select, Table } from 'flowbite-react';
+import { useQueries } from '@tanstack/react-query';
+import { Label, Select, Table } from 'flowbite-react';
+import { useEffect, useMemo, useState } from 'react';
 import { scheduleApi } from 'src/apis/schedule.api';
-import { semesterApi } from 'src/apis/semester.api';
 import LoadingIndicator from 'src/components/LoadingIndicator';
+import useStudentSemeseterCourse from 'src/hooks/useStudentSemesterCourse';
 import { Schedule } from 'src/types/schedule.type';
-import { Semester } from 'src/types/semester.type';
-import { getProfileFromLS } from 'src/utils/auth';
+import { calculateSemesterFilter, isoStringToDdMmYyyy } from 'src/utils/utils';
 ('use client');
 const schedule = [
   { time: '7:30 - 8:15', lesson: 'Tiết 1' },
@@ -35,30 +35,74 @@ const firstSecondTermValues = [
   { data: 'Học kỳ hè', value: 'kỳ hè' }
 ];
 const ScheduleTable = () => {
-  const id = getProfileFromLS().userId;
+  const currentSemester = calculateSemesterFilter();
+  const [selectedTerm, setSelectedTerm] = useState(
+    currentSemester.filterBy.tenHocKy
+  );
+  const [selectedYear, setSelectedYear] = useState(
+    currentSemester.filterBy.tenNamHoc
+  );
+  const [selectedSemesterCourse, setSelectedSemesterCourse] = useState<
+    number[]
+  >([]);
+  const {
+    maHocPhanList,
+    semesterData,
+    studentSemesterData,
+    isLoadingSemesterData,
+    isLoadingStudentSemester
+  } = useStudentSemeseterCourse();
 
-  const { data: semesterData, isLoading: isLoadingSemesterData } = useQuery({
-    queryKey: ['semester'],
-    queryFn: ({ signal }) => semesterApi.getAllSemester(0, 10000, signal),
-    select: data => {
-      const semester: Semester[] = data.data.result;
-      console.log(semester);
-      return semester;
+  const { data: scheduleData, isLoading: isLoadingScheduleData } = useQueries({
+    queries: maHocPhanList
+      ? maHocPhanList?.map((item: number) => {
+          return {
+            queryKey: ['schedule', item],
+            queryFn: ({ signal }) =>
+              scheduleApi.getCourseSchedule(item, signal),
+            select: data => {
+              const schedule: Schedule[] = data.data.result;
+              return schedule;
+            }
+          };
+        })
+      : [],
+    combine: results => {
+      return {
+        data: results.map(result => result.data).flat(),
+        isLoading: results.some(result => result.isLoading)
+      };
     }
   });
-
-  const { data: scheduleData, isLoading: isLoadingScheduleData } = useQuery({
-    queryKey: ['schedule', id],
-    queryFn: ({ signal }) => scheduleApi.getStudentSchedule(id, signal),
-    select: data => {
-      const schedule: Schedule[] = data.data.result;
-      console.log(schedule);
-      return schedule;
+  const currentSemesterID = useMemo(() => {
+    if (semesterData) {
+      const currentSemester = semesterData.find(
+        item =>
+          item?.tenHocKy === selectedTerm && item?.tenNamHoc === selectedYear
+      );
+      return currentSemester?.maHocKyNamHoc;
     }
-  });
+  }, [selectedTerm, selectedYear, semesterData]);
 
-  if (isLoadingScheduleData) return <LoadingIndicator />;
+  useEffect(() => {
+    if (studentSemesterData) {
+      const data = studentSemesterData.filter(
+        item => item?.maHocKyNamHoc === currentSemesterID
+      );
+      setSelectedSemesterCourse(
+        data
+          .map(item => item.danhSachDangKyHocPhans.map(i => i.maHocPhan))
+          .flat()
+      );
+    }
+  }, [currentSemesterID, studentSemesterData]);
 
+  if (
+    isLoadingScheduleData ||
+    isLoadingSemesterData ||
+    isLoadingStudentSemester
+  )
+    return <LoadingIndicator />;
   return (
     <div className='mt-10 w-full bg-white p-5 shadow-lg'>
       <div className='text-center'>
@@ -69,7 +113,12 @@ const ScheduleTable = () => {
       <div className='flex items-end space-x-4'>
         <div className='space-y-2'>
           <Label>Học kỳ</Label>
-          <Select id='filter' required>
+          <Select
+            id='filter'
+            value={selectedTerm}
+            onChange={e => setSelectedTerm(e.target.value)}
+            required
+          >
             {firstSecondTermValues.map(item => {
               return (
                 <option key={item.value} value={item.value}>
@@ -82,73 +131,103 @@ const ScheduleTable = () => {
 
         <div className='space-y-2'>
           <Label>Năm học</Label>
-          <Select id='filter' required>
-            {semesterData
-              ?.filter(
-                (item, index, self) =>
-                  self.findIndex(s => s.tenNamHoc === item.tenNamHoc) === index
-              )
-              .map(item => {
-                return (
-                  <option key={item.tenNamHoc} value={item.tenNamHoc}>
-                    {item.tenNamHoc}
-                  </option>
-                );
-              })}
+          <Select
+            id='filter'
+            required
+            value={selectedYear}
+            onChange={e => setSelectedYear(e.target.value)}
+          >
+            {semesterData &&
+              semesterData
+                ?.filter(
+                  (item, index, self) =>
+                    self.findIndex(s => s?.tenNamHoc === item?.tenNamHoc) ===
+                    index
+                )
+                .map(item => {
+                  return (
+                    <option key={item?.tenNamHoc} value={item?.tenNamHoc}>
+                      {item?.tenNamHoc}
+                    </option>
+                  );
+                })}
           </Select>
         </div>
-        <Button color='failure'>Xem</Button>
       </div>
-      <Table className='mt-4 border bg-gray-100 text-center'>
-        <Table.Head className='w-full'>
-          {headers.map(header => (
-            <Table.HeadCell className='' key={header}>
-              {header}
-            </Table.HeadCell>
-          ))}
-        </Table.Head>
-        <Table.Body className='divide-y'>
-          {schedule.map((item, index) => (
-            <Table.Row key={item.time} className='divide-x'>
-              <Table.Cell className='py-2'>
-                {item.lesson}
-                <br />
-                {item.time}
-              </Table.Cell>
-              {headers.slice(1).map(header => {
-                const matchingData = scheduleData?.find(
-                  data =>
-                    data.thuHoc === header &&
-                    data.soTietHoc &&
-                    data.soTietHoc.includes(index.toString())
-                );
-                console.log(matchingData);
-                if (
-                  matchingData &&
-                  matchingData.soTietHoc &&
-                  matchingData.soTietHoc[0] === index.toString()
-                ) {
-                  return (
-                    <Table.Cell
-                      className='bg-white'
-                      key={header}
-                      rowSpan={matchingData.soTietHoc.length}
-                    >
-                      {matchingData.maHocPhan}
-                      <br />
-                      {matchingData.maPhongHoc}
-                    </Table.Cell>
+      {selectedSemesterCourse.length === 0 && (
+        <p className='mt-2'>Chưa có dữ liệu</p>
+      )}
+      {selectedSemesterCourse.length !== 0 && (
+        <Table className='mt-4 border bg-gray-100 text-center'>
+          <Table.Head className='w-full'>
+            {headers.map(header => (
+              <Table.HeadCell className='' key={header}>
+                {header}
+              </Table.HeadCell>
+            ))}
+          </Table.Head>
+          <Table.Body className='divide-y'>
+            {schedule.map((item, index) => (
+              <Table.Row key={item.time} className='divide-x'>
+                <Table.Cell className='py-2'>
+                  {item.lesson}
+                  <br />
+                  {item.time}
+                </Table.Cell>
+                {headers.slice(1).map(header => {
+                  const matchingData = scheduleData?.find(
+                    data =>
+                      data?.thuHoc === header &&
+                      data?.soTietHoc &&
+                      data?.soTietHoc.includes(index.toString())
                   );
-                } else if (
-                  !matchingData?.soTietHoc?.includes(index.toString())
-                ) {
-                  return <Table.Cell key={header} />;
-                }
-              })}
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
+                  if (
+                    matchingData &&
+                    matchingData.soTietHoc &&
+                    matchingData.soTietHoc[0] === index.toString() &&
+                    selectedSemesterCourse.includes(matchingData.maHocPhan)
+                  ) {
+                    const hocKy = studentSemesterData?.find(
+                      item => item?.maHocKyNamHoc === currentSemesterID
+                    );
+                    const hocPhanData = hocKy?.danhSachDangKyHocPhans.find(
+                      item => item?.maHocPhan === matchingData.maHocPhan
+                    );
+                    return (
+                      <Table.Cell
+                        className='bg-white'
+                        key={header}
+                        rowSpan={matchingData.soTietHoc.length}
+                      >
+                        {matchingData.maHocPhan}
+                        <br />
+                        Sỉ số: {hocPhanData?.hocPhan.siSoSinhVien}
+                        <br />
+                        {hocPhanData?.hocPhan?.monHoc.tenMonHoc}
+                        <br />P {matchingData.maPhongHoc}
+                        <br />
+                        BĐ:{' '}
+                        {isoStringToDdMmYyyy(
+                          hocPhanData?.hocPhan.thoiDiemBatDau ?? ''
+                        )}
+                        <br />
+                        KT:{' '}
+                        {isoStringToDdMmYyyy(
+                          hocPhanData?.hocPhan.thoiDiemKetThuc ?? ''
+                        )}
+                      </Table.Cell>
+                    );
+                  } else if (
+                    !matchingData?.soTietHoc?.includes(index.toString())
+                  ) {
+                    return <Table.Cell key={header} />;
+                  }
+                })}
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+      )}
     </div>
   );
 };
