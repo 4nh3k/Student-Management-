@@ -50,3 +50,7 @@ export const URL_CREATE_STUDENT_FILES = 'ho-so/add-many';
 export const URL_DELETE_STUDENT_FILES = 'ho-so/remove-many';
 export const URL_UPDATE_STUDENT_FILES = 'ho-so/update-many';
 export const URL_GET_ALL_STUDENT_FILE_TYPES = '/ho-so/get-danh-sach-loai-ho-so';
+export const URL_GET_ALL_CONDUCT_POINTS = '/ket-qua-ren-luyen/get-many';
+export const URL_CREATE_CONDUCT_POINTS = 'ket-qua-ren-luyen/add-many';
+export const URL_DELETE_CONDUCT_POINTS = 'ket-qua-ren-luyen/remove-many';
+export const URL_UPDATE_CONDUCT_POINTS = 'ket-qua-ren-luyen/update-many';

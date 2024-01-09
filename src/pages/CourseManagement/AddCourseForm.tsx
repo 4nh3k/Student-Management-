@@ -139,7 +139,7 @@ const AddCourseForm = () => {
     setSemester(value);
     setCourse(prevCourse => ({
       ...prevCourse,
-      maGiangVien: selectedOption.maHocKyNamHoc
+      maHocKyNamHoc: selectedOption.maHocKyNamHoc
     }));
   };
 

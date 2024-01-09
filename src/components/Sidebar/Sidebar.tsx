@@ -165,17 +165,17 @@ export default function SidebarComponent({ isAdmin }: SidebarProp) {
                   Quản lý KQ học tập
                 </Sidebar.Item>
                 <Sidebar.Item
-                  href={path.student_conduct_points_management}
-                  active={getIsActive(path.student_conduct_points_management)}
+                  href={path.conduct_points_management}
+                  active={getIsActive(path.conduct_points_management)}
                 >
                   Quản lý KQ rèn luyện
                 </Sidebar.Item>
-                {/* <Sidebar.Item
-                  href={path.student_reward_management}
-                  active={getIsActive(path.student_reward_management)}
+                <Sidebar.Item
+                  href={path.reward_management}
+                  active={getIsActive(path.reward_management)}
                 >
                   Quản lý khen thưởng
-                </Sidebar.Item> */}
+                </Sidebar.Item>
               </Sidebar.Collapse>
             </Sidebar.ItemGroup>
           </Sidebar.Items>
