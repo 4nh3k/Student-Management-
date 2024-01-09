@@ -14,6 +14,25 @@ const useSemester = () => {
       staleTime: 1000 * 60 * 60
     });
   const studentID = getProfileFromLS().userId;
+
+  const studentCurrentSemesterQuery = useQuery({
+    queryKey: [
+      'studentCurrentSemester',
+      studentID,
+      currentSemester?.maHocKyNamHoc
+    ],
+    queryFn: ({ signal }) =>
+      courseRegistrationApi.getSemeseterStudentLearning(
+        studentID,
+        currentSemester?.maHocKyNamHoc ?? 0,
+        signal
+      ),
+    select: data => {
+      return data.data.result[0];
+    },
+    enabled: !!currentSemester?.maHocKyNamHoc
+  });
+
   const studentSemesterQuery = useQuery({
     queryKey: ['studentSemester', studentID],
     queryFn: ({ signal }) =>
@@ -31,6 +50,7 @@ const useSemester = () => {
   return {
     currentSemester,
     currentSemesterIsLoading,
+    studentCurrentSemesterQuery,
     studentSemesterQuery
   };
 };

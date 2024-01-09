@@ -20,7 +20,8 @@ export default function MainLayout() {
       toast.success('Đăng xuất thành công');
     },
     onError: () => {
-      toast.error('Có lỗi xảy ra. Vui lòng thử lại sau');
+      clearLS();
+      setIsAuthenticated(false);
     }
   });
 

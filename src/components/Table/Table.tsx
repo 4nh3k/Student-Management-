@@ -203,7 +203,7 @@ const Table: React.FC<TableProps> = ({
           <tbody className={resolvedStyles.classNameBody}>
             {paginatedData?.length === 0 && (
               <tr className='text-center'>
-                <td className='py-4' colSpan={headers.length}>
+                <td className='py-4' colSpan={100}>
                   Chưa có dữ liệu
                 </td>
               </tr>

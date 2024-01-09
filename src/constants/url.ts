@@ -35,6 +35,11 @@ export const URL_GET_ALL_HINH_THUC_THI =
   'hoc-phan/get-danh-sach-loai-hinh-thuc-thi';
 export const URL_GET_ALL_LOAI_HOC_PHAN =
   '/hoc-phan/get-danh-sach-loai-hoc-phan';
+export const URL_CREATE_DANG_KY_HOC_PHAN =
+  '/danh-sach-dang-ky-hoc-phan/add-many';
+export const URL_REMOVE_DANG_KY_HOC_PHAN =
+  '/danh-sach-dang-ky-hoc-phan/remove-many';
+export const URL_REMOVE_BANG_DIEM = '/bang-diem-hoc-phan/remove-many';
 export const URL_GET_ALL_HOC_KY_NAM_HOC = '';
 export const URL_GET_ALL_SCHEDULE = 'buoi-hoc/get-many';
 export const URL_CREATE_SCHEDULE = 'buoi-hoc/add-many';
