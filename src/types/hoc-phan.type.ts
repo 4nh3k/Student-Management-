@@ -16,7 +16,12 @@ type HocPhan = {
   buoiHocs: any[];
   buoiThis: any[];
   danhSachDangKyHocPhans: any[];
-  giangVien: null;
+  giangVien: {
+    maGiangVien: number;
+    tenGiangVien: string;
+    hocPhans: null;
+    khoaHocs: any[];
+  };
   heDaoTao: null;
   hocKyNamHoc: null;
   monHoc: MonHoc;

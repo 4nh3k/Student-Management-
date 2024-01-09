@@ -1,15 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
-import { Label, TextInput, Select, Datepicker, Button } from 'flowbite-react';
+import { Button, Datepicker, Label, Select, TextInput } from 'flowbite-react';
 import React, { useState } from 'react';
 import { courseApi } from 'src/apis/course.api';
 
-import { studentApi } from 'src/apis/student.api';
+import { toast } from 'react-toastify';
 import { lecturerApi } from 'src/apis/lecturer.api';
 import { semesterApi } from 'src/apis/semester.api';
-import HocPhan from 'src/types/hoc-phan.type';
-import CreateHocPhanDto from 'src/types/create-hoc-phan.dto';
+import { studentApi } from 'src/apis/student.api';
 import useCourse from 'src/hooks/useCourse';
-import { toast } from 'react-toastify';
+import CreateHocPhanDto from 'src/types/create-hoc-phan.dto';
 
 const AddCourseForm = () => {
   const decapitalizeFirstLetter = (str: string) => {
@@ -195,27 +194,12 @@ const AddCourseForm = () => {
     e.preventDefault();
     console.log('Submitted course:', course);
 
-    if (course.siSoSinhVien <= 0){
+    if (course.siSoSinhVien <= 0) {
       toast.error('Sĩ số sinh viên phải là số dương');
       return;
     }
 
     createCourseMutation.mutate(course, {
-      onSuccess: data => {
-        setCourse({
-          maMonHoc: 0,
-          maHeDaoTao: 0,
-          hinhThucThi: '',
-          maHocPhan: 0,
-          loaiHocPhan: '',
-          maGiangVien: 0,
-          siSoSinhVien: 0,
-          thoiDiemBatDau: new Date().toISOString(),
-          thoiDiemKetThuc: new Date().toISOString(),
-          maHocKyNamHoc: 0,
-          ghiChu: ''
-        });
-      },
       onError: error => {
         toast.error(error.response.data.message);
       }

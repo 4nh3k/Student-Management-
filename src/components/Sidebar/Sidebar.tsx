@@ -5,12 +5,11 @@ import {
   PiBooks,
   PiChalkboardTeacher,
   PiChartPieSlice,
-  PiClipboardText,
+  PiDotsNine,
   PiFiles,
   PiMagnifyingGlass,
   PiMoney,
-  PiStudent,
-  PiDotsNine
+  PiStudent
 } from 'react-icons/pi';
 import { useLocation } from 'react-router-dom';
 import logo from 'src/assets/icons/UITLogo.svg';
@@ -55,13 +54,13 @@ export default function SidebarComponent({ isAdmin }: SidebarProp) {
           </Sidebar.Logo>
           <Sidebar.Items>
             <Sidebar.ItemGroup>
-              <Sidebar.Item
+              {/* <Sidebar.Item
                 href={path.dashboard}
                 active={getIsActive(path.dashboard)}
                 icon={PiChartPieSlice}
               >
                 Bảng điều khiển
-              </Sidebar.Item>
+              </Sidebar.Item> */}
               <Sidebar.Collapse
                 label='Sinh viên'
                 icon={PiStudent}

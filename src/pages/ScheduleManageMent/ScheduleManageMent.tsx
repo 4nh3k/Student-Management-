@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button, Label, Modal, Select, TextInput } from 'flowbite-react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
@@ -47,11 +47,14 @@ export default function ScheduleManagement() {
       return data.data.result;
     }
   });
-
+  const queryClient = useQueryClient();
   const addScheduleMutation = useMutation({
     mutationFn: (data: Partial<HocPhan>) => scheduleApi.addSchedule(data),
     onSuccess: () => {
       toast.success('Thêm buổi học thành công');
+      queryClient.invalidateQueries({
+        queryKey: ['schedules']
+      });
     },
     onError: () => {
       toast.error('Thêm buổi học thất bại');

@@ -15,6 +15,7 @@ const headers: Header[] = [
   { title: 'Môn học', dataIndex: 'courseName' },
   { title: 'Số TC', dataIndex: 'credits' },
   { title: 'Thời gian học', dataIndex: 'duration' },
+  { title: 'Hình thức thi', dataIndex: 'examType' },
   { title: 'Đã ĐK/Sĩ số', dataIndex: 'registered' }
 ];
 interface TableData {
@@ -112,6 +113,7 @@ export default function CoursesRegistered() {
         item.hocPhan.monHoc.soTinChiThucHanh,
       transcriptId: item.maBangDiemHocPhan,
       courseRegistrationID: item.maThongTinDangKyHocPhan,
+      examType: item.hocPhan.hinhThucThi,
       duration:
         isoStringToDdMmYyyy(item.hocPhan.thoiDiemBatDau) +
         ' - ' +

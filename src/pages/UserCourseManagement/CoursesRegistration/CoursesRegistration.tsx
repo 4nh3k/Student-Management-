@@ -44,6 +44,7 @@ export default function CoursesRegistration() {
     { title: 'Số TC', dataIndex: 'credits' },
     { title: 'Thời gian học', dataIndex: 'duration' },
     { title: 'Hình thức thi', dataIndex: 'examType' },
+    { title: 'Giảng viên', dataIndex: 'lecturer' },
     { title: 'Đã ĐK/Sĩ số', dataIndex: 'registered' }
   ];
 
@@ -65,9 +66,14 @@ export default function CoursesRegistration() {
   });
   const { currentSemester, currentSemesterIsLoading } = useSemester();
   const { data: courseData, isLoading } = useQuery({
-    queryKey: ['courses', 5],
+    queryKey: ['courses', currentSemester?.maHocKyNamHoc ?? 0],
     queryFn: ({ signal }) =>
-      courseApi.getAllCourseDataInASemester(0, 10000, 56, signal),
+      courseApi.getAllCourseDataInASemester(
+        0,
+        10000,
+        currentSemester?.maHocKyNamHoc,
+        signal
+      ),
     select: data => {
       return data.data.result.map((item: HocPhan) => {
         return {
@@ -81,6 +87,7 @@ export default function CoursesRegistration() {
             soTinChiLyThuyet: item?.monHoc?.soTinChiLyThuyet,
             soTinChiThucHanh: item?.monHoc?.soTinChiThucHanh
           },
+          lecturer: item.giangVien.tenGiangVien,
           courseId: item.monHoc.maMonHoc,
           duration: isoStringToDdMmYyyy(item.thoiDiemBatDau),
           examType: capitalizeFirstLetter(item.hinhThucThi),
@@ -97,6 +104,7 @@ export default function CoursesRegistration() {
     });
   };
   const checkNeedToRegister = () => {
+    let check = true;
     courseSelected.forEach(selectedCourse => {
       const { examType } = selectedCourse;
       console.log(selectedCourse);
@@ -119,7 +127,7 @@ export default function CoursesRegistration() {
         )
       ) {
         toast.error('Bạn cần đăng ký học phần lý thuyết của môn học');
-        return false;
+        check = false;
       } else if (
         examType !== 'Bài kiểm tra thực hành cuối kỳ' &&
         selectedCourse.credit?.soTinChiThucHanh &&
@@ -130,10 +138,10 @@ export default function CoursesRegistration() {
         )
       ) {
         toast.error('Bạn cần đăng ký học phần thực hành của môn học');
-        return false;
+        check = false;
       }
     });
-    return true;
+    return check;
   };
   const handleOnCheck = (row: TableData, checked: boolean) => {
     console.log(row, checked);
@@ -154,7 +162,9 @@ export default function CoursesRegistration() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (checkNeedToRegister()) {
+    const check = checkNeedToRegister();
+    console.log(check);
+    if (check) {
       registerCourseMutation.mutate();
     }
     console.log(courseSelected);

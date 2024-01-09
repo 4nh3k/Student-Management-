@@ -159,7 +159,10 @@ export default function useRouteElement() {
             },
             {
               path: path.all,
-              element: <Navigate to={path.dashboard} />
+              element: AdminRoute(
+                <Navigate to={path.all_students} />,
+                <Navigate to={path.dashboard} />
+              )
             },
             {
               path: path.course_registration,
