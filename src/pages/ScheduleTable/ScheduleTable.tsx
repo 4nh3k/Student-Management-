@@ -89,6 +89,11 @@ const ScheduleTable = () => {
       const data = studentSemesterData.filter(
         item => item?.maHocKyNamHoc === currentSemesterID
       );
+      console.log(
+        data
+          .map(item => item.danhSachDangKyHocPhans.map(i => i.maHocPhan))
+          .flat()
+      );
       setSelectedSemesterCourse(
         data
           .map(item => item.danhSachDangKyHocPhans.map(i => i.maHocPhan))
@@ -175,17 +180,20 @@ const ScheduleTable = () => {
                   {item.time}
                 </Table.Cell>
                 {headers.slice(1).map(header => {
-                  const matchingData = scheduleData?.find(
-                    data =>
+                  console.log(scheduleData);
+                  const matchingData = scheduleData?.find(data => {
+                    console.log(data?.maHocPhan, header, index);
+                    return (
                       data?.thuHoc === header &&
                       data?.soTietHoc &&
+                      selectedSemesterCourse.includes(data?.maHocPhan) &&
                       data?.soTietHoc.includes(index.toString())
-                  );
+                    );
+                  });
                   if (
                     matchingData &&
                     matchingData.soTietHoc &&
-                    matchingData.soTietHoc[0] === index.toString() &&
-                    selectedSemesterCourse.includes(matchingData.maHocPhan)
+                    matchingData.soTietHoc[0] === index.toString()
                   ) {
                     const hocKy = studentSemesterData?.find(
                       item => item?.maHocKyNamHoc === currentSemesterID
