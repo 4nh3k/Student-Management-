@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button, Datepicker, Label, Select, TextInput } from 'flowbite-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -43,7 +43,7 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
   });
 
   const { data: studentData, isLoading: isLoadingStudentData } = useQuery({
-    queryKey: ['student', id],
+    queryKey: ['oneStudent', id],
     queryFn: ({ signal }) =>
       studentApi.getAllStudents(0, 1000, signal, parseInt(id)),
     select: data => {
@@ -387,7 +387,43 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
           );
         },
         onError: error => {
-          toast.error(error.response.data.message);
+          updateStudentMutation.mutate(
+            {
+              student: student,
+              id: id
+            },
+            {
+              onSuccess: data => {
+                setStudent({
+                  hoTenSinhVien: '',
+                  maKhoaHoc: 1,
+                  maChuyenNganh: 1,
+                  maHeDaoTao: 5,
+                  tinhTrangHocTap: 'đang học',
+                  ngaySinh: new Date().toLocaleDateString('en-GB'),
+                  gioiTinh: 'Nam',
+                  email: '',
+                  emailPassword: '',
+                  username: '',
+                  usernamePassword: '',
+                  soTaiKhoanNganHangDinhDanh: '',
+                  anhTheSinhVien: '',
+                  ngayNhapHoc: new Date().toLocaleDateString('en-GB'),
+                  maSinhVien: 0
+                });
+                setMajor('Khoa học máy tính');
+                setFaculty('Khoa học máy tính');
+                setEducationType('đại trà');
+                setGender('Nam');
+                setLearningStatus('Đang học');
+              },
+              onError: error => {
+                console.log(student);
+                toast.error(error.response.data.message);
+              }
+            }
+          );
+          // toast.error(error.response.data.message);
         }
       }
     );

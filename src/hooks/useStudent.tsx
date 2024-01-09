@@ -26,11 +26,12 @@ const useStudent = () => {
   });
 
   const updateStudentMutation = useMutation({
-    mutationFn: (data: { student: CreateStudentDto; id: number }) =>
-      studentApi.updateStudent(data.student, data.id),
-    onSuccess: data => {
+    mutationFn: (params: { student: CreateStudentDto; id: number }) =>
+      studentApi.updateStudent(params.student, params.id),
+    onSuccess: (data, params) => {
       toast.success('Cập nhật thông tin sinh viên thành công');
       queryClient.invalidateQueries({ queryKey: ['students'] });
+      queryClient.invalidateQueries({ queryKey: ['oneStudent', params.id] });
       console.log(data);
     },
     onError: (error: unknown) => {
