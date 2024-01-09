@@ -5,7 +5,7 @@ import { scheduleApi } from 'src/apis/schedule.api';
 import LoadingIndicator from 'src/components/LoadingIndicator';
 import useStudentSemeseterCourse from 'src/hooks/useStudentSemesterCourse';
 import { Schedule } from 'src/types/schedule.type';
-import { calculateSemesterFilter } from 'src/utils/utils';
+import { calculateSemesterFilter, isoStringToDdMmYyyy } from 'src/utils/utils';
 ('use client');
 const schedule = [
   { time: '7:30 - 8:15', lesson: 'Tiết 1' },
@@ -187,6 +187,12 @@ const ScheduleTable = () => {
                     matchingData.soTietHoc[0] === index.toString() &&
                     selectedSemesterCourse.includes(matchingData.maHocPhan)
                   ) {
+                    const hocKy = studentSemesterData?.find(
+                      item => item?.maHocKyNamHoc === currentSemesterID
+                    );
+                    const hocPhanData = hocKy?.danhSachDangKyHocPhans.find(
+                      item => item?.maHocPhan === matchingData.maHocPhan
+                    );
                     return (
                       <Table.Cell
                         className='bg-white'
@@ -195,7 +201,20 @@ const ScheduleTable = () => {
                       >
                         {matchingData.maHocPhan}
                         <br />
-                        {matchingData.maPhongHoc}
+                        Sỉ số: {hocPhanData?.hocPhan.siSoSinhVien}
+                        <br />
+                        {hocPhanData?.hocPhan?.monHoc.tenMonHoc}
+                        <br />P {matchingData.maPhongHoc}
+                        <br />
+                        BĐ:{' '}
+                        {isoStringToDdMmYyyy(
+                          hocPhanData?.hocPhan.thoiDiemBatDau ?? ''
+                        )}
+                        <br />
+                        KT:{' '}
+                        {isoStringToDdMmYyyy(
+                          hocPhanData?.hocPhan.thoiDiemKetThuc ?? ''
+                        )}
                       </Table.Cell>
                     );
                   } else if (
