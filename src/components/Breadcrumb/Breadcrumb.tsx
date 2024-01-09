@@ -29,6 +29,10 @@ const Breadcrumbs = ({ separator = '/' }: BreadcrumbProps) => {
     { path: path.student_file_management, breadcrumb: 'Hồ sơ sinh viên' },
     { path: path.add_student_file_form, breadcrumb: 'Thêm hồ sơ sinh viên' },
     {
+      path: path.student_result_management,
+      breadcrumb: 'Quản lý điểm học phần'
+    },
+    {
       path: path.student_conduct_points,
       breadcrumb: 'Điểm rèn luyện sinh viên'
     },
