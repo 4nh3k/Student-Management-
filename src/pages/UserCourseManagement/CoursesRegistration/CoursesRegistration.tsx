@@ -1,16 +1,18 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Button, Select, TextInput } from 'flowbite-react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { courseRegistrationApi } from 'src/apis/course-registration.api';
 import { courseApi } from 'src/apis/course.api';
 import LoadingIndicator from 'src/components/LoadingIndicator';
 import Table, { Header } from 'src/components/Table/Table';
 import useSemester from 'src/hooks/useSemester';
 import HocPhan from 'src/types/hoc-phan.type';
+import { getProfileFromLS } from 'src/utils/auth';
 import { capitalizeFirstLetter, isoStringToDdMmYyyy } from 'src/utils/utils';
 
 interface TableData {
-  ID: string;
+  ID: number;
   courseName: string;
   courseId: number;
   credits: number;
@@ -46,8 +48,24 @@ export default function CoursesRegistration() {
   ];
 
   const [courseSelected, setCourseSelected] = useState<TableData[]>([]);
-
+  const id = getProfileFromLS().userId;
   const { currentSemester, currentSemesterIsLoading } = useSemester();
+  console.log(id);
+  const registerCourseMutation = useMutation({
+    mutationFn: () =>
+      courseRegistrationApi.registerCourse(
+        id,
+        currentSemester?.maHocKyNamHoc ?? 0,
+        courseSelected.map(item => item.ID)
+      ),
+    onSuccess: () => {
+      toast.success('Đăng ký thành công');
+    },
+    onError: () => {
+      toast.error('Đăng ký thất bại');
+    }
+  });
+
   const { data: courseData, isLoading } = useQuery({
     queryKey: ['courses', 5],
     queryFn: ({ signal }) =>
@@ -103,6 +121,7 @@ export default function CoursesRegistration() {
         )
       ) {
         toast.error('Bạn cần đăng ký học phần lý thuyết của môn học');
+        return false;
       } else if (
         examType !== 'Bài kiểm tra thực hành cuối kỳ' &&
         selectedCourse.credit?.soTinChiThucHanh &&
@@ -113,12 +132,14 @@ export default function CoursesRegistration() {
         )
       ) {
         toast.error('Bạn cần đăng ký học phần thực hành của môn học');
+        return false;
       }
     });
+    return true;
   };
   const handleOnCheck = (row: TableData, checked: boolean) => {
+    console.log(row, checked);
     if (checked) {
-      console.log(row, checked);
       if (isCourseSelected(row)) {
         toast.error('Môn học đã được chọn');
         return false;
@@ -135,7 +156,9 @@ export default function CoursesRegistration() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    checkNeedToRegister();
+    if (checkNeedToRegister()) {
+      registerCourseMutation.mutate();
+    }
     console.log(courseSelected);
   };
 
