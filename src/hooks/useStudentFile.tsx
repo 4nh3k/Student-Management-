@@ -27,9 +27,10 @@ const useStudentFile = () => {
   const updateStudentFileMutation = useMutation({
     mutationFn: (data: { studentFile: StudentFile; id: number }) =>
       studentFileApi.updateStudentFile(data.studentFile, data.id),
-    onSuccess: data => {
+    onSuccess: (data, params) => {
       toast.success('Cập nhật hồ sơ thành công');
       queryClient.invalidateQueries({ queryKey: ['files'] });
+      queryClient.invalidateQueries({ queryKey: ['file' , params.id] });
       console.log(data);
     },
     onError: (error: unknown) => {

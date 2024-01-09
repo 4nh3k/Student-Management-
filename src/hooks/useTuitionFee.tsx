@@ -29,15 +29,18 @@ const useTuitionFee = () => {
       tuitionFee: TutionFee;
       studentId: number;
       semesterId: number;
+      tuitionId: number;
     }) =>
       tuitionFeeApi.updateTuitionFee(
         data.tuitionFee,
         data.studentId,
         data.semesterId
       ),
-    onSuccess: data => {
+    onSuccess: (data, params) => {
       toast.success('Cập nhật thông tin học phí sinh viên thành công');
       queryClient.invalidateQueries({ queryKey: ['fees'] });
+      console.log(data);
+      queryClient.invalidateQueries({ queryKey: ['fee', params.tuitionId] });
       console.log(data);
     },
     onError: (error: unknown) => {

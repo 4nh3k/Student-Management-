@@ -29,7 +29,7 @@ const EditFileForm = ({ id }) => {
   const studentFileTypes = getAllStudentFileTypes?.data.result;
 
   const { data: getFileData, isLoading: isLoadingFile } = useQuery({
-    queryKey: ['file', id],
+    queryKey: ['file', parseInt(id)],
     queryFn: ({ signal }) => studentFileApi.getAllStudentFiles(0, 1000, id)
   });
 
@@ -155,7 +155,11 @@ const EditFileForm = ({ id }) => {
           <div className='mb-2 block'>
             <Label htmlFor='hoanThanh' value='Trạng thái hồ sơ' />
           </div>
-          <Select id='trangThaiHoSo' onChange={handleFileStatusChange}>
+          <Select
+            id='trangThaiHoSo'
+            value={file.hoanThanh === true ? 'Đã duyệt' : 'Chưa duyệt'}
+            onChange={handleFileStatusChange}
+          >
             <option>Đã duyệt</option>
             <option>Chưa duyệt</option>
           </Select>

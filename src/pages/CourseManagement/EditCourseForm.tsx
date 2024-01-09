@@ -223,6 +223,14 @@ const EditCourseForm = ({ id }) => {
       return;
     }
 
+    const thoiDiemBatDau = new Date(course.thoiDiemBatDau);
+    const thoiDiemKetThuc = new Date(course.thoiDiemKetThuc);
+
+    if (thoiDiemBatDau >= thoiDiemKetThuc){
+      toast.error('Ngày bắt đầu phải trước ngày kết thúc !');
+      return;
+    }
+
     console.log(course);
 
     updateCourseMutation.mutate(

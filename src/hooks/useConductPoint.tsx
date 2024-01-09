@@ -33,9 +33,10 @@ const useConductPoint = () => {
   const updateConductPointMutation = useMutation({
     mutationFn: (data: { conductPoint: ConductPoint; id: number }) =>
       conductPointApi.updateConductPoint(data.conductPoint, data.id),
-    onSuccess: data => {
+    onSuccess: (data, params) => {
       toast.success('Cập nhật thông tin điểm rèn luyện thành công');
       queryClient.invalidateQueries({ queryKey: ['conductPoints'] });
+      queryClient.invalidateQueries({ queryKey: ['conductPoint', params.id] });
       console.log(data);
     },
     onError: (error: unknown) => {

@@ -22,9 +22,10 @@ const useCourse = () => {
   const updateCourseMutation = useMutation({
     mutationFn: (data: { course: CreateHocPhanDto; id: number }) =>
       courseApi.updateCourse(data.course, data.id),
-    onSuccess: data => {
+    onSuccess: (data, params) => {
       toast.success('Cập nhật học phần thành công');
       queryClient.invalidateQueries({ queryKey: ['courses'] });
+      queryClient.invalidateQueries({ queryKey: ['course', params.id] });
       console.log(data);
     },
     onError: (error: unknown) => {

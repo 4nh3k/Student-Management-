@@ -30,7 +30,7 @@ const EditFee = ({ id }) => {
   });
 
   const { data: feeFetch, isLoading: isLoadingFee } = useQuery({
-    queryKey: ['fee', id],
+    queryKey: ['fee', parseInt(id)],
     queryFn: ({ signal }) =>
       tuitionFeeApi.getAllTuitionFees(0, 1000, signal, id)
   });
@@ -102,7 +102,8 @@ const EditFee = ({ id }) => {
       {
         tuitionFee: fee,
         studentId: fee.maSinhVien,
-        semesterId: fee.maHocKyNamHoc
+        semesterId: fee.maHocKyNamHoc,
+        tuitionId: fee.maThongTinHocPhi
       },
       {
         onSuccess: data => {

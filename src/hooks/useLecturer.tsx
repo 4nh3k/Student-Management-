@@ -30,9 +30,10 @@ const useLecturer = () => {
   const updateLecturerMutation = useMutation({
     mutationFn: (data: { lecturer: CreateLecturerDto; id: number }) =>
       lecturerApi.updateLecturer(data.lecturer, data.id),
-    onSuccess: data => {
+    onSuccess: (data, params) => {
       toast.success('Cập nhật thông tin giảng viên thành công');
       queryClient.invalidateQueries({ queryKey: ['lecturers'] });
+      queryClient.invalidateQueries({ queryKey: ['lecturer', params.id] });
       console.log(data);
     },
     onError: (error: unknown) => {
