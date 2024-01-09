@@ -1,18 +1,25 @@
 import { useQuery } from '@tanstack/react-query';
 import { Button, Datepicker, Label, Select, TextInput } from 'flowbite-react';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { studentApi } from 'src/apis/student.api';
 import ImageLoader from 'src/components/ImageLoader/ImageLoader';
 import useStudent from 'src/hooks/useStudent';
 import CreateStudentDto from 'src/types/create-student.dto';
-import { validateAccountNumber, validateAge, validateEmail, validateName } from 'src/utils/utils';
-
+import {
+  validateAccountNumber,
+  validateAge,
+  validateEmail,
+  validateName
+} from 'src/utils/utils';
+import demoPicture from 'src/assets/imgs/ganyu.jpg';
 interface AddStudentFormProps {
   id?: string;
 }
 
 const AddStudentForm = ({ id }: AddStudentFormProps) => {
+  const [imageSrc, setImageSrc] = useState(demoPicture);
+
   const capitalizeFirstLetter = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
@@ -52,7 +59,7 @@ const AddStudentForm = ({ id }: AddStudentFormProps) => {
 
   const learningStatuses = learningStatusList?.data.result;
 
-  const { createStudentMutation } = useStudent();
+  const { createStudentMutation, createStudentImageMutation } = useStudent();
 
   const [student, setStudent] = useState<CreateStudentDto>({
     hoTenSinhVien: '',
@@ -161,59 +168,103 @@ const AddStudentForm = ({ id }: AddStudentFormProps) => {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Submitted student:', student); 
+    console.log('Submitted student:', student);
 
     if (!validateName(student.hoTenSinhVien)) {
       toast.error('Tên không hợp lệ');
       return;
-    };
+    }
 
     if (!validateEmail(student.email)) {
       toast.error('Email không hợp lệ');
       return;
-    };
+    }
 
     if (!validateAge(student.ngaySinh)) {
       toast.error('Tuổi sinh viên phải nằm trong khoảng 18 đến 65');
       return;
-    };
+    }
 
-    if (!validateAccountNumber(student.soTaiKhoanNganHangDinhDanh)){
+    if (!validateAccountNumber(student.soTaiKhoanNganHangDinhDanh)) {
       toast.error(
         'Số tài khoản ngân hàng phải chỉ chứa toàn số và độ dài 9-14 số'
       );
       return;
-    };
+    }
 
-    createStudentMutation.mutate(student, {
-      onSuccess: data => {
-        setStudent({
-          hoTenSinhVien: '',
-          maKhoaHoc: 1,
-          maChuyenNganh: 1,
-          maHeDaoTao: 5,
-          tinhTrangHocTap: 'đang học',
-          ngaySinh: new Date().toLocaleDateString('en-GB'),
-          gioiTinh: 'Nam',
-          email: '',
-          emailPassword: '',
-          username: '',
-          usernamePassword: '',
-          soTaiKhoanNganHangDinhDanh: '',
-          anhTheSinhVien: '',
-          ngayNhapHoc: new Date().toLocaleDateString('en-GB'),
-          maSinhVien: 0
-        });
-        setMajor('Khoa học máy tính');
-        setFaculty('Khoa học máy tính');
-        setEducationType('đại trà');
-        setGender('Nam');
-        setLearningStatus('Đang học');
-      },
-      onError: error => {
-        toast.error(error.response.data.message);
+    createStudentImageMutation.mutate(
+      { id: 'test', image: file },
+      {
+        onSuccess: data => {
+          console.log(data);
+          setStudent(prevStudent => ({
+            ...prevStudent,
+            anhTheSinhVien: data.data.imageUrls[0]
+          }));
+          createStudentMutation.mutate(student, {
+            onSuccess: data => {
+              setStudent({
+                hoTenSinhVien: '',
+                maKhoaHoc: 1,
+                maChuyenNganh: 1,
+                maHeDaoTao: 5,
+                tinhTrangHocTap: 'đang học',
+                ngaySinh: new Date().toLocaleDateString('en-GB'),
+                gioiTinh: 'Nam',
+                email: '',
+                emailPassword: '',
+                username: '',
+                usernamePassword: '',
+                soTaiKhoanNganHangDinhDanh: '',
+                anhTheSinhVien: '',
+                ngayNhapHoc: new Date().toLocaleDateString('en-GB'),
+                maSinhVien: 0
+              });
+              setMajor('Khoa học máy tính');
+              setFaculty('Khoa học máy tính');
+              setEducationType('đại trà');
+              setGender('Nam');
+              setLearningStatus('Đang học');
+            },
+            onError: error => {
+              console.log(student)
+              toast.error(error.response.data.message);
+            }
+          });
+        },
+        onError: error => {
+          toast.error(error.response.data.message);
+        }
       }
-    });
+    );
+
+    
+  };
+
+  const inputRef = useRef(null);
+
+  const handleLoadImage = () => {
+    if (inputRef.current) {
+      inputRef.current.click();
+    }
+  };
+
+  const [file, setFile] = useState<File>();
+
+  const handleFileChange = event => {
+    const file = event.target.files[0];
+
+    if (file) {
+      // Check if the selected file is an image
+      if (file.type.startsWith('image/')) {
+        // Update the image source with the selected file
+        const newImageSrc = URL.createObjectURL(file);
+        setImageSrc(newImageSrc);
+        setFile(file);
+      } else {
+        console.error('Invalid file format. Please select an image.');
+      }
+    }
   };
 
   return (
@@ -389,17 +440,56 @@ const AddStudentForm = ({ id }: AddStudentFormProps) => {
             required
           />
         </div>
+        <div>
+          <div className='mb-2 block'>
+            <Label htmlFor='username' value='Tên tài khoản SV' />
+          </div>
+          <TextInput
+            id='username'
+            type='text'
+            placeholder='Nhập tên tài khoản sinh viên'
+            value={student.username}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div>
+          <div className='mb-2 block'>
+            <Label htmlFor='usernamePassword' value='Mật khẩu tài khoản SV' />
+          </div>
+          <TextInput
+            id='usernamePassword'
+            type='text'
+            placeholder='Nhập mật khẩu tài khoản SV'
+            value={student.usernamePassword}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
       </div>
       <div className='mt-5 flex items-center space-x-6 align-middle'>
-        <ImageLoader></ImageLoader>
+        <img
+          alt='Ảnh sinh viên'
+          className='border-rounded h-32 w-32 rounded-full'
+          src={imageSrc}
+        ></img>
         <div className='flex flex-col space-y-2'>
           <Label
             htmlFor='studentImage'
             value='Tải ảnh sinh viên (150px X 150px)'
           />
           <div className='flex items-center space-x-3 align-middle'>
-            <Button color='sidebar'>Chọn ảnh</Button>
-            <span>Chựa chọn file</span>
+            <Button color='sidebar' onClick={handleLoadImage}>
+              Chọn ảnh
+            </Button>
+            <input
+              type='file'
+              ref={inputRef}
+              style={{ display: 'none' }}
+              onChange={handleFileChange}
+              accept='image/jpeg, image/png, image/gif, image/svg+xml'
+            />
+            {/* <span>Chựa chọn file</span> */}
           </div>
         </div>
       </div>

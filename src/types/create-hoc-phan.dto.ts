@@ -12,4 +12,6 @@ export default interface CreateHocPhanDto {
   thoiDiemKetThuc: string;
   maHocKyNamHoc: number;
   ghiChu: string;
+  username: string;
+  usernamePassword: string;
 };

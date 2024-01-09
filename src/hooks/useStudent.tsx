@@ -52,10 +52,23 @@ const useStudent = () => {
     }
   });
 
+  const createStudentImageMutation = useMutation({
+    mutationFn: (data: { id: string; image: File }) => studentApi.updateImageBook(data),
+    onSuccess: data => {
+      toast.success('Tạo ảnh thành công');
+      console.log(data);
+    },
+    onError: (error: unknown) => {
+      console.log(error);
+      toast.error(error.respone.data.message);
+    }
+  });
+
   return {
     createStudentMutation,
     updateStudentMutation,
-    deleteStudentMutation
+    deleteStudentMutation,
+    createStudentImageMutation
   };
 };
 
