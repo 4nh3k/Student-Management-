@@ -18,14 +18,40 @@ const Breadcrumbs = ({ separator = '/' }: BreadcrumbProps) => {
     { path: path.add_fee, breadcrumb: 'Thêm thông tin học phí' },
     { path: path.course_management, breadcrumb: 'Quản lý học phần' },
     { path: path.exam_schedule_management, breadcrumb: 'Quản lý lịch thi' },
-    { path: path.timetable_management, breadcrumb: 'Quản lý lịch thi' },
+    { path: path.timetable_management, breadcrumb: 'Quản lý lịch học' },
     { path: path.student_dashboard, breadcrumb: 'Bảng điều khiển' },
     { path: path.course_registration, breadcrumb: 'Đăng ký học phần' },
     { path: path.course_registered, breadcrumb: 'Học phần đã đăng ký' },
     { path: path.student_fee_info, breadcrumb: 'Thông tin học phí' },
     { path: path.student_schedule, breadcrumb: 'Thời khoá biểu' },
     { path: path.student_transcript, breadcrumb: 'Bảng điểm' },
-    { path: path.student_test_schedule, breadcrumb: 'Lịch thi' }
+    { path: path.student_test_schedule, breadcrumb: 'Lịch thi' },
+    { path: path.student_file_management, breadcrumb: 'Hồ sơ sinh viên' },
+    { path: path.add_student_file_form, breadcrumb: 'Thêm hồ sơ sinh viên' },
+    {
+      path: path.student_conduct_points,
+      breadcrumb: 'Điểm rèn luyện sinh viên'
+    },
+    {
+      path: path.student_reward_management,
+      breadcrumb: 'Khen thưởng sinh viên'
+    },
+    {
+      path: path.file_management,
+      breadcrumb: 'Quản lý hồ sơ sinh viên'
+    },
+    {
+      path: path.add_course_form,
+      breadcrumb: 'Thêm học phần'
+    },
+    {
+      path: path.conduct_points_management,
+      breadcrumb: 'Quản lý điểm rèn luyện'
+    },
+    {
+      path: path.reward_management,
+      breadcrumb: 'Quản lý khen thưởng'
+    }
   ];
   const breadcrumbs = useBreadcrumbs(routes);
   const separatorSpan = <span key='separator'> {separator} </span>;

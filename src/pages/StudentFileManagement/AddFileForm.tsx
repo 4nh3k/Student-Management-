@@ -19,6 +19,39 @@ const AddFileForm = () => {
     maSinhVien: id
   });
 
+  const { data: fileData, isLoading: isFileLoading } = useQuery({
+    queryKey: ['files'],
+    queryFn: ({ signal }) =>
+      studentFileApi.getStudentFileByStudentId(0, 1000, id),
+    select: data => {
+      return data.data.result.map((file: StudentFile) => {
+        return file.loaiHoSo;
+      });
+    }
+  });
+
+  console.log(fileData);
+
+  const uniqueStudentFileType = new Set(fileData);
+  console.log(uniqueStudentFileType);
+
+  const additionalValuesArray = ['nhập học', 'thôi học', 'tốt nghiệp']; // Replace this with your actual array
+
+  additionalValuesArray.forEach(value => {
+    if (!(value === 'xin nhập học lại' || value === 'bảo lưu')){
+      if (uniqueStudentFileType.has(value)) {
+        // Value exists in the set, so delete it
+        uniqueStudentFileType.delete(value);
+      } else {
+        // Value does not exist in the set, so add it
+        uniqueStudentFileType.add(value);
+      }
+    }
+  });
+
+  uniqueStudentFileType.add('xin nhập học lại');
+  uniqueStudentFileType.add('bảo lưu');
+
   const { data: getAllStudentFileTypes, isLoading: isLoadingFileTypes } =
     useQuery({
       queryKey: ['studentFileTypes'],
@@ -98,7 +131,9 @@ const AddFileForm = () => {
             onChange={handleStudentFileTypeChange}
           >
             {!isLoadingFileTypes &&
-              studentFileTypes.map(type => <option key={type}>{type}</option>)}
+              [...uniqueStudentFileType].map(type => (
+                <option key={type}>{type}</option>
+              ))}
           </Select>
         </div>
         <div>

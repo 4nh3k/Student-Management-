@@ -1,52 +1,75 @@
 import { useQuery } from '@tanstack/react-query';
-import { Modal, Select, TextInput } from 'flowbite-react';
-import { useEffect, useState } from 'react';
-import { lecturerApi } from 'src/apis/lecturer.api';
+import { Button, Label, Modal, Select, TextInput } from 'flowbite-react';
+import { useState } from 'react';
 import Table from 'src/components/Table';
-import { conductPointApi } from 'src/apis/conduct-points.api';
-import ConductPoint from 'src/types/conduct-point.type';
-import { getProfileFromLS } from 'src/utils/auth';
+import { studentFileApi } from 'src/apis/student-file.api';
+import StudentFile from 'src/types/student-file.type';
+import { rewardApi } from 'src/apis/reward.api';
+import Reward from 'src/types/reward.type';
 import { semesterApi } from 'src/apis/semester.api';
+import { capitalizeFirstLetter } from 'src/utils/utils';
+import { format } from 'date-fns';
+import Student from 'src/types/student.type';
+import { studentApi } from 'src/apis/student.api';
+import useReward from 'src/hooks/useReward';
+import { getProfileFromLS } from 'src/utils/auth';
 ('use client');
 
-const StudentConductPoint = () => {
+const StudentRewardManagement = () => {
   const id = getProfileFromLS().userId;
   console.log(id);
+  const [semesterId, setSemesterId] = useState<number>(1);
+  const [semester, setSemester] = useState<string>('');
   const [search, setSearch] = useState<string>('');
   const [selectedValue, setSelectedValue] = useState<string>('ID');
   const [pageSize, setPageSize] = useState<number>(10);
+
   const headers = [
-    { title: 'Mã sinh viên', dataIndex: 'maSinhVien' },
-    { title: 'Số điểm rèn luyện', dataIndex: 'soDiemRenLuyen' },
-    { title: 'Xếp loại rèn luyện', dataIndex: 'xepLoaiRenLuyen' },
-    { title: 'Mã học kỳ năm học', dataIndex: 'maHocKyNamHoc' },
+    { title: 'Mã khen thưởng', dataIndex: 'maKhenThuong' },
+    { title: 'Xếp loại khen thưởng', dataIndex: 'xepLoaiKhenThuong' },
+    { title: 'Học kỳ năm học', dataIndex: 'hocKyNamHoc' },
+    { title: 'Sinh viên', dataIndex: 'sinhVien' }
   ];
 
-  const [semester, setSemester] = useState<string>('');
   const { data: getAllSemesters, isLoading: isSemesterLoading } = useQuery({
     queryKey: ['semesters'],
     queryFn: () => semesterApi.getAllSemester(0, 1000)
   });
+
   const semesters = getAllSemesters?.data.result;
 
-  const { data: conductPointData, isLoading: isConductPointLoading } = useQuery(
-    {
-      queryKey: ['conductPoints'],
-      queryFn: () => conductPointApi.getAllConductPointOfAStudent(0, 1000, id),
-      select: data => {
-        return data.data.result.map((item: ConductPoint) => {
-          return {
-            maKetQuaRenLuyen: item.maKetQuaRenLuyen,
-            soDiemRenLuyen: item.soDiemRenLuyen,
-            xepLoaiRenLuyen: item.xepLoaiRenLuyen,
-            hocKyNamHoc: '',
-            maHocKyNamHoc: item.maHocKyNamHoc,
-            maSinhVien: item.maSinhVien
-          };
-        });
-      }
+  const { data: studentData, isLoading } = useQuery({
+    queryKey: ['students'],
+    queryFn: ({ signal }) => studentApi.getAllStudents(0, 1000, signal),
+    enabled: !!getAllSemesters // Only fetch data when getAllSemesters is available
+  });
+
+  const students = studentData?.data.result;
+
+  const { data: rewardData, isLoading: isLoadingReward } = useQuery({
+    queryKey: ['rewards'],
+    queryFn: () => rewardApi.getAllRewardOfAStudent(0, 1000, id),
+    enabled: !!studentData,
+    select: data => {
+      return data.data.result.map((reward: Reward) => {
+        const semester = semesters?.find(
+          semester => semester.maHocKyNamHoc === reward.maHocKyNamHoc
+        );
+        const student = students?.find(
+          student => student.maSinhVien === reward.maSinhVien
+        );
+        return {
+          maKhenThuong: reward.maKhenThuong,
+          maHocKyNamHoc: reward.maHocKyNamHoc,
+          xepLoaiKhenThuong: reward.xepLoaiKhenThuong,
+          sinhVien: student?.maSinhVien + ' - ' + student?.hoTenSinhVien,
+          hocKyNamHoc: semester?.tenHocKy + ' ' + semester?.tenNamHoc
+        };
+      });
     }
-  );
+  });
+
+  console.log(rewardData);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -57,18 +80,9 @@ const StudentConductPoint = () => {
     setSelectedValue(e.target.value);
   };
 
-  const [openModal, setOpenModal] = useState(false);
-
-  const [selectedRow, setSelectedRow] = useState<string>('');
-
-  const handleRowClick = (row: any) => {
-    setSelectedRow(row.maKetQuaRenLuyen);
-    setOpenModal(true);
-  };
-
   return (
     <div>
-      <div className='mb-10 w-full bg-white p-5 shadow-lg'>
+      <div className='mb-5 w-full bg-white p-5 shadow-lg'>
         <div id='input-row' className='flex items-center'>
           <div className='w-96'>
             <TextInput
@@ -108,14 +122,13 @@ const StudentConductPoint = () => {
             <span className='ml-2 text-gray-500'>kết quả</span>
           </div>
         </div>
-        {!isConductPointLoading && !isSemesterLoading && (
+        {!isLoadingReward && rewardData && (
           <Table
             headers={headers}
-            data={conductPointData}
+            data={rewardData}
             pageSize={pageSize}
             filters={{ [selectedValue]: search }}
             className='border-input mt-2 border-2'
-            onRowClick={handleRowClick}
           />
         )}
       </div>
@@ -123,4 +136,4 @@ const StudentConductPoint = () => {
   );
 };
 
-export default StudentConductPoint;
+export default StudentRewardManagement;
