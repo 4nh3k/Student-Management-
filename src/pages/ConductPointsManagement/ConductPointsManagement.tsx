@@ -1,13 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { Modal, Select, TextInput } from 'flowbite-react';
 import { useState } from 'react';
-import { lecturerApi } from 'src/apis/lecturer.api';
 import Table from 'src/components/Table';
-import { Header } from 'src/components/Table/Table';
-import Lecturer from 'src/types/lecturer.type';
-import EditStudentForm from '../Student/EditStudentForm';
-import { studentFileApi } from 'src/apis/student-file.api';
-import StudentFile from 'src/types/student-file.type';
 import { conductPointApi } from 'src/apis/conduct-points.api';
 import ConductPoint from 'src/types/conduct-point.type';
 import EditConductForm from './EditConductPointForm';
@@ -64,72 +58,70 @@ const ConductPointsManagement = () => {
 
   return (
     <div>
-    <div className='w-full bg-white p-5 shadow-lg mb-10'>
-      <div id='input-row' className='flex items-center'>
-        <div className='w-96'>
-          <TextInput
-            placeholder='Tìm kiếm...'
-            value={search}
-            onChange={handleSearchChange}
+      <div className='mb-10 w-full bg-white p-5 shadow-lg'>
+        <div id='input-row' className='flex items-center'>
+          <div className='w-96'>
+            <TextInput
+              placeholder='Tìm kiếm...'
+              value={search}
+              onChange={handleSearchChange}
+            />
+          </div>
+          <div className='ml-4'>
+            <Select
+              id='filter'
+              value={selectedValue}
+              onChange={handleSelectedValueChange}
+              required
+            >
+              {headers.map(header => {
+                return (
+                  <option key={header.dataIndex} value={header.dataIndex}>
+                    {header.title}
+                  </option>
+                );
+              })}
+            </Select>
+          </div>
+          <div className='ml-auto flex items-center'>
+            <span className='mr-2 text-gray-500'>Hiển thị</span>
+            <Select
+              id='pageSize'
+              value={pageSize}
+              onChange={e => setPageSize(+e.target.value)}
+            >
+              <option>10</option>
+              <option>25</option>
+              <option>50</option>
+              <option>100</option>
+            </Select>
+            <span className='ml-2 text-gray-500'>kết quả</span>
+          </div>
+        </div>
+        {!isConductPointLoading && (
+          <Table
+            headers={headers}
+            data={conductPointData}
+            pageSize={pageSize}
+            filters={{ [selectedValue]: search }}
+            className='border-input mt-2 border-2'
+            onRowClick={handleRowClick}
           />
-        </div>
-        <div className='ml-4'>
-          <Select
-            id='filter'
-            value={selectedValue}
-            onChange={handleSelectedValueChange}
-            required
-          >
-            {headers.map(header => {
-              return (
-                <option key={header.dataIndex} value={header.dataIndex}>
-                  {header.title}
-                </option>
-              );
-            })}
-          </Select>
-        </div>
-        <div className='ml-auto flex items-center'>
-          <span className='mr-2 text-gray-500'>Hiển thị</span>
-          <Select
-            id='pageSize'
-            value={pageSize}
-            onChange={e => setPageSize(+e.target.value)}
-          >
-            <option>10</option>
-            <option>25</option>
-            <option>50</option>
-            <option>100</option>
-          </Select>
-          <span className='ml-2 text-gray-500'>kết quả</span>
-        </div>
+        )}
+        <Modal
+          size={'6xl'}
+          dismissible
+          show={openModal}
+          onClose={() => setOpenModal(false)}
+        >
+          <Modal.Header>Cập nhật / Xóa thông tin điểm rèn luyện</Modal.Header>
+          <Modal.Body>
+            <EditConductForm id={selectedRow}></EditConductForm>
+          </Modal.Body>
+        </Modal>
       </div>
-      {!isConductPointLoading && (
-        <Table
-          headers={headers}
-          data={conductPointData}
-          pageSize={pageSize}
-          filters={{ [selectedValue]: search }}
-          className='border-input mt-2 border-2'
-          onRowClick={handleRowClick}
-        />
-      )}
-      <Modal
-        size={'6xl'}
-        dismissible
-        show={openModal}
-        onClose={() => setOpenModal(false)}
-      >
-        <Modal.Header>Cập nhật / Xóa thông tin điểm rèn luyện</Modal.Header>
-        <Modal.Body>
-          <EditConductForm id={selectedRow}></EditConductForm>
-        </Modal.Body>
-      </Modal>
 
-      
-    </div>
-
-    <AddConductForm></AddConductForm>
+      <AddConductForm></AddConductForm>
     </div>
   );
 };
