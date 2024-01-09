@@ -12,10 +12,12 @@ export const scheduleApi = {
     return http.post<SuccessResponse<Schedule>>(URL_CREATE_SCHEDULE, rawBody);
   },
   // cho dang ky hoc phan, tam thoi lay all
-  getStudentSchedule(id: number, signal?: AbortSignal) {
+  getCourseSchedule(id: number, signal?: AbortSignal) {
     const urlWithParams = `${URL_GET_ALL_SCHEDULE}?offset=0&limit=1000`;
     const rawBody = {
-      filterBy: {}
+      filterBy: {
+        maHocPhan: id
+      }
     };
     console.log(rawBody);
     return http.post<SuccessResponse<Schedule[]>>(urlWithParams, rawBody, {
