@@ -1,17 +1,21 @@
 import { useQuery } from '@tanstack/react-query';
 import { Button, Datepicker, Label, Select, TextInput } from 'flowbite-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { studentApi } from 'src/apis/student.api';
 import ImageLoader from 'src/components/ImageLoader/ImageLoader';
 import useStudent from 'src/hooks/useStudent';
 import CreateStudentDto from 'src/types/create-student.dto';
+import demoPicture from 'src/assets/imgs/ganyu.jpg';
+import StudentIcon from 'src/assets/imgs/student.png';
 
 interface AddStudentFormProps {
   id?: string;
 }
 
 const EditStudentForm = ({ id }: AddStudentFormProps) => {
+  const [imageSrc, setImageSrc] = useState(demoPicture);
+  const [file, setFile] = useState<File>();
   const capitalizeFirstLetter = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
@@ -26,7 +30,7 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
     maChuyenNganh: 1,
     maHeDaoTao: 5,
     tinhTrangHocTap: 'đang học',
-    ngaySinh: new Date().toISOString(),
+    ngaySinh: new Date().toISOString().split('T')[0],
     gioiTinh: 'Nam',
     email: '',
     emailPassword: '',
@@ -34,7 +38,7 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
     usernamePassword: '',
     soTaiKhoanNganHangDinhDanh: '',
     anhTheSinhVien: '',
-    ngayNhapHoc: new Date().toISOString(),
+    ngayNhapHoc: new Date().toISOString().split('T')[0],
     maSinhVien: 0
   });
 
@@ -57,7 +61,8 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
           username: item.username,
           usernamePassword: item.usernamePassword,
           soTaiKhoanNganHangDinhDanh: item.soTaiKhoanNganHangDinhDanh,
-          anhTheSinhVien: item.anhTheSinhVien,
+          anhTheSinhVien:
+            item.anhTheSinhVien !== '' ? item.anhTheSinhVien : StudentIcon,
           ngayNhapHoc: item.ngayNhapHoc,
           maSinhVien: item.maSinhVien
         };
@@ -92,7 +97,11 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
 
   const learningStatuses = learningStatusList?.data.result;
 
-  const { updateStudentMutation, deleteStudentMutation } = useStudent();
+  const {
+    updateStudentMutation,
+    deleteStudentMutation,
+    createStudentImageMutation
+  } = useStudent();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -169,7 +178,7 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
     console.log(date);
     setStudent(prevStudent => ({
       ...prevStudent,
-      ngaySinh: date.toISOString()
+      ngaySinh: date.toISOString().split('T')[0]
     }));
   };
 
@@ -177,7 +186,7 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
     console.log(date);
     setStudent(prevStudent => ({
       ...prevStudent,
-      ngayNhapHoc: date.toISOString()
+      ngayNhapHoc: date.toISOString().split('T')[0]
     }));
   };
 
@@ -195,7 +204,7 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
         maChuyenNganh: studentData[0].maChuyenNganh,
         maHeDaoTao: studentData[0].maHeDaoTao,
         tinhTrangHocTap: studentData[0].tinhTrangHocTap,
-        ngaySinh: studentData[0].ngaySinh,
+        ngaySinh: new Date(studentData[0].ngaySinh).toISOString().split('T')[0],
         gioiTinh: studentData[0].gioiTinh,
         email: studentData[0].email,
         emailPassword: studentData[0].emailPassword,
@@ -203,7 +212,9 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
         usernamePassword: studentData[0].usernamePassword,
         soTaiKhoanNganHangDinhDanh: studentData[0].soTaiKhoanNganHangDinhDanh,
         anhTheSinhVien: studentData[0].anhTheSinhVien,
-        ngayNhapHoc: studentData[0].ngayNhapHoc,
+        ngayNhapHoc: new Date(studentData[0].ngayNhapHoc)
+          .toISOString()
+          .split('T')[0],
         maSinhVien: studentData[0].maSinhVien
       });
       const selectedEducationType = educationTypeData.find(
@@ -225,6 +236,8 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
         major => major.maChuyenNganh === studentData[0].maChuyenNganh
       );
       setMajor(capitalizeFirstLetter(selectedMajor.tenChuyenNganh));
+
+      setImageSrc(studentData[0].anhTheSinhVien);
     }
   }, [
     studentData,
@@ -275,7 +288,6 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
     // Test the input string against the regular expression
     return regex.test(inputString);
   };
-
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Submitted student:', student);
@@ -302,38 +314,78 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
       return;
     }
 
-    updateStudentMutation.mutate(
-      { student: student, id: parseInt(id) },
+    createStudentImageMutation.mutate(
+      { id: 'test', image: file },
       {
         onSuccess: data => {
-          setStudent({
-            hoTenSinhVien: '',
-            maKhoaHoc: 1,
-            maChuyenNganh: 1,
-            maHeDaoTao: 5,
-            tinhTrangHocTap: 'đang học',
-            ngaySinh: new Date().toLocaleDateString('en-GB'),
-            gioiTinh: 'Nam',
-            email: '',
-            emailPassword: '',
-            username: '',
-            usernamePassword: '',
-            soTaiKhoanNganHangDinhDanh: '',
-            anhTheSinhVien: '',
-            ngayNhapHoc: new Date().toLocaleDateString('en-GB'),
-            maSinhVien: 0
-          });
-          setMajor('Khoa học máy tính');
-          setFaculty('Khoa học máy tính');
-          setEducationType('đại trà');
-          setGender('Nam');
-          setLearningStatus('Đang học');
+          console.log(data);
+          setStudent(prevStudent => ({
+            ...prevStudent,
+            anhTheSinhVien: data.data.imageUrls[0]
+          }));
+          updateStudentMutation.mutate(
+            { student: student, id: student.maSinhVien },
+            {
+              onSuccess: data => {
+                setStudent({
+                  hoTenSinhVien: '',
+                  maKhoaHoc: 1,
+                  maChuyenNganh: 1,
+                  maHeDaoTao: 5,
+                  tinhTrangHocTap: 'đang học',
+                  ngaySinh: new Date().toISOString().split('T')[0],
+                  gioiTinh: 'Nam',
+                  email: '',
+                  emailPassword: '',
+                  username: '',
+                  usernamePassword: '',
+                  soTaiKhoanNganHangDinhDanh: '',
+                  anhTheSinhVien: '',
+                  ngayNhapHoc: new Date().toISOString().split('T')[0],
+                  maSinhVien: 0
+                });
+                setMajor('Khoa học máy tính');
+                setFaculty('Khoa học máy tính');
+                setEducationType('đại trà');
+                setGender('Nam');
+                setLearningStatus('Đang học');
+              },
+              onError: error => {
+                console.log(student);
+                toast.error(error.response.data.message);
+              }
+            }
+          );
         },
         onError: error => {
           toast.error(error.response.data.message);
         }
       }
     );
+  };
+
+  const inputRef = useRef(null);
+
+  const handleLoadImage = () => {
+    if (inputRef.current) {
+      inputRef.current.click();
+    }
+  };
+
+  const handleFileChange = event => {
+    const file = event.target.files[0];
+
+    if (file) {
+      // Check if the selected file is an image
+      if (file.type.startsWith('image/')) {
+        // Update the image source with the selected file
+        const newImageSrc = URL.createObjectURL(file);
+        setImageSrc(newImageSrc);
+        setFile(file);
+      } else {
+        console.error('Invalid file format. Please select an image.');
+      }
+    }
   };
 
   const onDeleteStudent = () => {
@@ -400,7 +452,7 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
           </div>
           <Datepicker
             id='ngaySinh'
-            value={new Date(student.ngaySinh).toLocaleDateString('en-GB')}
+            value={new Date(student.ngaySinh).toISOString().split('T')[0]}
             onSelectedDateChanged={handleDateOfBirthChange}
           ></Datepicker>
         </div>
@@ -410,7 +462,7 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
           </div>
           <Datepicker
             id='ngayNhapHoc'
-            value={new Date(student.ngayNhapHoc).toLocaleDateString('en-GB')}
+            value={new Date(student.ngayNhapHoc).toISOString().split('T')[0]}
             onSelectedDateChanged={handleLearningStartDateChange}
           ></Datepicker>
         </div>
@@ -534,15 +586,28 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
         </div>
       </div>
       <div className='mt-5 flex items-center space-x-6 align-middle'>
-        <ImageLoader></ImageLoader>
+        <img
+          alt='Ảnh sinh viên'
+          className='border-rounded h-32 w-32 rounded-full'
+          src={imageSrc}
+        ></img>
         <div className='flex flex-col space-y-2'>
           <Label
             htmlFor='studentImage'
             value='Tải ảnh sinh viên (150px X 150px)'
           />
           <div className='flex items-center space-x-3 align-middle'>
-            <Button color='sidebar'>Chọn ảnh</Button>
-            <span>Chựa chọn file</span>
+            <Button color='sidebar' onClick={handleLoadImage}>
+              Chọn ảnh
+            </Button>
+            <input
+              type='file'
+              ref={inputRef}
+              style={{ display: 'none' }}
+              onChange={handleFileChange}
+              accept='image/jpeg, image/png, image/gif, image/svg+xml'
+            />
+            {/* <span>Chựa chọn file</span> */}
           </div>
         </div>
       </div>
