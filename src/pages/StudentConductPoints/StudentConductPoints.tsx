@@ -3,11 +3,6 @@ import { Modal, Select, TextInput } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { lecturerApi } from 'src/apis/lecturer.api';
 import Table from 'src/components/Table';
-import { Header } from 'src/components/Table/Table';
-import Lecturer from 'src/types/lecturer.type';
-import EditStudentForm from '../Student/EditStudentForm';
-import { studentFileApi } from 'src/apis/student-file.api';
-import StudentFile from 'src/types/student-file.type';
 import { conductPointApi } from 'src/apis/conduct-points.api';
 import ConductPoint from 'src/types/conduct-point.type';
 import { getProfileFromLS } from 'src/utils/auth';
@@ -24,7 +19,7 @@ const StudentConductPoint = () => {
     { title: 'Mã sinh viên', dataIndex: 'maSinhVien' },
     { title: 'Số điểm rèn luyện', dataIndex: 'soDiemRenLuyen' },
     { title: 'Xếp loại rèn luyện', dataIndex: 'xepLoaiRenLuyen' },
-    { title: 'Học kỳ năm học', dataIndex: 'hocKyNamHoc' }
+    { title: 'Mã học kỳ năm học', dataIndex: 'maHocKyNamHoc' },
   ];
 
   const [semester, setSemester] = useState<string>('');
@@ -52,32 +47,6 @@ const StudentConductPoint = () => {
       }
     }
   );
-
-  const [conductPoints, setConductPoints] = useState(conductPointData);
-
-  useEffect(() => {
-    if (
-      !isSemesterLoading &&
-      !isConductPointLoading &&
-      semesters &&
-      conductPointData
-    ) {
-      setConductPoints(prevArray =>
-        prevArray.map(item => {
-          const semesterValue = semesters.find(
-            semester => semester.maHocKyNamHoc == item.maHocKyNamHoc);
-          // Return a new object with the updated value
-          return {
-            ...item,
-            hocKyNamHoc:
-              semesterValue?.tenHocKy + ' ' + semesterValue?.tenNamHoc
-          };
-        })
-      );
-    }
-  }, [semesters, isSemesterLoading, conductPointData, isConductPointLoading]);
-
-  console.log(conductPoints)
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -142,7 +111,7 @@ const StudentConductPoint = () => {
         {!isConductPointLoading && !isSemesterLoading && (
           <Table
             headers={headers}
-            data={conductPoints}
+            data={conductPointData}
             pageSize={pageSize}
             filters={{ [selectedValue]: search }}
             className='border-input mt-2 border-2'
