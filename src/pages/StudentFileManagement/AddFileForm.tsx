@@ -38,7 +38,7 @@ const AddFileForm = () => {
   const additionalValuesArray = ['nhập học', 'thôi học', 'tốt nghiệp']; // Replace this with your actual array
 
   additionalValuesArray.forEach(value => {
-    if (!(value === 'xin nhập học lại' || value === 'bảo lưu')){
+    if (!(value === 'xin nhập học lại' || value === 'bảo lưu')) {
       if (uniqueStudentFileType.has(value)) {
         // Value exists in the set, so delete it
         uniqueStudentFileType.delete(value);
@@ -143,6 +143,7 @@ const AddFileForm = () => {
           <TextInput
             id='maSinhVien'
             type='number'
+            disabled
             placeholder='Nhập mã sinh viên'
             value={file.maSinhVien}
             required
@@ -168,6 +169,7 @@ const AddFileForm = () => {
           <Select
             id='trangThaiHoSo'
             value={file.hoanThanh ? 'Đã duyệt' : 'Chưa duyệt'}
+            disabled
           >
             <option>Đã duyệt</option>
             <option>Chưa duyệt</option>

@@ -113,7 +113,7 @@ export default function CoursesRegistration() {
         selectedCourse.credit?.soTinChiLyThuyet,
         courseSelected.find(
           item =>
-            item.examType === 'Bài kiểm tra lý thuyết cuối kỳ' &&
+            item.examType === 'Bài kiểm tra thực hành cuối kỳ' &&
             item.courseId === selectedCourse.courseId
         )
       );
@@ -144,7 +144,6 @@ export default function CoursesRegistration() {
     return check;
   };
   const handleOnCheck = (row: TableData, checked: boolean) => {
-    console.log(row, checked);
     if (checked) {
       if (isCourseSelected(row)) {
         toast.error('Môn học đã được chọn');
@@ -162,6 +161,10 @@ export default function CoursesRegistration() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (courseSelected.length === 0) {
+      toast.error('Vui lòng chọn môn học');
+      return;
+    }
     const check = checkNeedToRegister();
     console.log(check);
     if (check) {

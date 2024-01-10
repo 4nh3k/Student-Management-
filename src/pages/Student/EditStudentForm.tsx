@@ -1,13 +1,12 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Button, Datepicker, Label, Select, TextInput } from 'flowbite-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { studentApi } from 'src/apis/student.api';
-import ImageLoader from 'src/components/ImageLoader/ImageLoader';
+import demoPicture from 'src/assets/imgs/ganyu.jpg';
+import LoadingIndicator from 'src/components/LoadingIndicator';
 import useStudent from 'src/hooks/useStudent';
 import CreateStudentDto from 'src/types/create-student.dto';
-import demoPicture from 'src/assets/imgs/ganyu.jpg';
-import StudentIcon from 'src/assets/imgs/student.png';
 
 interface AddStudentFormProps {
   id?: string;
@@ -438,6 +437,16 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
       deleteStudentMutation.mutate(id);
     }
   };
+  if (
+    isEducationTypeLoading ||
+    isEducationTypeLoading ||
+    isEducationTypeLoading ||
+    isFacultyLoading ||
+    isMajorsLoading ||
+    isLoadingStatus ||
+    isLoadingStudentData
+  )
+    return <LoadingIndicator />;
 
   return (
     <form
@@ -619,19 +628,7 @@ const EditStudentForm = ({ id }: AddStudentFormProps) => {
           <TextInput
             id='soTaiKhoanNganHangDinhDanh'
             type='number'
-            placeholder='Nhập số tài khoản định danh'
-            value={student.soTaiKhoanNganHangDinhDanh}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div>
-          <div className='mb-2 block'>
-            <Label htmlFor='account' value='Số tài khoản định danh' />
-          </div>
-          <TextInput
-            id='soTaiKhoanNganHangDinhDanh'
-            type='number'
+            min={0}
             placeholder='Nhập số tài khoản định danh'
             value={student.soTaiKhoanNganHangDinhDanh}
             onChange={handleInputChange}

@@ -1,17 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
-import { Button, Label, Modal, Select, TextInput } from 'flowbite-react';
+import { Button, Label, Select, TextInput } from 'flowbite-react';
 import { useState } from 'react';
-import Table from 'src/components/Table';
-import { studentFileApi } from 'src/apis/student-file.api';
-import StudentFile from 'src/types/student-file.type';
 import { rewardApi } from 'src/apis/reward.api';
-import Reward from 'src/types/reward.type';
 import { semesterApi } from 'src/apis/semester.api';
-import { capitalizeFirstLetter } from 'src/utils/utils';
-import { format } from 'date-fns';
-import Student from 'src/types/student.type';
 import { studentApi } from 'src/apis/student.api';
+import LoadingIndicator from 'src/components/LoadingIndicator';
+import Table from 'src/components/Table';
 import useReward from 'src/hooks/useReward';
+import Reward from 'src/types/reward.type';
 ('use client');
 
 const RewardManagement = () => {
@@ -92,7 +88,7 @@ const RewardManagement = () => {
     setSemesterId(selectedOption?.maHocKyNamHoc);
   };
 
-  const {createRewardMutation} = useReward();
+  const { createRewardMutation } = useReward();
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,8 +97,8 @@ const RewardManagement = () => {
     createRewardMutation.mutate(rewardArray, {
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       onSuccess: data => {
-        setSemesterId(1)
-        setSemester('kỳ 1 2005-2006')
+        setSemesterId(1);
+        setSemester('kỳ 1 2005-2006');
       },
       onError: error => {
         toast.error(error.response.data.message);
@@ -165,9 +161,9 @@ const RewardManagement = () => {
       <form
         id='student-table-container'
         className='mb-5 w-full bg-white p-5 shadow-lg'
-          onSubmit={onSubmit}
+        onSubmit={onSubmit}
       >
-        <h1 className='text-lg font-semibold'>Thêm điểm rèn luyện</h1>
+        <h1 className='text-lg font-semibold'>Thêm khen thưởng sinh viên</h1>
         <div className='mt-4 grid grid-cols-4 gap-8'>
           <div>
             <div className='mb-2 block'>
@@ -189,9 +185,12 @@ const RewardManagement = () => {
           </div>
         </div>
         <div className='mt-7 flex space-x-5'>
-          <Button type='submit' color='failure'>
-            Thêm
-          </Button>
+          {createRewardMutation.isPending && <LoadingIndicator />}
+          {!createRewardMutation.isPending && (
+            <Button type='submit' color='failure'>
+              Thêm
+            </Button>
+          )}
         </div>
       </form>
     </div>

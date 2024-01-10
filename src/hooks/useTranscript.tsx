@@ -139,7 +139,7 @@ const useTranscript = () => {
               practicalGrade: null,
               finalGrade: null,
               credit: null,
-              averageGrade: <p className='font-bold'>{GPA}</p>
+              averageGrade: <p className='font-bold'>{formatGrade(GPA)}</p>
             }
           ],
           isLoading: results.some(result => result.isLoading)

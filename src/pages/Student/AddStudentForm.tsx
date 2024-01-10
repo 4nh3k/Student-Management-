@@ -3,7 +3,7 @@ import { Button, Datepicker, Label, Select, TextInput } from 'flowbite-react';
 import React, { useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { studentApi } from 'src/apis/student.api';
-import ImageLoader from 'src/components/ImageLoader/ImageLoader';
+import demoPicture from 'src/assets/imgs/ganyu.jpg';
 import useStudent from 'src/hooks/useStudent';
 import CreateStudentDto from 'src/types/create-student.dto';
 import {
@@ -12,7 +12,6 @@ import {
   validateEmail,
   validateName
 } from 'src/utils/utils';
-import demoPicture from 'src/assets/imgs/ganyu.jpg';
 interface AddStudentFormProps {
   id?: string;
 }
@@ -193,6 +192,10 @@ const AddStudentForm = ({ id }: AddStudentFormProps) => {
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Submitted student:', student);
+    if (file === undefined) {
+      toast.error('Vui lòng chọn ảnh');
+      return;
+    }
 
     if (!validateName(student.hoTenSinhVien)) {
       toast.error('Tên không hợp lệ');
